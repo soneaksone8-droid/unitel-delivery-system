@@ -381,10 +381,10 @@
         <label>ການຈ່າຍເງິນ</label>
         <div class="money-row">
           <div class="money-input">
-            <input type="number" id="payOrigin" inputmode="decimal" placeholder="ຈ່າຍຕົ້ນທາງ">
+            <input type="text" id="payOrigin" inputmode="numeric" class="money-fmt" placeholder="ຈ່າຍຕົ້ນທາງ">
           </div>
           <div class="money-input">
-            <input type="number" id="payDestination" inputmode="decimal" placeholder="ຈ່າຍປາຍທາງ">
+            <input type="text" id="payDestination" inputmode="numeric" class="money-fmt" placeholder="ຈ່າຍປາຍທາງ">
           </div>
         </div>
       </div>
@@ -398,7 +398,7 @@
         </div>
         <div class="cod-amount" id="codAmountWrap">
           <div class="money-input">
-            <input type="number" id="codAmount" inputmode="decimal" placeholder="ຈຳນວນເງິນ COD">
+            <input type="text" id="codAmount" inputmode="numeric" class="money-fmt" placeholder="ຈຳນວນເງິນ COD">
           </div>
         </div>
       </div>
@@ -481,6 +481,20 @@
     setTimeout(()=> t.classList.remove('show'), 2600);
   }
 
+  // ===== ໝາຍຈຸດອັດຕະໂນມັດໃນຊ່ອງເງິນ (ເຊັ່ນ 1,000,000) =====
+  function formatMoneyInput(el){
+    let raw = el.value.replace(/[^\d]/g, ''); // ເອົາແຕ່ໂຕເລກ
+    if(raw === ''){ el.value = ''; return; }
+    el.value = Number(raw).toLocaleString('en-US');
+  }
+  function unformatMoney(str){
+    if(!str) return 0;
+    return Number(String(str).replace(/[^\d]/g, '')) || 0;
+  }
+  document.querySelectorAll('.money-fmt').forEach(el => {
+    el.addEventListener('input', () => formatMoneyInput(el));
+  });
+
   // ===== Set default date = today =====
   document.getElementById('date').valueAsDate = new Date();
 
@@ -496,10 +510,10 @@
       trackingCode: document.getElementById('trackingCode').value.trim(),
       receiverName: document.getElementById('receiverName').value.trim(),
       phone: document.getElementById('phone').value.trim(),
-      payOrigin: document.getElementById('payOrigin').value || 0,
-      payDestination: document.getElementById('payDestination').value || 0,
+      payOrigin: unformatMoney(document.getElementById('payOrigin').value),
+      payDestination: unformatMoney(document.getElementById('payDestination').value),
       hasCod: hasCod,
-      codAmount: hasCod ? (document.getElementById('codAmount').value || 0) : 0,
+      codAmount: hasCod ? unformatMoney(document.getElementById('codAmount').value) : 0,
       note: document.getElementById('note').value.trim()
     };
 
