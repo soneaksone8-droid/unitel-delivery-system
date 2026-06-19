@@ -131,6 +131,19 @@
   .sum-sub-item{font-size:11.5px;color:var(--ink-soft);}
   .sum-sub-item b{display:block;font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--ink);font-weight:700;margin-top:1px;}
 
+  .sum-detail{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);display:flex;flex-direction:column;gap:7px;}
+  .sum-detail-item{
+    display:flex;align-items:center;justify-content:space-between;
+    font-size:12px;color:var(--ink-soft);
+  }
+  .sum-detail-item b{
+    font-family:'JetBrains Mono',monospace;font-size:13.5px;color:var(--ink);font-weight:700;
+  }
+  .sum-detail-item.cod{
+    margin-top:2px;padding-top:7px;border-top:1px dashed var(--line);
+  }
+  .sum-detail-item.cod b{color:#8a6315;}
+
   /* ===== Breakdown table ===== */
   .table-section{margin-top:22px;}
   .section-title{
@@ -224,17 +237,31 @@
     <div class="sum-card in">
       <div class="sum-eyebrow"><span class="ic">↙</span> ຝາກມາ</div>
       <div class="sum-value" id="inCount">—<span class="unit">ລາຍການ</span></div>
-      <div class="sum-sub">
-        <div class="sum-sub-item">ລາຍຮັບ <b id="inRevenue">—</b></div>
-        <div class="sum-sub-item">COD <b id="inCod">—</b></div>
+      <div class="sum-detail">
+        <div class="sum-detail-item">
+          <span>ຈ່າຍຕົ້ນທາງ</span><b id="inOrigin">—</b>
+        </div>
+        <div class="sum-detail-item">
+          <span>ຈ່າຍປາຍທາງ</span><b id="inDestination">—</b>
+        </div>
+        <div class="sum-detail-item cod">
+          <span>ເງິນ COD</span><b id="inCod">—</b>
+        </div>
       </div>
     </div>
     <div class="sum-card out">
       <div class="sum-eyebrow"><span class="ic">↗</span> ຝາກໄປ</div>
       <div class="sum-value" id="outCount">—<span class="unit">ລາຍການ</span></div>
-      <div class="sum-sub">
-        <div class="sum-sub-item">ລາຍຮັບ <b id="outRevenue">—</b></div>
-        <div class="sum-sub-item">COD <b id="outCod">—</b></div>
+      <div class="sum-detail">
+        <div class="sum-detail-item">
+          <span>ຈ່າຍຕົ້ນທາງ</span><b id="outOrigin">—</b>
+        </div>
+        <div class="sum-detail-item">
+          <span>ຈ່າຍປາຍທາງ</span><b id="outDestination">—</b>
+        </div>
+        <div class="sum-detail-item cod">
+          <span>ເງິນ COD</span><b id="outCod">—</b>
+        </div>
       </div>
     </div>
   </div>
@@ -333,11 +360,13 @@
       document.getElementById('grandCod').textContent = fmt(data.grandTotal.totalCod) + ' ກີບ';
 
       document.getElementById('inCount').innerHTML = fmt(data.in.count) + '<span class="unit">ລາຍການ</span>';
-      document.getElementById('inRevenue').textContent = fmt(data.in.totalRevenue) + ' ກີບ';
+      document.getElementById('inOrigin').textContent = fmt(data.in.totalOrigin) + ' ກີບ';
+      document.getElementById('inDestination').textContent = fmt(data.in.totalDestination) + ' ກີບ';
       document.getElementById('inCod').textContent = fmt(data.in.totalCod) + ' ກີບ';
 
       document.getElementById('outCount').innerHTML = fmt(data.out.count) + '<span class="unit">ລາຍການ</span>';
-      document.getElementById('outRevenue').textContent = fmt(data.out.totalRevenue) + ' ກີບ';
+      document.getElementById('outOrigin').textContent = fmt(data.out.totalOrigin) + ' ກີບ';
+      document.getElementById('outDestination').textContent = fmt(data.out.totalDestination) + ' ກີບ';
       document.getElementById('outCod').textContent = fmt(data.out.totalCod) + ' ກີບ';
     } catch(err){
       console.error('Summary load error:', err);
