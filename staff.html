@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ບັນທຶກອໍເດີ້ — ຢູນິເທວ ສາຂາຄຳບຸນ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1c2333;
+    --ink-soft:#5a6378;
+    --paper:#fbf9f4;
+    --panel:#ffffff;
+    --line:#e7e2d6;
+    --route-out:#c2410c;
+    --route-out-soft:#fef1e8;
+    --route-in:#0f6e5f;
+    --route-in-soft:#e7f5f1;
+    --accent:#1c2333;
+    --warn:#b3261e;
+    --radius:14px;
+    --shadow: 0 1px 2px rgba(28,35,51,0.04), 0 8px 24px -12px rgba(28,35,51,0.12);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(circle at 1px 1px, rgba(28,35,51,0.05) 1px, transparent 0) 0 0/22px 22px,
+      var(--paper);
+    color:var(--ink);
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
+    min-height:100vh;
+    padding:0 0 64px;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+
+  /* ===== Header ===== */
+  header{
+    background:var(--ink);
+    color:#f4f1e8;
+    padding:22px 20px 26px;
+    position:relative;
+    overflow:hidden;
+  }
+  header::after{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      repeating-linear-gradient(135deg, rgba(244,241,232,0.035) 0 2px, transparent 2px 14px);
+    pointer-events:none;
+  }
+  .header-inner{max-width:760px;margin:0 auto;position:relative;}
+  .brand-row{display:flex;align-items:center;gap:10px;margin-bottom:4px;}
+  .brand-mark{
+    width:34px;height:34px;border-radius:9px;
+    background:linear-gradient(135deg,var(--route-out),#e8923f);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:15px;color:#fff;flex-shrink:0;
+    box-shadow:0 2px 6px rgba(194,65,12,0.4);
+  }
+  .brand-text-lao{font-size:19px;font-weight:700;letter-spacing:0.2px;}
+  .brand-text-sub{font-size:11.5px;color:#c8c2af;letter-spacing:1.5px;text-transform:uppercase;margin-top:1px;font-family:'Noto Sans',sans-serif;}
+  .branch-tag{
+    display:inline-flex;align-items:center;gap:6px;
+    margin-top:12px;
+    font-size:12.5px;color:#d8d2bf;
+    font-family:'JetBrains Mono',monospace;
+    letter-spacing:0.3px;
+  }
+  .branch-tag .dot{width:6px;height:6px;border-radius:50%;background:#7fd9a8;box-shadow:0 0 0 3px rgba(127,217,168,0.18);}
+
+  /* ===== Layout ===== */
+  .wrap{max-width:760px;margin:0 auto;padding:0 16px;}
+
+  /* ===== Route Toggle ===== */
+  .route-toggle{
+    display:grid;grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:-20px;
+    position:relative;
+    z-index:2;
+  }
+  .route-btn{
+    background:var(--panel);
+    border:2px solid var(--line);
+    border-radius:var(--radius);
+    padding:16px 14px;
+    cursor:pointer;
+    text-align:left;
+    display:flex;align-items:center;gap:12px;
+    transition:border-color .15s, transform .1s, box-shadow .15s;
+    box-shadow:var(--shadow);
+  }
+  .route-btn:active{transform:scale(0.98);}
+  .route-icon{
+    width:38px;height:38px;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;font-size:18px;
+  }
+  .route-btn[data-route="out"] .route-icon{background:var(--route-out-soft);color:var(--route-out);}
+  .route-btn[data-route="in"] .route-icon{background:var(--route-in-soft);color:var(--route-in);}
+  .route-label{font-weight:700;font-size:14.5px;line-height:1.3;}
+  .route-sub{font-size:11px;color:var(--ink-soft);font-family:'Noto Sans',sans-serif;}
+  .route-btn.active[data-route="out"]{border-color:var(--route-out);background:var(--route-out-soft);}
+  .route-btn.active[data-route="in"]{border-color:var(--route-in);background:var(--route-in-soft);}
+
+  /* ===== Form Card ===== */
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    margin-top:14px;
+    overflow:hidden;
+  }
+  .card-head{
+    padding:16px 18px 14px;
+    border-bottom:1px dashed var(--line);
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .card-head h2{margin:0;font-size:15.5px;font-weight:700;}
+  .route-flag{
+    font-size:11px;font-weight:700;padding:4px 10px;border-radius:99px;
+    font-family:'JetBrains Mono',monospace;letter-spacing:0.3px;
+  }
+  .route-flag.out{background:var(--route-out-soft);color:var(--route-out);}
+  .route-flag.in{background:var(--route-in-soft);color:var(--route-in);}
+
+  .form-body{padding:16px 18px 18px;}
+  .field-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .field{margin-bottom:13px;}
+  .field.full{grid-column:1/-1;}
+  .field label{
+    display:block;font-size:12.5px;font-weight:600;color:var(--ink-soft);
+    margin-bottom:5px;letter-spacing:0.1px;
+  }
+  .field label .req{color:var(--warn);margin-left:2px;}
+  .field input, .field textarea{
+    width:100%;
+    border:1.5px solid var(--line);
+    border-radius:9px;
+    padding:10px 12px;
+    font-size:14.5px;
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
+    color:var(--ink);
+    background:#fff;
+    transition:border-color .15s;
+  }
+  .field input.mono-input{font-family:'JetBrains Mono',monospace;letter-spacing:0.4px;}
+  .field input:focus, .field textarea:focus{
+    outline:none;border-color:var(--ink);
+  }
+  .field input::placeholder{color:#b7b2a3;font-family:'Noto Sans Lao','Noto Sans',sans-serif;}
+
+  .money-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .money-input{position:relative;}
+  .money-input input{padding-right:46px;}
+  .money-input::after{
+    content:"KIP";position:absolute;right:12px;top:50%;transform:translateY(-50%);
+    font-size:10.5px;color:#b7b2a3;font-weight:700;letter-spacing:0.5px;
+    font-family:'JetBrains Mono',monospace;
+  }
+  .money-input{margin-bottom:0;}
+
+  /* COD toggle */
+  .cod-block{
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    padding:12px 14px;
+    margin-bottom:13px;
+    transition:border-color .15s, background .15s;
+  }
+  .cod-block.active{border-color:#c9a227;background:#fdf8e9;}
+  .cod-head{display:flex;align-items:center;justify-content:space-between;}
+  .cod-label{display:flex;align-items:center;gap:9px;cursor:pointer;}
+  .switch{
+    width:42px;height:24px;border-radius:99px;background:#d9d4c5;
+    position:relative;cursor:pointer;transition:background .15s;flex-shrink:0;
+  }
+  .switch.on{background:#c9a227;}
+  .switch::after{
+    content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;
+    border-radius:50%;background:#fff;transition:left .15s;
+    box-shadow:0 1px 3px rgba(0,0,0,0.25);
+  }
+  .switch.on::after{left:21px;}
+  .cod-label span{font-size:13.5px;font-weight:600;}
+  .cod-amount{
+    margin-top:11px;display:none;
+  }
+  .cod-amount.show{display:block;}
+
+  .submit-btn{
+    width:100%;
+    background:var(--ink);
+    color:#f4f1e8;
+    border:none;
+    border-radius:10px;
+    padding:14px;
+    font-size:15px;
+    font-weight:700;
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
+    cursor:pointer;
+    margin-top:4px;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    transition:opacity .15s, transform .1s;
+  }
+  .submit-btn:active{transform:scale(0.985);}
+  .submit-btn:disabled{opacity:0.55;cursor:not-allowed;}
+  .submit-btn.out{background:var(--route-out);}
+  .submit-btn.in{background:var(--route-in);}
+
+  .toast{
+    position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120%);
+    background:var(--ink);color:#fff;
+    padding:12px 20px;border-radius:99px;font-size:13.5px;font-weight:600;
+    box-shadow:0 8px 24px rgba(0,0,0,0.25);
+    transition:transform .25s cubic-bezier(.34,1.56,.64,1);
+    z-index:50;display:flex;align-items:center;gap:8px;
+  }
+  .toast.show{transform:translateX(-50%) translateY(0);}
+  .toast.error{background:var(--warn);}
+
+  /* ===== Recent list ===== */
+  .recent-section{margin-top:26px;}
+  .recent-title{
+    display:flex;align-items:center;gap:8px;
+    font-size:13px;font-weight:700;color:var(--ink-soft);
+    text-transform:uppercase;letter-spacing:0.8px;margin:0 2px 10px;
+  }
+  .recent-title::before{content:"";width:14px;height:2px;background:var(--ink-soft);border-radius:2px;}
+
+  .recent-item{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:11px;
+    padding:12px 14px;
+    margin-bottom:8px;
+    display:flex;align-items:center;gap:12px;
+    box-shadow:var(--shadow);
+    animation:slideIn .3s ease;
+  }
+  @keyframes slideIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+  .recent-tag{
+    width:30px;height:30px;border-radius:8px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    font-size:13px;font-weight:800;
+  }
+  .recent-tag.out{background:var(--route-out-soft);color:var(--route-out);}
+  .recent-tag.in{background:var(--route-in-soft);color:var(--route-in);}
+  .recent-main{flex:1;min-width:0;}
+  .recent-code{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;}
+  .recent-meta{font-size:12px;color:var(--ink-soft);margin-top:2px;display:flex;gap:8px;flex-wrap:wrap;}
+  .recent-cod-badge{
+    font-size:10px;font-weight:700;background:#fdf8e9;color:#8a6d1a;
+    padding:1px 7px;border-radius:99px;font-family:'JetBrains Mono',monospace;
+  }
+  .recent-amount{text-align:right;flex-shrink:0;}
+  .recent-amount .num{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13.5px;}
+  .recent-amount .lbl{font-size:10px;color:var(--ink-soft);}
+
+  .empty-state{
+    text-align:center;padding:36px 20px;color:var(--ink-soft);font-size:13.5px;
+  }
+  .skeleton{
+    background:var(--panel);border:1px solid var(--line);border-radius:11px;
+    padding:12px 14px;margin-bottom:8px;height:58px;
+    background-image:linear-gradient(90deg, #f7f4ec 0px, #efebdf 40px, #f7f4ec 80px);
+    background-size:600px;animation:shimmer 1.4s infinite linear;
+  }
+  @keyframes shimmer{from{background-position:-300px 0;}to{background-position:300px 0;}}
+
+  .nav-link{
+    display:block;text-align:center;margin-top:28px;
+    font-size:13px;color:var(--ink-soft);text-decoration:none;
+    font-weight:600;
+  }
+  .nav-link:hover{color:var(--ink);}
+
+  @media (max-width:420px){
+    .field-grid, .money-row{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand-row">
+      <div class="brand-mark">U</div>
+      <div>
+        <div class="brand-text-lao">ຢູນິເທວຂົນສົ່ງດ່ວນ</div>
+        <div class="brand-text-sub">Express Delivery Log</div>
+      </div>
+    </div>
+    <div class="branch-tag">
+      <span class="dot"></span>
+      <span>ສາຂາຄຳບຸນ — ບັນທຶກອໍເດີ້</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="route-toggle">
+    <button class="route-btn active" data-route="out" onclick="selectRoute('out')">
+      <div class="route-icon">↗</div>
+      <div>
+        <div class="route-label">ຝາກໄປ</div>
+        <div class="route-sub">ລູກຄ້າຝາກອອກ</div>
+      </div>
+    </button>
+    <button class="route-btn" data-route="in" onclick="selectRoute('in')">
+      <div class="route-icon">↙</div>
+      <div>
+        <div class="route-label">ຝາກມາ</div>
+        <div class="route-sub">ເຄື່ອງເຂົ້າສາຂາ</div>
+      </div>
+    </button>
+  </div>
+
+  <form class="card" id="orderForm">
+    <div class="card-head">
+      <h2>ຂໍ້ມູນອໍເດີ້</h2>
+      <span class="route-flag out" id="routeFlag">ຝາກໄປ</span>
+    </div>
+    <div class="form-body">
+
+      <div class="field-grid">
+        <div class="field">
+          <label>ວັນທີ <span class="req">*</span></label>
+          <input type="date" id="date" required>
+        </div>
+        <div class="field">
+          <label>ເລກລະຫັດເຄື່ອງ <span class="req">*</span></label>
+          <input type="text" id="trackingCode" class="mono-input" placeholder="ເຊັ່ນ 0123456789" required>
+        </div>
+      </div>
+
+      <div class="field-grid">
+        <div class="field">
+          <label>ຊື່ຜູ້ຮັບ <span class="req">*</span></label>
+          <input type="text" id="receiverName" placeholder="ຊື່ ແລະ ນາມສະກຸນ" required>
+        </div>
+        <div class="field">
+          <label>ເບີໂທ</label>
+          <input type="tel" id="phone" class="mono-input" placeholder="020 xxxxxxxx">
+        </div>
+      </div>
+
+      <div class="field full">
+        <label>ການຈ່າຍເງິນ</label>
+        <div class="money-row">
+          <div class="money-input">
+            <input type="number" id="payOrigin" inputmode="decimal" placeholder="ຈ່າຍຕົ້ນທາງ">
+          </div>
+          <div class="money-input">
+            <input type="number" id="payDestination" inputmode="decimal" placeholder="ຈ່າຍປາຍທາງ">
+          </div>
+        </div>
+      </div>
+
+      <div class="cod-block" id="codBlock">
+        <div class="cod-head">
+          <label class="cod-label" onclick="toggleCod(event)">
+            <div class="switch" id="codSwitch"></div>
+            <span>ເຄື່ອງມີ COD</span>
+          </label>
+        </div>
+        <div class="cod-amount" id="codAmountWrap">
+          <div class="money-input">
+            <input type="number" id="codAmount" inputmode="decimal" placeholder="ຈຳນວນເງິນ COD">
+          </div>
+        </div>
+      </div>
+
+      <div class="field full">
+        <label>ໝາຍເຫດ</label>
+        <textarea id="note" rows="2" placeholder="ບັນທຶກເພີ່ມເຕີມ (ຖ້າມີ)"></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn out" id="submitBtn">
+        <span id="submitLabel">＋ ບັນທຶກອໍເດີ້ ຝາກໄປ</span>
+      </button>
+    </div>
+  </form>
+
+  <div class="recent-section">
+    <div class="recent-title">ລາຍການລ່າສຸດ</div>
+    <div id="recentList">
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+    </div>
+  </div>
+
+  <a href="report.html" class="nav-link">ເບິ່ງລາຍງານສະຫຼຸບ →</a>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ⚠️ ປ່ຽນ URL ນີ້ເປັນ Web App URL ຂອງ Apps Script ຫຼັງຈາກ Deploy
+  const API_URL = 'https://script.google.com/macros/s/AKfycbzbBSy_vIFkj3A9Q5j0ZDUwF-t8oszRt2kFMz9cB6OsaMqiI0t__syteoP_hM4Mt_Zu/exec';
+
+  let currentRoute = 'out';
+
+  function selectRoute(route){
+    currentRoute = route;
+    document.querySelectorAll('.route-btn').forEach(b=>{
+      b.classList.toggle('active', b.dataset.route === route);
+    });
+    const flag = document.getElementById('routeFlag');
+    const btn = document.getElementById('submitBtn');
+    const label = document.getElementById('submitLabel');
+
+    if(route === 'out'){
+      flag.textContent = 'ຝາກໄປ';
+      flag.className = 'route-flag out';
+      btn.className = 'submit-btn out';
+      label.textContent = '＋ ບັນທຶກອໍເດີ້ ຝາກໄປ';
+    } else {
+      flag.textContent = 'ຝາກມາ';
+      flag.className = 'route-flag in';
+      btn.className = 'submit-btn in';
+      label.textContent = '＋ ບັນທຶກອໍເດີ້ ຝາກມາ';
+    }
+    loadRecent();
+  }
+
+  function toggleCod(e){
+    e.preventDefault();
+    const sw = document.getElementById('codSwitch');
+    const block = document.getElementById('codBlock');
+    const wrap = document.getElementById('codAmountWrap');
+    const isOn = sw.classList.toggle('on');
+    block.classList.toggle('active', isOn);
+    wrap.classList.toggle('show', isOn);
+    if(!isOn){ document.getElementById('codAmount').value=''; }
+  }
+
+  function showToast(msg, isError){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast' + (isError ? ' error' : '') + ' show';
+    setTimeout(()=> t.classList.remove('show'), 2600);
+  }
+
+  // ===== Set default date = today =====
+  document.getElementById('date').valueAsDate = new Date();
+
+  // ===== Submit form =====
+  document.getElementById('orderForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    const hasCod = document.getElementById('codSwitch').classList.contains('on');
+
+    const order = {
+      type: currentRoute,
+      date: document.getElementById('date').value,
+      trackingCode: document.getElementById('trackingCode').value.trim(),
+      receiverName: document.getElementById('receiverName').value.trim(),
+      phone: document.getElementById('phone').value.trim(),
+      payOrigin: document.getElementById('payOrigin').value || 0,
+      payDestination: document.getElementById('payDestination').value || 0,
+      hasCod: hasCod,
+      codAmount: hasCod ? (document.getElementById('codAmount').value || 0) : 0,
+      note: document.getElementById('note').value.trim()
+    };
+
+    if(!order.trackingCode || !order.receiverName){
+      showToast('ກະລຸນາປ້ອນເລກລະຫັດເຄື່ອງ ແລະ ຊື່ຜູ້ຮັບ', true);
+      return;
+    }
+
+    btn.disabled = true;
+    const originalLabel = document.getElementById('submitLabel').textContent;
+    document.getElementById('submitLabel').textContent = 'ກຳລັງບັນທຶກ...';
+
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'addOrder', order: order })
+      });
+      const result = await res.json();
+
+      if(result.success){
+        showToast('✓ ບັນທຶກສຳເລັດແລ້ວ');
+        document.getElementById('orderForm').reset();
+        document.getElementById('date').valueAsDate = new Date();
+        const sw = document.getElementById('codSwitch');
+        sw.classList.remove('on');
+        document.getElementById('codBlock').classList.remove('active');
+        document.getElementById('codAmountWrap').classList.remove('show');
+        loadRecent();
+      } else {
+        showToast('ມີຂໍ້ຜິດພາດ: ' + (result.error || 'ບໍ່ຮູ້ສາເຫດ'), true);
+      }
+    } catch(err){
+      showToast('ເຊື່ອມຕໍ່ບໍ່ໄດ້ ກະລຸນາລອງໃໝ່', true);
+    } finally {
+      btn.disabled = false;
+      document.getElementById('submitLabel').textContent = originalLabel;
+    }
+  });
+
+  // ===== Load recent orders =====
+  async function loadRecent(){
+    const list = document.getElementById('recentList');
+    list.innerHTML = '<div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>';
+
+    try {
+      const res = await fetch(`${API_URL}?action=recent&type=${currentRoute}&limit=8`);
+      const items = await res.json();
+
+      if(!items || items.length === 0){
+        list.innerHTML = '<div class="empty-state">ຍັງບໍ່ມີລາຍການ — ເລີ່ມບັນທຶກລາຍການທຳອິດເລີຍ</div>';
+        return;
+      }
+
+      list.innerHTML = items.map(item => {
+        const routeTag = currentRoute === 'out' ? 'out' : 'in';
+        const arrow = currentRoute === 'out' ? '↗' : '↙';
+        const total = (Number(item.payOrigin)||0) + (Number(item.payDestination)||0);
+        return `
+          <div class="recent-item">
+            <div class="recent-tag ${routeTag}">${arrow}</div>
+            <div class="recent-main">
+              <div class="recent-code">${escapeHtml(item.trackingCode)}</div>
+              <div class="recent-meta">
+                <span>${escapeHtml(item.receiverName)}</span>
+                <span>·</span>
+                <span>${item.date}</span>
+                ${item.hasCod ? '<span class="recent-cod-badge">COD</span>' : ''}
+              </div>
+            </div>
+            <div class="recent-amount">
+              <div class="num">${total.toLocaleString()}</div>
+              <div class="lbl">KIP</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    } catch(err){
+      list.innerHTML = '<div class="empty-state">ໂຫຼດລາຍການບໍ່ໄດ້ — ກວດສອບການເຊື່ອມຕໍ່</div>';
+    }
+  }
+
+  function escapeHtml(str){
+    if(!str) return '';
+    return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  }
+
+  // Initial load
+  loadRecent();
+</script>
+
+</body>
+</html>

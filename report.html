@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ລາຍງານສະຫຼຸບ — ຢູນິເທວ ສາຂາຄຳບຸນ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1c2333;
+    --ink-soft:#5a6378;
+    --paper:#fbf9f4;
+    --panel:#ffffff;
+    --line:#e7e2d6;
+    --route-out:#c2410c;
+    --route-out-soft:#fef1e8;
+    --route-in:#0f6e5f;
+    --route-in-soft:#e7f5f1;
+    --warn:#b3261e;
+    --radius:14px;
+    --shadow: 0 1px 2px rgba(28,35,51,0.04), 0 8px 24px -12px rgba(28,35,51,0.12);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(circle at 1px 1px, rgba(28,35,51,0.05) 1px, transparent 0) 0 0/22px 22px,
+      var(--paper);
+    color:var(--ink);
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
+    min-height:100vh;
+    padding:0 0 56px;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+
+  header{
+    background:var(--ink);
+    color:#f4f1e8;
+    padding:22px 20px 22px;
+    position:relative;overflow:hidden;
+  }
+  header::after{
+    content:"";position:absolute;inset:0;
+    background-image:repeating-linear-gradient(135deg, rgba(244,241,232,0.035) 0 2px, transparent 2px 14px);
+    pointer-events:none;
+  }
+  .header-inner{max-width:920px;margin:0 auto;position:relative;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  .brand-row{display:flex;align-items:center;gap:10px;}
+  .brand-mark{
+    width:34px;height:34px;border-radius:9px;
+    background:linear-gradient(135deg,var(--route-out),#e8923f);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:15px;color:#fff;flex-shrink:0;
+    box-shadow:0 2px 6px rgba(194,65,12,0.4);
+  }
+  .brand-text-lao{font-size:18px;font-weight:700;}
+  .brand-text-sub{font-size:11px;color:#c8c2af;letter-spacing:1.2px;text-transform:uppercase;font-family:'Noto Sans',sans-serif;}
+  .back-link{color:#d8d2bf;text-decoration:none;font-size:13px;font-weight:600;display:flex;align-items:center;gap:5px;}
+  .back-link:hover{color:#fff;}
+
+  .wrap{max-width:920px;margin:0 auto;padding:0 16px;}
+
+  /* ===== Filter bar ===== */
+  .filter-bar{
+    display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+    margin-top:-18px;position:relative;z-index:2;
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:12px 14px;box-shadow:var(--shadow);
+  }
+  .filter-tabs{display:flex;gap:4px;background:var(--paper);border-radius:9px;padding:3px;}
+  .filter-tab{
+    border:none;background:transparent;padding:7px 14px;border-radius:7px;
+    font-size:12.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;transition:all .15s;
+  }
+  .filter-tab.active{background:var(--ink);color:#f4f1e8;}
+  .filter-bar input[type="date"], .filter-bar input[type="month"]{
+    border:1.5px solid var(--line);border-radius:8px;padding:7px 10px;font-size:13px;
+    font-family:'JetBrains Mono',monospace;color:var(--ink);
+  }
+  .filter-bar select{
+    border:1.5px solid var(--line);border-radius:8px;padding:7px 10px;font-size:13px;
+    font-family:'JetBrains Mono',monospace;color:var(--ink);background:#fff;
+  }
+  .refresh-btn{
+    margin-left:auto;border:1.5px solid var(--line);background:#fff;border-radius:8px;
+    padding:7px 12px;font-size:12.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
+  }
+  .refresh-btn:hover{border-color:var(--ink);color:var(--ink);}
+
+  /* ===== Summary cards ===== */
+  .summary-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px;
+  }
+  .sum-card{
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:16px 16px;box-shadow:var(--shadow);position:relative;overflow:hidden;
+  }
+  .sum-card::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:3px;
+  }
+  .sum-card.grand::before{background:var(--ink);}
+  .sum-card.out::before{background:var(--route-out);}
+  .sum-card.in::before{background:var(--route-in);}
+  .sum-eyebrow{font-size:11px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+  .sum-eyebrow .ic{font-size:13px;}
+  .sum-value{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;line-height:1.1;}
+  .sum-value .unit{font-size:13px;font-weight:600;color:var(--ink-soft);margin-left:4px;}
+  .sum-sub{display:flex;gap:14px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);}
+  .sum-sub-item{font-size:11.5px;color:var(--ink-soft);}
+  .sum-sub-item b{display:block;font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--ink);font-weight:700;margin-top:1px;}
+
+  /* ===== Breakdown table ===== */
+  .table-section{margin-top:22px;}
+  .section-title{
+    font-size:13px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;
+    letter-spacing:0.8px;margin:0 2px 10px;display:flex;align-items:center;gap:8px;
+  }
+  .section-title::before{content:"";width:14px;height:2px;background:var(--ink-soft);border-radius:2px;}
+
+  .table-card{
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);overflow:hidden;
+  }
+  .table-scroll{overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;font-size:13px;min-width:560px;}
+  thead th{
+    text-align:left;padding:11px 14px;background:#f5f2e9;
+    font-size:11px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;
+    letter-spacing:0.5px;border-bottom:1px solid var(--line);white-space:nowrap;
+  }
+  thead th.num{text-align:right;}
+  tbody td{padding:10px 14px;border-bottom:1px solid #f1eee4;font-family:'JetBrains Mono',monospace;}
+  tbody td.num{text-align:right;}
+  tbody td.lao{font-family:'Noto Sans Lao','Noto Sans',sans-serif;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#fbf9f4;}
+  .pill{
+    display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;
+    padding:2px 8px;border-radius:99px;
+  }
+  .pill.out{background:var(--route-out-soft);color:var(--route-out);}
+  .pill.in{background:var(--route-in-soft);color:var(--route-in);}
+
+  .bar-cell{display:flex;align-items:center;gap:6px;}
+  .bar-track{flex:1;height:6px;background:#f1eee4;border-radius:99px;overflow:hidden;min-width:50px;}
+  .bar-fill{height:100%;border-radius:99px;}
+  .bar-fill.out{background:var(--route-out);}
+  .bar-fill.in{background:var(--route-in);}
+
+  .empty-state{text-align:center;padding:40px 20px;color:var(--ink-soft);font-size:13.5px;}
+  .skeleton-row{height:38px;background-image:linear-gradient(90deg, #f7f4ec 0px, #efebdf 40px, #f7f4ec 80px);background-size:600px;animation:shimmer 1.4s infinite linear;}
+  @keyframes shimmer{from{background-position:-300px 0;}to{background-position:300px 0;}}
+
+  .totals-row td{font-weight:700;background:#f5f2e9;border-top:2px solid var(--line);}
+
+  @media (max-width:680px){
+    .summary-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand-row">
+      <div class="brand-mark">U</div>
+      <div>
+        <div class="brand-text-lao">ລາຍງານສະຫຼຸບ</div>
+        <div class="brand-text-sub">ສາຂາຄຳບຸນ</div>
+      </div>
+    </div>
+    <a href="staff.html" class="back-link">← ໜ້າບັນທຶກ</a>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="filter-bar">
+    <div class="filter-tabs" id="filterTabs">
+      <button class="filter-tab active" data-mode="all" onclick="setMode('all')">ທັງໝົດ</button>
+      <button class="filter-tab" data-mode="day" onclick="setMode('day')">ລາຍວັນ</button>
+      <button class="filter-tab" data-mode="month" onclick="setMode('month')">ລາຍເດືອນ</button>
+      <button class="filter-tab" data-mode="year" onclick="setMode('year')">ລາຍປີ</button>
+    </div>
+    <input type="date" id="dayPicker" style="display:none" onchange="applyFilter()">
+    <input type="month" id="monthPicker" style="display:none" onchange="applyFilter()">
+    <select id="yearPicker" style="display:none" onchange="applyFilter()"></select>
+    <button class="refresh-btn" onclick="loadAll()">⟳ ໂຫຼດໃໝ່</button>
+  </div>
+
+  <div class="summary-grid" id="summaryGrid">
+    <div class="sum-card grand">
+      <div class="sum-eyebrow"><span class="ic">Σ</span> ຍອດລວມທັງໝົດ</div>
+      <div class="sum-value" id="grandCount">—</div>
+      <div class="sum-sub">
+        <div class="sum-sub-item">ລາຍຮັບລວມ <b id="grandRevenue">—</b></div>
+        <div class="sum-sub-item">COD ລວມ <b id="grandCod">—</b></div>
+      </div>
+    </div>
+    <div class="sum-card out">
+      <div class="sum-eyebrow"><span class="ic">↗</span> ຝາກໄປ</div>
+      <div class="sum-value" id="outCount">—<span class="unit">ລາຍການ</span></div>
+      <div class="sum-sub">
+        <div class="sum-sub-item">ລາຍຮັບ <b id="outRevenue">—</b></div>
+        <div class="sum-sub-item">COD <b id="outCod">—</b></div>
+      </div>
+    </div>
+    <div class="sum-card in">
+      <div class="sum-eyebrow"><span class="ic">↙</span> ຝາກມາ</div>
+      <div class="sum-value" id="inCount">—<span class="unit">ລາຍການ</span></div>
+      <div class="sum-sub">
+        <div class="sum-sub-item">ລາຍຮັບ <b id="inRevenue">—</b></div>
+        <div class="sum-sub-item">COD <b id="inCod">—</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-section">
+    <div class="section-title">ປຽບທຽບຍອດແຍກຕາມວັນທີ</div>
+    <div class="table-card">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>ວັນທີ</th>
+              <th class="num">ຝາກໄປ</th>
+              <th class="num">ຝາກມາ</th>
+              <th class="num">ລາຍຮັບ ຝາກໄປ</th>
+              <th class="num">ລາຍຮັບ ຝາກມາ</th>
+              <th class="num">ລາຍຮັບລວມ</th>
+              <th style="min-width:90px">ອັດຕາສ່ວນ</th>
+            </tr>
+          </thead>
+          <tbody id="breakdownBody">
+            <tr><td colspan="7" class="skeleton-row"></td></tr>
+            <tr><td colspan="7" class="skeleton-row"></td></tr>
+            <tr><td colspan="7" class="skeleton-row"></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ⚠️ ປ່ຽນ URL ນີ້ເປັນ Web App URL ຂອງ Apps Script ຫຼັງຈາກ Deploy (ໃຫ້ກົງກັນກັບ staff.html)
+  const API_URL = 'https://script.google.com/macros/s/AKfycbzbBSy_vIFkj3A9Q5j0ZDUwF-t8oszRt2kFMz9cB6OsaMqiI0t__syteoP_hM4Mt_Zu/exec';
+
+  let currentMode = 'all';
+
+  // populate year picker
+  const yearSel = document.getElementById('yearPicker');
+  const thisYear = new Date().getFullYear();
+  for(let y = thisYear; y >= thisYear - 5; y--){
+    const opt = document.createElement('option');
+    opt.value = y; opt.textContent = y;
+    yearSel.appendChild(opt);
+  }
+
+  function setMode(mode){
+    currentMode = mode;
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
+    document.getElementById('dayPicker').style.display = mode === 'day' ? 'block' : 'none';
+    document.getElementById('monthPicker').style.display = mode === 'month' ? 'block' : 'none';
+    document.getElementById('yearPicker').style.display = mode === 'year' ? 'block' : 'none';
+
+    if(mode === 'day' && !document.getElementById('dayPicker').value){
+      document.getElementById('dayPicker').valueAsDate = new Date();
+    }
+    if(mode === 'month' && !document.getElementById('monthPicker').value){
+      const now = new Date();
+      document.getElementById('monthPicker').value = now.toISOString().slice(0,7);
+    }
+    if(mode === 'year' && !yearSel.value){
+      yearSel.value = thisYear;
+    }
+    loadAll();
+  }
+
+  function getFilterValue(){
+    if(currentMode === 'day') return document.getElementById('dayPicker').value;
+    if(currentMode === 'month') return document.getElementById('monthPicker').value;
+    if(currentMode === 'year') return yearSel.value;
+    return '';
+  }
+
+  function applyFilter(){
+    loadAll();
+  }
+
+  function fmt(n){
+    return Math.round(Number(n)||0).toLocaleString();
+  }
+
+  async function loadAll(){
+    await Promise.all([loadSummary(), loadBreakdown()]);
+  }
+
+  async function loadSummary(){
+    try{
+      const fv = getFilterValue();
+      const url = `${API_URL}?action=summary&filterType=${currentMode}&filterValue=${encodeURIComponent(fv)}`;
+      const res = await fetch(url);
+      const data = await res.json();
+
+      document.getElementById('grandCount').innerHTML = fmt(data.grandTotal.count) + '<span class="unit">ລາຍການ</span>';
+      document.getElementById('grandRevenue').textContent = fmt(data.grandTotal.totalRevenue) + ' ກີບ';
+      document.getElementById('grandCod').textContent = fmt(data.grandTotal.totalCod) + ' ກີບ';
+
+      document.getElementById('outCount').innerHTML = fmt(data.out.count) + '<span class="unit">ລາຍການ</span>';
+      document.getElementById('outRevenue').textContent = fmt(data.out.totalRevenue) + ' ກີບ';
+      document.getElementById('outCod').textContent = fmt(data.out.totalCod) + ' ກີບ';
+
+      document.getElementById('inCount').innerHTML = fmt(data.in.count) + '<span class="unit">ລາຍການ</span>';
+      document.getElementById('inRevenue').textContent = fmt(data.in.totalRevenue) + ' ກີບ';
+      document.getElementById('inCod').textContent = fmt(data.in.totalCod) + ' ກີບ';
+    } catch(err){
+      console.error('Summary load error:', err);
+    }
+  }
+
+  async function loadBreakdown(){
+    const body = document.getElementById('breakdownBody');
+    try{
+      const fv = getFilterValue();
+      const breakdownFilterType = currentMode === 'day' ? 'all' : currentMode; // day mode shows full breakdown around context; keep simple: use 'all' filter then highlight
+      const filterType = (currentMode === 'month' || currentMode === 'year') ? currentMode : 'all';
+      const filterValue = (currentMode === 'month' || currentMode === 'year') ? fv : '';
+
+      const url = `${API_URL}?action=breakdown&filterType=${filterType}&filterValue=${encodeURIComponent(filterValue)}`;
+      const res = await fetch(url);
+      let rows = await res.json();
+
+      if(currentMode === 'day' && fv){
+        rows = rows.filter(r => r.date === fv);
+      }
+
+      if(!rows || rows.length === 0){
+        body.innerHTML = '<tr><td colspan="7"><div class="empty-state">ບໍ່ມີຂໍ້ມູນໃນຊ່ວງເວລານີ້</div></td></tr>';
+        return;
+      }
+
+      // sort newest first for readability
+      rows = rows.slice().sort((a,b)=> b.date.localeCompare(a.date));
+
+      const maxRevenue = Math.max(...rows.map(r => r.outRevenue + r.inRevenue), 1);
+
+      let totalOutCount=0, totalInCount=0, totalOutRev=0, totalInRev=0;
+
+      body.innerHTML = rows.map(r => {
+        const totalRev = r.outRevenue + r.inRevenue;
+        const outPct = totalRev > 0 ? Math.round((r.outRevenue/totalRev)*100) : 0;
+        totalOutCount += r.outCount;
+        totalInCount += r.inCount;
+        totalOutRev += r.outRevenue;
+        totalInRev += r.inRevenue;
+        return `
+          <tr>
+            <td class="lao">${r.date}</td>
+            <td class="num"><span class="pill out">↗ ${r.outCount}</span></td>
+            <td class="num"><span class="pill in">↙ ${r.inCount}</span></td>
+            <td class="num">${fmt(r.outRevenue)}</td>
+            <td class="num">${fmt(r.inRevenue)}</td>
+            <td class="num"><b>${fmt(totalRev)}</b></td>
+            <td>
+              <div class="bar-cell">
+                <div class="bar-track">
+                  <div class="bar-fill out" style="width:${outPct}%"></div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('') + `
+        <tr class="totals-row">
+          <td class="lao">ລວມ</td>
+          <td class="num">${totalOutCount}</td>
+          <td class="num">${totalInCount}</td>
+          <td class="num">${fmt(totalOutRev)}</td>
+          <td class="num">${fmt(totalInRev)}</td>
+          <td class="num">${fmt(totalOutRev+totalInRev)}</td>
+          <td></td>
+        </tr>
+      `;
+    } catch(err){
+      body.innerHTML = '<tr><td colspan="7"><div class="empty-state">ໂຫຼດຂໍ້ມູນບໍ່ໄດ້ — ກວດສອບການເຊື່ອມຕໍ່</div></td></tr>';
+    }
+  }
+
+  loadAll();
+</script>
+
+</body>
+</html>
