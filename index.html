@@ -186,6 +186,21 @@
     transition:border-color .15s, box-shadow .15s;
   }
   .field input.mono-input{font-family:'JetBrains Mono',monospace;letter-spacing:0.4px;font-weight:600;}
+  .field input.input-error{border-color:var(--warn);}
+  .field input.input-error:focus{box-shadow:0 0 0 3.5px rgba(179,38,30,0.12);}
+  .dup-warning{
+    display:none;
+    align-items:center;gap:5px;
+    font-size:12px;color:var(--warn);font-weight:600;
+    margin-top:6px;
+  }
+  .dup-warning.show{display:flex;}
+  .checking-note{
+    display:none;
+    font-size:12px;color:var(--ink-soft);
+    margin-top:6px;
+  }
+  .checking-note.show{display:block;}
   .field input:focus, .field textarea:focus{
     outline:none;border-color:var(--mode-color);
     box-shadow:0 0 0 3.5px var(--mode-tint);
@@ -448,7 +463,8 @@
         </div>
         <div class="field">
           <label>ເລກລະຫັດເຄື່ອງ <span class="req">*</span></label>
-          <input type="text" id="trackingCode" class="mono-input" placeholder="ເຊັ່ນ 0123456789" required>
+          <input type="text" id="trackingCode" class="mono-input" placeholder="ເຊັ່ນ 0123456789" required autocomplete="off">
+          <div class="dup-warning" id="dupWarning">⚠ ເລກນີ້ມີໃນລະບົບແລ້ວ (ຊ້ຳກັບລາຍການເກົ່າ)</div>
         </div>
       </div>
 
@@ -661,6 +677,42 @@
     el.addEventListener('input', () => formatMoneyInput(el));
   });
 
+  // ===== ກວດສອບເລກລະຫັດເຄື່ອງຊ້ຳ (real-time, debounce) =====
+  let isCurrentCodeDuplicate = false;
+  let dupCheckTimer = null;
+  let dupCheckSeq = 0;
+
+  async function checkDuplicateCode(){
+    const input = document.getElementById('trackingCode');
+    const warning = document.getElementById('dupWarning');
+    const code = input.value.trim();
+
+    if(!code){
+      isCurrentCodeDuplicate = false;
+      input.classList.remove('input-error');
+      warning.classList.remove('show');
+      return;
+    }
+
+    const mySeq = ++dupCheckSeq;
+    try {
+      const res = await fetch(`${API_URL}?action=checkDuplicate&trackingCode=${encodeURIComponent(code)}`);
+      const result = await res.json();
+      if(mySeq !== dupCheckSeq) return; // ມີການພິມໃໝ່ກວ່າແລ້ວ, ຖິ້ມຜົນເກົ່າ
+
+      isCurrentCodeDuplicate = !!result.isDuplicate;
+      input.classList.toggle('input-error', isCurrentCodeDuplicate);
+      warning.classList.toggle('show', isCurrentCodeDuplicate);
+    } catch(err){
+      // ກວດສອບລົ້ມເຫຼວ (ເຊັ່ນເຄືອຂ່າຍຂັດຂ້ອງ) - ປ່ອຍໃຫ້ກວດອີກຄັ້ງຕອນບັນທຶກແທ້ຢູ່ Backend
+    }
+  }
+
+  document.getElementById('trackingCode').addEventListener('input', function(){
+    clearTimeout(dupCheckTimer);
+    dupCheckTimer = setTimeout(checkDuplicateCode, 500);
+  });
+
   // ===== Set default date = today =====
   document.getElementById('date').valueAsDate = new Date();
 
@@ -688,6 +740,14 @@
       return;
     }
 
+    // ກວດສອບອີກຄັ້ງກ່ອນສົ່ງ (ກໍລະນີຍັງບໍ່ທັນກວດສຳເລັດ ຫຼື ກວດແລ້ວເຫັນວ່າຊ້ຳ)
+    await checkDuplicateCode();
+    if(isCurrentCodeDuplicate){
+      showToast('⚠ ເລກລະຫັດເຄື່ອງນີ້ມີໃນລະບົບແລ້ວ ກະລຸນາກວດສອບເລກບິນ', true);
+      document.getElementById('trackingCode').focus();
+      return;
+    }
+
     btn.disabled = true;
     const originalLabel = document.getElementById('submitLabel').textContent;
     document.getElementById('submitLabel').textContent = 'ກຳລັງບັນທຶກ...';
@@ -707,6 +767,9 @@
         sw.classList.remove('on');
         document.getElementById('codBlock').classList.remove('active');
         document.getElementById('codAmountWrap').classList.remove('show');
+        document.getElementById('trackingCode').classList.remove('input-error');
+        document.getElementById('dupWarning').classList.remove('show');
+        isCurrentCodeDuplicate = false;
         loadRecent();
       } else {
         showToast('ມີຂໍ້ຜິດພາດ: ' + (result.error || 'ບໍ່ຮູ້ສາເຫດ'), true);
