@@ -398,6 +398,28 @@
   .fab-report:hover{opacity:0.92;}
   .fab-report .ic{font-size:17px;}
 
+  /* ===== FAB ບັນທຶກເຄື່ອງຕີກັບ (ສະແດງສະເພາະໂໝດຝາກມາ, ລອຍຄ້າງເທິງ FAB ລາຍງານ) ===== */
+  .fab-returned{
+    display:none;
+    position:fixed;
+    right:20px;bottom:78px;
+    z-index:40;
+    align-items:center;gap:9px;
+    background:#b3261e;
+    border:none;border-radius:99px;
+    padding:14px 20px;
+    font-size:14px;color:#fff;
+    font-weight:700;
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
+    cursor:pointer;
+    box-shadow:0 10px 26px -8px rgba(179,38,30,0.6);
+    transition:opacity .15s, transform .12s;
+  }
+  body.mode-in .fab-returned{display:flex;}
+  .fab-returned:active{transform:scale(0.95);}
+  .fab-returned:hover{opacity:0.92;}
+  .fab-returned .ic{font-size:17px;}
+
   /* ===== Edit Modal ===== */
   .modal-overlay{
     position:fixed;inset:0;z-index:60;
@@ -517,6 +539,49 @@
   .pager-btn:hover:not(:disabled){border-color:var(--mode-color);color:var(--mode-color);}
   .pager-btn:disabled{opacity:0.4;cursor:not-allowed;}
   .pager-info{font-size:13px;font-weight:600;color:var(--ink-soft);font-family:'JetBrains Mono',monospace;}
+
+  /* ===== Returned Modal ===== */
+  .returned-search-msg{
+    font-size:12.5px;font-weight:600;margin:-6px 0 14px;min-height:0;
+  }
+  .returned-search-msg.error{color:var(--warn);}
+  .returned-search-msg.info{color:var(--ink-soft);}
+
+  .returned-preview{
+    background:var(--paper);border:1.5px solid var(--line);
+    border-radius:var(--radius-sm);padding:16px;
+  }
+  .returned-preview-row{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:7px 0;font-size:13.5px;
+  }
+  .returned-preview-row + .returned-preview-row{border-top:1px dashed var(--line);}
+  .returned-preview-row .lbl{color:var(--ink-soft);font-size:12.5px;}
+  .returned-preview-row .val{font-weight:700;color:var(--ink);}
+  .returned-preview-row .val.mono{font-family:'JetBrains Mono',monospace;}
+  .returned-preview-code{
+    font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:800;
+    color:var(--ink);margin-bottom:4px;
+  }
+  .returned-preview-name{font-size:14px;color:var(--ink-soft);margin-bottom:10px;}
+
+  .returned-reason-options{display:flex;gap:8px;flex-wrap:wrap;}
+  .reason-chip{
+    border:1.5px solid var(--line);background:#fff;
+    border-radius:99px;padding:8px 16px;
+    font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer;
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
+    transition:border-color .15s, background .15s, color .15s;
+  }
+  .reason-chip:hover{border-color:#b3261e;}
+  .reason-chip.selected{background:#b3261e;border-color:#b3261e;color:#fff;}
+
+  .returned-warning{
+    margin-top:14px;
+    background:#fdf1ef;border:1px solid #f0d1cb;
+    border-radius:9px;padding:11px 13px;
+    font-size:12px;color:#8a2e22;line-height:1.5;
+  }
 
   @media (max-width:420px){
     .field-grid, .money-row{grid-template-columns:1fr;}
@@ -643,12 +708,67 @@
   </div>
 </div>
 
+<button type="button" class="fab-returned" id="returnedEntryBtn" onclick="openReturnedModal()">
+  <span class="ic">↩</span>
+  <span>ບັນທຶກເຄື່ອງຕີກັບ</span>
+</button>
+
 <a href="report.html" class="fab-report">
   <span class="ic">📊</span>
   <span>ລາຍງານ</span>
 </a>
 
 <div class="toast" id="toast"></div>
+
+<!-- ===== Returned Modal (ມາກເຄື່ອງຕີກັບ) ===== -->
+<div class="modal-overlay" id="returnedOverlay" onclick="if(event.target===this) closeReturnedModal()">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3>ບັນທຶກເຄື່ອງຕີກັບ</h3>
+      <button type="button" class="modal-close" onclick="closeReturnedModal()">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- ຂັ້ນຕອນ 1: ຄົ້ນຫາດ້ວຍເລກບິນ -->
+      <div id="returnedStep1">
+        <div class="field full">
+          <label>ເລກລະຫັດເຄື່ອງ (ຈາກໃບຝາກມາ) <span class="req">*</span></label>
+          <input type="text" id="returnedSearchCode" class="mono-input" placeholder="ພິມເລກລະຫັດເຄື່ອງ...">
+        </div>
+        <div class="returned-search-msg" id="returnedSearchMsg"></div>
+        <button type="button" class="submit-btn" style="background:#b3261e;box-shadow:0 10px 22px -10px #b3261e;" onclick="searchReturnedOrder()">
+          <span id="returnedSearchBtnLabel">ຄົ້ນຫາລາຍການ</span>
+        </button>
+      </div>
+
+      <!-- ຂັ້ນຕອນ 2: ສະແດງຂໍ້ມູນ ໃຫ້ຢືນຢັນ -->
+      <div id="returnedStep2" style="display:none;">
+        <div class="returned-preview" id="returnedPreview"></div>
+
+        <div class="field full" style="margin-top:14px;">
+          <label>ສາເຫດຕີກັບ <span class="req">*</span></label>
+          <div class="returned-reason-options" id="returnedReasonOptions">
+            <button type="button" class="reason-chip" data-reason="ລູກຄ້າບໍ່ມາຮັບເກີນກຳນົດ" onclick="selectReason(this)">ບໍ່ມາຮັບເກີນກຳນົດ</button>
+            <button type="button" class="reason-chip" data-reason="ເຄື່ອງແຕກຫັກ" onclick="selectReason(this)">ເຄື່ອງແຕກຫັກ</button>
+            <button type="button" class="reason-chip" data-reason="ອື່ນໆ" onclick="selectReason(this)">ອື່ນໆ</button>
+          </div>
+        </div>
+
+        <div class="returned-warning">
+          ⚠ ເມື່ອຢືນຢັນ ລາຍການນີ້ຈະຖືກຍ້າຍອອກຈາກຍອດ "ຝາກມາ" ປົກກະຕິ ໄປເປັນ "ເຄື່ອງຕີກັບ" ທັນທີ ແລະ ບໍ່ສາມາດກັບຄືນໄດ້
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="modal-cancel-btn" onclick="backToReturnedStep1()">← ຄົ້ນຫາໃໝ່</button>
+          <button type="button" class="submit-btn" id="returnedConfirmBtn" style="margin-top:0;background:#b3261e;box-shadow:0 10px 22px -10px #b3261e;" onclick="confirmMarkReturned()">
+            <span id="returnedConfirmLabel">✓ ຢືນຢັນຕີກັບ</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 <!-- ===== History Modal ===== -->
 <div class="modal-overlay" id="historyOverlay" onclick="if(event.target===this) closeHistoryModal()">
@@ -1104,6 +1224,131 @@
   function selectFromHistory(item){
     closeHistoryModal();
     openEditModal(item);
+  }
+
+  // ===== Returned Modal (ມາກເຄື່ອງຕີກັບ) =====
+  let returnedFoundOrder = null;
+  let returnedSelectedReason = '';
+
+  function openReturnedModal(){
+    document.getElementById('returnedOverlay').classList.add('show');
+    backToReturnedStep1();
+  }
+
+  function closeReturnedModal(){
+    document.getElementById('returnedOverlay').classList.remove('show');
+  }
+
+  function backToReturnedStep1(){
+    document.getElementById('returnedStep1').style.display = 'block';
+    document.getElementById('returnedStep2').style.display = 'none';
+    document.getElementById('returnedSearchCode').value = '';
+    document.getElementById('returnedSearchMsg').textContent = '';
+    document.getElementById('returnedSearchMsg').className = 'returned-search-msg';
+    returnedFoundOrder = null;
+    returnedSelectedReason = '';
+    document.querySelectorAll('.reason-chip').forEach(c => c.classList.remove('selected'));
+    setTimeout(() => document.getElementById('returnedSearchCode').focus(), 100);
+  }
+
+  async function searchReturnedOrder(){
+    const code = document.getElementById('returnedSearchCode').value.trim();
+    const msg = document.getElementById('returnedSearchMsg');
+    const btn = document.querySelector('#returnedStep1 .submit-btn');
+    const label = document.getElementById('returnedSearchBtnLabel');
+
+    if(!code){
+      msg.textContent = 'ກະລຸນາພິມເລກລະຫັດເຄື່ອງ';
+      msg.className = 'returned-search-msg error';
+      return;
+    }
+
+    btn.disabled = true;
+    label.textContent = 'ກຳລັງຄົ້ນຫາ...';
+    msg.textContent = '';
+    msg.className = 'returned-search-msg';
+
+    try {
+      const res = await fetch(`${API_URL}?action=findInOrder&trackingCode=${encodeURIComponent(code)}`);
+      const result = await res.json();
+
+      if(result.found){
+        returnedFoundOrder = result.order;
+        showReturnedStep2(result.order);
+      } else {
+        msg.textContent = '✕ ບໍ່ພົບເລກລະຫັດນີ້ໃນລາຍການ "ຝາກມາ" ກະລຸນາກວດສອບເລກບິນ';
+        msg.className = 'returned-search-msg error';
+      }
+    } catch(err){
+      msg.textContent = 'ເຊື່ອມຕໍ່ບໍ່ໄດ້ ກະລຸນາລອງໃໝ່';
+      msg.className = 'returned-search-msg error';
+    } finally {
+      btn.disabled = false;
+      label.textContent = 'ຄົ້ນຫາລາຍການ';
+    }
+  }
+
+  function showReturnedStep2(order){
+    document.getElementById('returnedStep1').style.display = 'none';
+    document.getElementById('returnedStep2').style.display = 'block';
+
+    const origin = Number(order.payOrigin) || 0;
+    const destination = Number(order.payDestination) || 0;
+    const codAmt = order.hasCod ? (Number(order.codAmount) || 0) : 0;
+
+    document.getElementById('returnedPreview').innerHTML = `
+      <div class="returned-preview-code">${escapeHtml(order.trackingCode)}</div>
+      <div class="returned-preview-name">${escapeHtml(order.receiverName)} · ${order.date}</div>
+      <div class="returned-preview-row"><span class="lbl">ຈ່າຍຕົ້ນທາງ</span><span class="val mono">${origin.toLocaleString()} ກີບ</span></div>
+      <div class="returned-preview-row"><span class="lbl">ຈ່າຍປາຍທາງ</span><span class="val mono">${destination.toLocaleString()} ກີບ</span></div>
+      ${order.hasCod ? `<div class="returned-preview-row"><span class="lbl">ເງິນ COD</span><span class="val mono">${codAmt.toLocaleString()} ກີບ</span></div>` : ''}
+    `;
+  }
+
+  function selectReason(btnEl){
+    document.querySelectorAll('.reason-chip').forEach(c => c.classList.remove('selected'));
+    btnEl.classList.add('selected');
+    returnedSelectedReason = btnEl.dataset.reason;
+  }
+
+  async function confirmMarkReturned(){
+    if(!returnedFoundOrder){
+      showToast('ບໍ່ພົບຂໍ້ມູນລາຍການ ກະລຸນາຄົ້ນຫາໃໝ່', true);
+      return;
+    }
+    if(!returnedSelectedReason){
+      showToast('ກະລຸນາເລືອກສາເຫດຕີກັບ', true);
+      return;
+    }
+
+    const btn = document.getElementById('returnedConfirmBtn');
+    const label = document.getElementById('returnedConfirmLabel');
+    btn.disabled = true;
+    label.textContent = 'ກຳລັງບັນທຶກ...';
+
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        body: JSON.stringify({
+          action: 'markAsReturned',
+          order: { id: returnedFoundOrder.id, reason: returnedSelectedReason }
+        })
+      });
+      const result = await res.json();
+
+      if(result.success){
+        showToast('✓ ບັນທຶກເຄື່ອງຕີກັບສຳເລັດແລ້ວ');
+        closeReturnedModal();
+        loadRecent();
+      } else {
+        showToast('ມີຂໍ້ຜິດພາດ: ' + (result.error || 'ບໍ່ຮູ້ສາເຫດ'), true);
+      }
+    } catch(err){
+      showToast('ເຊື່ອມຕໍ່ບໍ່ໄດ້ ກະລຸນາລອງໃໝ່', true);
+    } finally {
+      btn.disabled = false;
+      label.textContent = '✓ ຢືນຢັນຕີກັບ';
+    }
   }
 
   // ===== Edit Modal =====
