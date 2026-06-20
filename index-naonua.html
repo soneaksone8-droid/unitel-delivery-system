@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23c2531f'/%3E%3Ctext x='50' y='68' font-family='Georgia,serif' font-size='58' font-weight='700' fill='white' text-anchor='middle'%3EU%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23c2531f'/%3E%3Ctext x='50' y='68' font-family='Georgia,serif' font-size='58' font-weight='700' fill='white' text-anchor='middle'%3EU%3C/text%3E%3C/svg%3E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ບັນທຶກອໍເດີ້">
+<meta name="theme-color" content="#c2531f">
+<title>ບັນທຶກອໍເດີ້ — ຢູນິເທວ ສາຂາຄຳບຸນ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Lao:wght@600;700&family=Noto+Sans+Lao:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#221d1a;
+    --ink-soft:#7c736a;
+    --paper:#faf7f2;
+    --panel:#ffffff;
+    --line:#e9e1d6;
+
+    /* ຝາກໄປ = ສົ້ມແບຣນ (ນຸ້ມລົງ ບໍ່ແສບຕາ) */
+    --out:#c2531f;
+    --out-deep:#9c3f15;
+    --out-tint:#fdf0e6;
+    --out-mid:#f2a268;
+
+    /* ຝາກມາ = ຟ້າອົມຂຽວເຂັ້ມ (teal) */
+    --in:#1f6e6b;
+    --in-deep:#13504e;
+    --in-tint:#e9f4f3;
+    --in-mid:#6bb0ad;
+
+    --gold:#b8860b;
+    --gold-tint:#fbf3df;
+    --warn:#b3261e;
+    --radius:18px;
+    --radius-sm:11px;
+    --shadow: 0 1px 2px rgba(34,29,26,0.05), 0 12px 30px -16px rgba(34,29,26,0.18);
+    --mode-color: var(--in);
+    --mode-deep: var(--in-deep);
+    --mode-tint: var(--in-tint);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
+    min-height:100vh;
+    padding:0 0 70px;
+    transition:background .35s ease;
+  }
+  body.mode-in{ background:
+      radial-gradient(ellipse 900px 500px at 50% -8%, var(--in-tint), transparent 60%),
+      var(--paper);
+  }
+  body.mode-out{ background:
+      radial-gradient(ellipse 900px 500px at 50% -8%, var(--out-tint), transparent 60%),
+      var(--paper);
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  .serif{font-family:'Noto Serif Lao',serif;}
+
+  /* ===== Header ===== */
+  header{
+    background:linear-gradient(135deg, var(--out-deep) 0%, var(--out) 70%);
+    color:#fff7ee;
+    padding:20px 20px 64px;
+    position:relative;
+    overflow:hidden;
+    border-bottom:3px solid rgba(255,255,255,0.65);
+    transition:border-color .25s;
+  }
+  header.mode-in{
+    border-bottom-color:var(--in-deep);
+  }
+  header::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:radial-gradient(circle, rgba(255,247,238,0.12) 1px, transparent 1px);
+    background-size:16px 16px;
+    pointer-events:none;
+  }
+  .header-inner{max-width:780px;margin:0 auto;position:relative;}
+  .brand-row{display:flex;align-items:center;gap:11px;}
+  .brand-mark{
+    width:38px;height:38px;border-radius:10px;
+    background:linear-gradient(150deg,#fff,#ffe2c4);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:16px;color:var(--out-deep);flex-shrink:0;
+    font-family:'Noto Serif Lao',serif;
+    box-shadow:0 3px 10px rgba(0,0,0,0.18);
+  }
+  .brand-text-lao{font-size:20px;font-weight:700;letter-spacing:0.2px;font-family:'Noto Serif Lao',serif;color:#fff;}
+  .brand-text-sub{font-size:10.5px;color:#ffe0c2;letter-spacing:2px;text-transform:uppercase;margin-top:2px;font-family:'JetBrains Mono',monospace;}
+  .branch-tag{
+    display:inline-flex;align-items:center;gap:7px;
+    margin-top:14px;
+    font-size:13px;color:#fff0e0;
+    letter-spacing:0.2px;
+  }
+  .branch-tag .dot{width:6px;height:6px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px rgba(255,255,255,0.25);flex-shrink:0;}
+  .branch-tag b{color:#fff;font-weight:700;}
+
+  /* ===== Layout ===== */
+  .wrap{max-width:780px;margin:0 auto;padding:0 16px;}
+
+  /* ===== Route Toggle ===== */
+  .route-toggle{
+    display:grid;grid-template-columns:1fr 1fr;
+    gap:11px;
+    margin-top:-46px;
+    position:relative;
+    z-index:2;
+  }
+  .route-btn{
+    background:var(--panel);
+    border:2px solid transparent;
+    border-radius:var(--radius);
+    padding:18px 16px;
+    cursor:pointer;
+    text-align:left;
+    display:flex;align-items:center;gap:13px;
+    transition:border-color .18s, transform .12s, box-shadow .18s, background .18s;
+    box-shadow:var(--shadow);
+    position:relative;
+  }
+  .route-btn:active{transform:scale(0.97);}
+  .route-icon{
+    width:44px;height:44px;border-radius:12px;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;font-size:20px;font-weight:700;
+    transition:background .18s, color .18s;
+  }
+  .route-btn[data-route="in"] .route-icon{background:var(--in-tint);color:var(--in);}
+  .route-btn[data-route="out"] .route-icon{background:var(--out-tint);color:var(--out);}
+  .route-text{min-width:0;}
+  .route-label{font-weight:700;font-size:15.5px;line-height:1.3;font-family:'Noto Serif Lao',serif;}
+  .route-sub{font-size:11px;color:var(--ink-soft);margin-top:1px;}
+
+  .route-btn.active[data-route="in"]{border-color:var(--in);background:var(--in-tint);box-shadow:0 10px 26px -14px rgba(31,110,107,0.5);}
+  .route-btn.active[data-route="in"] .route-icon{background:var(--in);color:#fff;}
+  .route-btn.active[data-route="out"]{border-color:var(--out);background:var(--out-tint);box-shadow:0 10px 26px -14px rgba(194,83,31,0.5);}
+  .route-btn.active[data-route="out"] .route-icon{background:var(--out);color:#fff;}
+
+  /* ===== Form Card ===== */
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    margin-top:16px;
+    overflow:hidden;
+  }
+  .card-head{
+    padding:18px 20px 16px;
+    display:flex;align-items:center;justify-content:space-between;
+    background:var(--mode-tint);
+    border-bottom:1px solid var(--line);
+    transition:background .25s;
+  }
+  .card-head h2{margin:0;font-size:16.5px;font-weight:700;font-family:'Noto Serif Lao',serif;color:var(--ink);}
+  .route-flag{
+    font-size:11.5px;font-weight:700;padding:5px 13px;border-radius:99px;
+    letter-spacing:0.3px;color:#fff;
+    background:var(--mode-color);
+    transition:background .25s;
+    display:flex;align-items:center;gap:5px;
+  }
+
+  .form-body{padding:20px 20px 20px;}
+  .field-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+  .field{margin-bottom:14px;}
+  .field.full{grid-column:1/-1;}
+  .field label{
+    display:block;font-size:12.5px;font-weight:600;color:var(--ink-soft);
+    margin-bottom:6px;letter-spacing:0.1px;
+  }
+  .field label .req{color:var(--warn);margin-left:2px;}
+  .field input, .field textarea{
+    width:100%;
+    border:1.5px solid var(--line);
+    border-radius:var(--radius-sm);
+    padding:11px 13px;
+    font-size:15px;
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
+    color:var(--ink);
+    background:#fff;
+    transition:border-color .15s, box-shadow .15s;
+  }
+  .field input.mono-input{font-family:'JetBrains Mono',monospace;letter-spacing:0.4px;font-weight:600;}
+  .field input.input-error{border-color:var(--warn);}
+  .field input.input-error:focus{box-shadow:0 0 0 3.5px rgba(179,38,30,0.12);}
+  .dup-warning{
+    display:none;
+    align-items:center;gap:5px;
+    font-size:12px;color:var(--warn);font-weight:600;
+    margin-top:6px;
+  }
+  .dup-warning.show{display:flex;}
+  .checking-note{
+    display:none;
+    font-size:12px;color:var(--ink-soft);
+    margin-top:6px;
+  }
+  .checking-note.show{display:block;}
+  .field input:focus, .field textarea:focus{
+    outline:none;border-color:var(--mode-color);
+    box-shadow:0 0 0 3.5px var(--mode-tint);
+  }
+  .field input::placeholder, .field textarea::placeholder{color:#c2b8a8;font-family:'Noto Sans Lao','Noto Sans',sans-serif;}
+
+  .money-row{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+  .money-input{position:relative;}
+  .money-input input{padding-right:48px;}
+  .money-input::after{
+    content:"KIP";position:absolute;right:13px;top:50%;transform:translateY(-50%);
+    font-size:10px;color:#c2b8a8;font-weight:700;letter-spacing:0.6px;
+    font-family:'JetBrains Mono',monospace;
+  }
+  .money-input{margin-bottom:0;}
+
+  /* COD toggle */
+  .cod-block{
+    border:1.5px solid var(--line);
+    border-radius:var(--radius-sm);
+    padding:14px 16px;
+    margin-bottom:14px;
+    transition:border-color .2s, background .2s, box-shadow .2s;
+    background:var(--panel);
+  }
+  .cod-block.active{
+    border-color:var(--gold);
+    background:linear-gradient(135deg, var(--gold-tint), #fffdf6);
+    box-shadow:0 4px 14px -8px rgba(184,134,11,0.45);
+  }
+  .cod-head{display:flex;align-items:center;justify-content:space-between;}
+  .cod-label{display:flex;align-items:center;gap:11px;cursor:pointer;}
+  .cod-icon{
+    min-width:34px;height:30px;border-radius:9px;
+    padding:0 7px;
+    background:#f1ece0;color:#a89a78;
+    display:flex;align-items:center;justify-content:center;
+    font-size:11px;font-weight:800;flex-shrink:0;
+    letter-spacing:0.2px;
+    transition:background .2s, color .2s;
+  }
+  .cod-block.active .cod-icon{background:var(--gold);color:#fff;}
+  .switch{
+    width:44px;height:25px;border-radius:99px;background:#e1d8c8;
+    position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;
+  }
+  .switch.on{background:var(--gold);}
+  .switch::after{
+    content:"";position:absolute;top:3px;left:3px;width:19px;height:19px;
+    border-radius:50%;background:#fff;transition:left .2s cubic-bezier(.3,1.4,.4,1);
+    box-shadow:0 1px 3px rgba(0,0,0,0.25);
+  }
+  .switch.on::after{left:22px;}
+  .cod-label span{font-size:14.5px;font-weight:700;}
+  .cod-amount{
+    margin-top:0;max-height:0;overflow:hidden;opacity:0;
+    transition:max-height .25s ease, opacity .2s ease, margin-top .25s ease;
+  }
+  .cod-amount.show{margin-top:13px;max-height:80px;opacity:1;}
+  .cod-amount .money-input input{
+    border-color:#e8d9ab;
+    font-size:16px;font-weight:700;
+    background:#fffefa;
+  }
+  .cod-amount .money-input input:focus{
+    border-color:var(--gold);
+    box-shadow:0 0 0 3.5px var(--gold-tint);
+  }
+  .cod-amount .money-input::after{color:#c9a73f;}
+
+  .submit-btn{
+    width:100%;
+    background:var(--mode-color);
+    color:#fff;
+    border:none;
+    border-radius:var(--radius-sm);
+    padding:15px;
+    font-size:15.5px;
+    font-weight:700;
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
+    cursor:pointer;
+    margin-top:5px;
+    display:flex;align-items:center;justify-content:center;gap:9px;
+    transition:opacity .15s, transform .1s, background .25s, box-shadow .25s;
+    box-shadow:0 10px 22px -10px var(--mode-color);
+  }
+  .submit-btn:active{transform:scale(0.985);}
+  .submit-btn:disabled{opacity:0.55;cursor:not-allowed;}
+
+  .toast{
+    position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120%);
+    background:var(--ink);color:#fff;
+    padding:13px 22px;border-radius:99px;font-size:14px;font-weight:600;
+    box-shadow:0 8px 24px rgba(0,0,0,0.3);
+    transition:transform .25s cubic-bezier(.34,1.56,.64,1);
+    z-index:50;display:flex;align-items:center;gap:8px;
+  }
+  .toast.show{transform:translateX(-50%) translateY(0);}
+  .toast.error{background:var(--warn);}
+
+  /* ===== Recent list ===== */
+  .recent-section{margin-top:30px;}
+  .recent-title-row{
+    display:flex;align-items:center;justify-content:space-between;
+    margin:0 2px 12px;
+  }
+  .recent-title{
+    display:flex;align-items:center;gap:9px;
+    font-size:13px;font-weight:700;color:var(--ink-soft);
+    text-transform:uppercase;letter-spacing:1px;margin:0;
+  }
+  .recent-title::before{content:"";width:16px;height:2px;background:var(--mode-color);border-radius:2px;transition:background .25s;}
+  .history-btn{
+    display:flex;align-items:center;gap:5px;
+    background:none;border:none;cursor:pointer;
+    font-size:12.5px;font-weight:700;color:var(--mode-color);
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
+    padding:4px 6px;border-radius:6px;
+    transition:background .15s, color .2s;
+  }
+  .history-btn:hover{background:var(--mode-tint);}
+  .history-btn .ic{font-size:13px;transition:transform .15s;}
+  .history-btn:hover .ic{transform:translateX(2px);}
+
+  .recent-item{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-left:3px solid var(--mode-color);
+    border-radius:var(--radius-sm);
+    padding:13px 15px;
+    margin-bottom:9px;
+    display:flex;align-items:center;gap:13px;
+    box-shadow:var(--shadow);
+    animation:slideIn .3s ease;
+    transition:border-color .25s, transform .1s, box-shadow .15s;
+    cursor:pointer;
+  }
+  .recent-item:hover{box-shadow:0 4px 16px -6px rgba(34,29,26,0.25);}
+  .recent-item:active{transform:scale(0.99);}
+  @keyframes slideIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+  .recent-tag{
+    width:32px;height:32px;border-radius:9px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    font-size:14px;font-weight:800;
+    background:var(--mode-tint);color:var(--mode-color);
+    transition:background .25s, color .25s;
+  }
+  .recent-main{flex:1;min-width:0;}
+  .recent-code{font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:700;}
+  .recent-meta{font-size:12px;color:var(--ink-soft);margin-top:3px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .recent-cod-badge{
+    font-size:10px;font-weight:700;background:var(--gold-tint);color:#8a6315;
+    padding:2px 8px;border-radius:99px;font-family:'JetBrains Mono',monospace;
+  }
+  .recent-amount{text-align:right;flex-shrink:0;}
+  .recent-amount .lbl{font-size:9.5px;color:var(--ink-soft);margin-top:2px;}
+  .amt-row{display:flex;align-items:center;justify-content:flex-end;gap:6px;}
+  .amt-row + .amt-row{margin-top:3px;}
+  .amt-tag{
+    font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:5px;
+    letter-spacing:0.3px;white-space:nowrap;
+  }
+  .amt-tag.origin{background:#e3edfa;color:#1d5fae;}
+  .amt-tag.dest{background:#fce6ea;color:#b4254f;}
+  .amt-tag.cod{background:#fff1cf;color:#92660a;}
+  .amt-num{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13.5px;}
+  .amt-num.cod-num{color:#92660a;}
+
+  .empty-state{
+    text-align:center;padding:38px 20px;color:var(--ink-soft);font-size:14px;
+  }
+  .skeleton{
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);
+    padding:13px 15px;margin-bottom:9px;height:60px;
+    background-image:linear-gradient(90deg, #f3ede2 0px, #ebe2d2 40px, #f3ede2 80px);
+    background-size:600px;animation:shimmer 1.4s infinite linear;
+  }
+  @keyframes shimmer{from{background-position:-300px 0;}to{background-position:300px 0;}}
+
+  /* ===== Floating button to report page ===== */
+  .fab-report{
+    position:fixed;
+    right:20px;bottom:22px;
+    z-index:40;
+    display:flex;align-items:center;gap:9px;
+    background:var(--ink);
+    border:none;border-radius:99px;
+    padding:14px 20px;
+    font-size:14px;color:#f6f1e8;text-decoration:none;
+    font-weight:700;
+    box-shadow:0 10px 26px -8px rgba(34,29,26,0.55);
+    transition:opacity .15s, transform .12s;
+  }
+  .fab-report:active{transform:scale(0.95);}
+  .fab-report:hover{opacity:0.92;}
+  .fab-report .ic{font-size:17px;}
+
+  /* ===== FAB ບັນທຶກເຄື່ອງຕີກັບ (ສະແດງສະເພາະໂໝດຝາກມາ, ລອຍຄ້າງເທິງ FAB ລາຍງານ) ===== */
+  .fab-returned{
+    display:none;
+    position:fixed;
+    right:20px;bottom:78px;
+    z-index:40;
+    align-items:center;gap:9px;
+    background:#b3261e;
+    border:none;border-radius:99px;
+    padding:14px 20px;
+    font-size:14px;color:#fff;
+    font-weight:700;
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
+    cursor:pointer;
+    box-shadow:0 10px 26px -8px rgba(179,38,30,0.6);
+    transition:opacity .15s, transform .12s;
+  }
+  body.mode-in .fab-returned{display:flex;}
+  .fab-returned:active{transform:scale(0.95);}
+  .fab-returned:hover{opacity:0.92;}
+  .fab-returned .ic{font-size:17px;}
+
+  /* ===== Edit Modal ===== */
+  .modal-overlay{
+    position:fixed;inset:0;z-index:60;
+    background:rgba(34,29,26,0.5);
+    display:none;
+    align-items:flex-end;
+    justify-content:center;
+    backdrop-filter:blur(2px);
+  }
+  .modal-overlay.show{display:flex;}
+  .modal-card{
+    background:var(--panel);
+    width:100%;max-width:560px;
+    max-height:88vh;
+    border-radius:20px 20px 0 0;
+    box-shadow:0 -10px 40px rgba(0,0,0,0.25);
+    display:flex;flex-direction:column;
+    animation:modalUp .25s cubic-bezier(.2,.9,.3,1);
+  }
+  @media (min-width:620px){
+    .modal-overlay{align-items:center;}
+    .modal-card{border-radius:var(--radius);max-height:85vh;}
+  }
+  @keyframes modalUp{from{transform:translateY(40px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+  .modal-head{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 20px;border-bottom:1px solid var(--line);
+    flex-shrink:0;
+  }
+  .modal-head h3{margin:0;font-size:16.5px;font-weight:700;font-family:'Noto Serif Lao',serif;}
+  .modal-close{
+    width:32px;height:32px;border-radius:9px;border:none;
+    background:var(--paper);color:var(--ink-soft);font-size:15px;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;
+    transition:background .15s;
+  }
+  .modal-close:hover{background:#efe7da;}
+  .modal-body{padding:20px;overflow-y:auto;}
+  .modal-actions{display:flex;gap:10px;margin-top:6px;}
+  .modal-cancel-btn{
+    flex:0 0 auto;
+    background:var(--paper);
+    border:1.5px solid var(--line);
+    color:var(--ink-soft);
+    border-radius:var(--radius-sm);
+    padding:0 20px;
+    font-size:14.5px;font-weight:700;
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
+    cursor:pointer;
+  }
+  .modal-cancel-btn:hover{border-color:var(--ink-soft);}
+
+  /* ===== History Modal ===== */
+  .history-card{
+    max-width:620px;
+    height:88vh;
+  }
+  @media (min-width:620px){
+    .history-card{height:80vh;max-height:720px;}
+  }
+  .history-filters{
+    display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;
+    padding:16px 20px;border-bottom:1px solid var(--line);flex-shrink:0;
+  }
+  .history-filter-field{display:flex;flex-direction:column;gap:5px;}
+  .history-filter-field.grow{flex:1;min-width:160px;}
+  .history-filter-field label{font-size:11.5px;font-weight:600;color:var(--ink-soft);}
+  .history-filter-field input{
+    border:1.5px solid var(--line);border-radius:9px;
+    padding:9px 11px;font-size:14px;
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
+    color:var(--ink);background:#fff;
+  }
+  .history-filter-field input:focus{outline:none;border-color:var(--mode-color);}
+  .history-clear-btn{
+    border:1.5px solid var(--line);background:var(--paper);
+    border-radius:9px;padding:9px 14px;
+    font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer;
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
+    flex-shrink:0;
+  }
+  .history-clear-btn:hover{border-color:var(--ink-soft);color:var(--ink);}
+
+  .history-body{
+    flex:1;overflow-y:auto;padding:14px 20px;
+    display:flex;flex-direction:column;gap:8px;
+  }
+  .history-row{
+    display:flex;align-items:center;gap:12px;
+    background:var(--panel);border:1px solid var(--line);
+    border-left:3px solid var(--mode-color);
+    border-radius:var(--radius-sm);
+    padding:11px 14px;cursor:pointer;
+    transition:box-shadow .15s, transform .1s;
+  }
+  .history-row:hover{box-shadow:0 4px 14px -8px rgba(34,29,26,0.3);}
+  .history-row:active{transform:scale(0.99);}
+  .history-row-main{flex:1;min-width:0;}
+  .history-row-code{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13.5px;}
+  .history-row-meta{font-size:11.5px;color:var(--ink-soft);margin-top:2px;display:flex;gap:7px;flex-wrap:wrap;}
+  .history-row-amounts{text-align:right;flex-shrink:0;}
+
+  .history-footer{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 20px;border-top:1px solid var(--line);flex-shrink:0;
+    flex-wrap:wrap;gap:10px;
+  }
+  .history-count{font-size:12.5px;color:var(--ink-soft);}
+  .history-pager{display:flex;align-items:center;gap:12px;}
+  .pager-btn{
+    border:1.5px solid var(--line);background:#fff;
+    border-radius:9px;padding:8px 14px;
+    font-size:13px;font-weight:700;color:var(--ink);cursor:pointer;
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
+    transition:border-color .15s, opacity .15s;
+  }
+  .pager-btn:hover:not(:disabled){border-color:var(--mode-color);color:var(--mode-color);}
+  .pager-btn:disabled{opacity:0.4;cursor:not-allowed;}
+  .pager-info{font-size:13px;font-weight:600;color:var(--ink-soft);font-family:'JetBrains Mono',monospace;}
+
+  /* ===== Returned Modal ===== */
+  .returned-search-msg{
+    font-size:12.5px;font-weight:600;margin:-6px 0 14px;min-height:0;
+  }
+  .returned-search-msg.error{color:var(--warn);}
+  .returned-search-msg.info{color:var(--ink-soft);}
+
+  .returned-preview{
+    background:var(--paper);border:1.5px solid var(--line);
+    border-radius:var(--radius-sm);padding:16px;
+  }
+  .returned-preview-row{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:7px 0;font-size:13.5px;
+  }
+  .returned-preview-row + .returned-preview-row{border-top:1px dashed var(--line);}
+  .returned-preview-row .lbl{color:var(--ink-soft);font-size:12.5px;}
+  .returned-preview-row .val{font-weight:700;color:var(--ink);}
+  .returned-preview-row .val.mono{font-family:'JetBrains Mono',monospace;}
+  .returned-preview-code{
+    font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:800;
+    color:var(--ink);margin-bottom:4px;
+  }
+  .returned-preview-name{font-size:14px;color:var(--ink-soft);margin-bottom:10px;}
+
+  .returned-reason-options{display:flex;gap:8px;flex-wrap:wrap;}
+  .reason-chip{
+    border:1.5px solid var(--line);background:#fff;
+    border-radius:99px;padding:8px 16px;
+    font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer;
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
+    transition:border-color .15s, background .15s, color .15s;
+  }
+  .reason-chip:hover{border-color:#b3261e;}
+  .reason-chip.selected{background:#b3261e;border-color:#b3261e;color:#fff;}
+
+  .returned-warning{
+    margin-top:14px;
+    background:#fdf1ef;border:1px solid #f0d1cb;
+    border-radius:9px;padding:11px 13px;
+    font-size:12px;color:#8a2e22;line-height:1.5;
+  }
+
+  @media (max-width:420px){
+    .field-grid, .money-row{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body class="mode-in">
+
+<header class="mode-in">
+  <div class="header-inner">
+    <div class="brand-row">
+      <div class="brand-mark">U</div>
+      <div>
+        <div class="brand-text-lao">ຢູນິເທວຂົນສົ່ງດ່ວນ</div>
+        <div class="brand-text-sub">Express Delivery Log</div>
+      </div>
+    </div>
+    <div class="branch-tag">
+      <span class="dot"></span>
+      <span><b id="branchLabel">ສາຂາຄຳບຸນ</b> — ບັນທຶກອໍເດີ້</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="route-toggle">
+    <button class="route-btn active" data-route="in" onclick="selectRoute('in')">
+      <div class="route-icon">↙</div>
+      <div class="route-text">
+        <div class="route-label">ຝາກມາ</div>
+        <div class="route-sub">ເຄື່ອງເຂົ້າສາຂາ</div>
+      </div>
+    </button>
+    <button class="route-btn" data-route="out" onclick="selectRoute('out')">
+      <div class="route-icon">↗</div>
+      <div class="route-text">
+        <div class="route-label">ຝາກໄປ</div>
+        <div class="route-sub">ລູກຄ້າຝາກອອກ</div>
+      </div>
+    </button>
+  </div>
+
+  <form class="card" id="orderForm">
+    <div class="card-head">
+      <h2>ຂໍ້ມູນອໍເດີ້</h2>
+      <span class="route-flag" id="routeFlag">↙ ຝາກມາ</span>
+    </div>
+    <div class="form-body">
+
+      <div class="field-grid">
+        <div class="field">
+          <label>ວັນທີ <span class="req">*</span></label>
+          <input type="date" id="date" required>
+        </div>
+        <div class="field">
+          <label>ເລກລະຫັດເຄື່ອງ <span class="req">*</span></label>
+          <input type="text" id="trackingCode" class="mono-input" placeholder="ເຊັ່ນ 0123456789" required autocomplete="off">
+          <div class="dup-warning" id="dupWarning">⚠ ເລກນີ້ມີໃນລະບົບແລ້ວ (ຊ້ຳກັບລາຍການເກົ່າ)</div>
+        </div>
+      </div>
+
+      <div class="field-grid">
+        <div class="field">
+          <label>ຊື່ຜູ້ຮັບ <span class="req">*</span></label>
+          <input type="text" id="receiverName" placeholder="ຊື່ ແລະ ນາມສະກຸນ" required>
+        </div>
+        <div class="field">
+          <label>ເບີໂທ</label>
+          <input type="tel" id="phone" class="mono-input" placeholder="020 xxxxxxxx">
+        </div>
+      </div>
+
+      <div class="field full">
+        <label>ການຈ່າຍເງິນ</label>
+        <div class="money-row">
+          <div class="money-input">
+            <input type="text" id="payOrigin" inputmode="numeric" class="money-fmt" placeholder="ຈ່າຍຕົ້ນທາງ">
+          </div>
+          <div class="money-input">
+            <input type="text" id="payDestination" inputmode="numeric" class="money-fmt" placeholder="ຈ່າຍປາຍທາງ">
+          </div>
+        </div>
+      </div>
+
+      <div class="cod-block" id="codBlock">
+        <div class="cod-head">
+          <label class="cod-label" onclick="toggleCod(event)">
+            <div class="cod-icon">ກີບ</div>
+            <span>ເຄື່ອງມີ COD</span>
+          </label>
+          <div class="switch" id="codSwitch" onclick="toggleCod(event)"></div>
+        </div>
+        <div class="cod-amount" id="codAmountWrap">
+          <div class="money-input">
+            <input type="text" id="codAmount" inputmode="numeric" class="money-fmt" placeholder="ຈຳນວນເງິນ COD">
+          </div>
+        </div>
+      </div>
+
+      <div class="field full">
+        <label>ໝາຍເຫດ</label>
+        <textarea id="note" rows="2" placeholder="ບັນທຶກເພີ່ມເຕີມ (ຖ້າມີ)"></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">
+        <span id="submitLabel">＋ ບັນທຶກອໍເດີ້ ຝາກມາ</span>
+      </button>
+    </div>
+  </form>
+
+  <div class="recent-section">
+    <div class="recent-title-row">
+      <div class="recent-title">ລາຍການລ່າສຸດ</div>
+      <button type="button" class="history-btn" onclick="openHistoryModal()">
+        <span>ປະຫວັດທັງໝົດ</span><span class="ic">→</span>
+      </button>
+    </div>
+    <div id="recentList">
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+    </div>
+  </div>
+</div>
+
+<button type="button" class="fab-returned" id="returnedEntryBtn" onclick="openReturnedModal()">
+  <span class="ic">↩</span>
+  <span>ບັນທຶກເຄື່ອງຕີກັບ</span>
+</button>
+
+<a href="report-naonua.html" class="fab-report">
+  <span class="ic">📊</span>
+  <span>ລາຍງານ</span>
+</a>
+
+<div class="toast" id="toast"></div>
+
+<!-- ===== Returned Modal (ມາກເຄື່ອງຕີກັບ) ===== -->
+<div class="modal-overlay" id="returnedOverlay" onclick="if(event.target===this) closeReturnedModal()">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3>ບັນທຶກເຄື່ອງຕີກັບ</h3>
+      <button type="button" class="modal-close" onclick="closeReturnedModal()">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- ຂັ້ນຕອນ 1: ຄົ້ນຫາດ້ວຍເລກບິນ -->
+      <div id="returnedStep1">
+        <div class="field full">
+          <label>ເລກລະຫັດເຄື່ອງ (ຈາກໃບຝາກມາ) <span class="req">*</span></label>
+          <input type="text" id="returnedSearchCode" class="mono-input" placeholder="ພິມເລກລະຫັດເຄື່ອງ...">
+        </div>
+        <div class="returned-search-msg" id="returnedSearchMsg"></div>
+        <button type="button" class="submit-btn" style="background:#b3261e;box-shadow:0 10px 22px -10px #b3261e;" onclick="searchReturnedOrder()">
+          <span id="returnedSearchBtnLabel">ຄົ້ນຫາລາຍການ</span>
+        </button>
+      </div>
+
+      <!-- ຂັ້ນຕອນ 2: ສະແດງຂໍ້ມູນ ໃຫ້ຢືນຢັນ -->
+      <div id="returnedStep2" style="display:none;">
+        <div class="returned-preview" id="returnedPreview"></div>
+
+        <div class="field full" style="margin-top:14px;">
+          <label>ສາເຫດຕີກັບ <span class="req">*</span></label>
+          <div class="returned-reason-options" id="returnedReasonOptions">
+            <button type="button" class="reason-chip" data-reason="ລູກຄ້າບໍ່ມາຮັບເກີນກຳນົດ" onclick="selectReason(this)">ບໍ່ມາຮັບເກີນກຳນົດ</button>
+            <button type="button" class="reason-chip" data-reason="ເຄື່ອງແຕກຫັກ" onclick="selectReason(this)">ເຄື່ອງແຕກຫັກ</button>
+            <button type="button" class="reason-chip" data-reason="ອື່ນໆ" onclick="selectReason(this)">ອື່ນໆ</button>
+          </div>
+        </div>
+
+        <div class="returned-warning">
+          ⚠ ເມື່ອຢືນຢັນ ລາຍການນີ້ຈະຖືກຍ້າຍອອກຈາກຍອດ "ຝາກມາ" ປົກກະຕິ ໄປເປັນ "ເຄື່ອງຕີກັບ" ທັນທີ ແລະ ບໍ່ສາມາດກັບຄືນໄດ້
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="modal-cancel-btn" onclick="backToReturnedStep1()">← ຄົ້ນຫາໃໝ່</button>
+          <button type="button" class="submit-btn" id="returnedConfirmBtn" style="margin-top:0;background:#b3261e;box-shadow:0 10px 22px -10px #b3261e;" onclick="confirmMarkReturned()">
+            <span id="returnedConfirmLabel">✓ ຢືນຢັນຕີກັບ</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===== History Modal ===== -->
+<div class="modal-overlay" id="historyOverlay" onclick="if(event.target===this) closeHistoryModal()">
+  <div class="modal-card history-card">
+    <div class="modal-head">
+      <h3>ປະຫວັດອໍເດີ້ — <span id="historyRouteLabel">ຝາກມາ</span></h3>
+      <button type="button" class="modal-close" onclick="closeHistoryModal()">✕</button>
+    </div>
+
+    <div class="history-filters">
+      <div class="history-filter-field">
+        <label>ວັນທີ</label>
+        <input type="date" id="historyDateFilter" onchange="onHistoryFilterChange()">
+      </div>
+      <div class="history-filter-field grow">
+        <label>ຄົ້ນຫາເລກລະຫັດເຄື່ອງ</label>
+        <input type="text" id="historySearchInput" class="mono-input" placeholder="ພິມເລກລະຫັດ..." oninput="onHistorySearchInput()">
+      </div>
+      <button type="button" class="history-clear-btn" id="historyClearBtn" onclick="clearHistoryFilters()">ລ້າງຕົວກອງ</button>
+    </div>
+
+    <div class="history-body" id="historyBody">
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+    </div>
+
+    <div class="history-footer">
+      <div class="history-count" id="historyCount">—</div>
+      <div class="history-pager">
+        <button type="button" class="pager-btn" id="historyPrevBtn" onclick="goHistoryPage(-1)">← ກ່ອນໜ້າ</button>
+        <span class="pager-info" id="historyPageInfo">1 / 1</span>
+        <button type="button" class="pager-btn" id="historyNextBtn" onclick="goHistoryPage(1)">ຖັດໄປ →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Edit Modal ===== -->
+<div class="modal-overlay" id="editOverlay" onclick="if(event.target===this) closeEditModal()">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3>ແກ້ໄຂລາຍການ</h3>
+      <button type="button" class="modal-close" onclick="closeEditModal()">✕</button>
+    </div>
+    <form id="editForm" class="modal-body">
+      <input type="hidden" id="edit_id">
+      <input type="hidden" id="edit_type">
+
+      <div class="field-grid">
+        <div class="field">
+          <label>ວັນທີ <span class="req">*</span></label>
+          <input type="date" id="edit_date" required>
+        </div>
+        <div class="field">
+          <label>ເລກລະຫັດເຄື່ອງ <span class="req">*</span></label>
+          <input type="text" id="edit_trackingCode" class="mono-input" required>
+        </div>
+      </div>
+
+      <div class="field-grid">
+        <div class="field">
+          <label>ຊື່ຜູ້ຮັບ <span class="req">*</span></label>
+          <input type="text" id="edit_receiverName" required>
+        </div>
+        <div class="field">
+          <label>ເບີໂທ</label>
+          <input type="tel" id="edit_phone" class="mono-input">
+        </div>
+      </div>
+
+      <div class="field full">
+        <label>ການຈ່າຍເງິນ</label>
+        <div class="money-row">
+          <div class="money-input">
+            <input type="text" id="edit_payOrigin" inputmode="numeric" class="money-fmt" placeholder="ຈ່າຍຕົ້ນທາງ">
+          </div>
+          <div class="money-input">
+            <input type="text" id="edit_payDestination" inputmode="numeric" class="money-fmt" placeholder="ຈ່າຍປາຍທາງ">
+          </div>
+        </div>
+      </div>
+
+      <div class="cod-block" id="edit_codBlock">
+        <div class="cod-head">
+          <label class="cod-label" onclick="toggleEditCod(event)">
+            <div class="cod-icon">ກີບ</div>
+            <span>ເຄື່ອງມີ COD</span>
+          </label>
+          <div class="switch" id="edit_codSwitch" onclick="toggleEditCod(event)"></div>
+        </div>
+        <div class="cod-amount" id="edit_codAmountWrap">
+          <div class="money-input">
+            <input type="text" id="edit_codAmount" inputmode="numeric" class="money-fmt" placeholder="ຈຳນວນເງິນ COD">
+          </div>
+        </div>
+      </div>
+
+      <div class="field full">
+        <label>ໝາຍເຫດ</label>
+        <textarea id="edit_note" rows="2"></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="modal-cancel-btn" onclick="closeEditModal()">ຍົກເລີກ</button>
+        <button type="submit" class="submit-btn" id="editSubmitBtn" style="margin-top:0;">
+          <span id="editSubmitLabel">ບັນທຶກການແກ້ໄຂ</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  // ⚠️ Web App URL ຂອງ Apps Script
+  const API_URL = 'https://script.google.com/macros/s/AKfycbzbBSy_vIFkj3A9Q5j0ZDUwF-t8oszRt2kFMz9cB6OsaMqiI0t__syteoP_hM4Mt_Zu/exec';
+
+  // ⚠️ ສາຂາຂອງໜ້ານີ້ — ປ່ຽນຄ່ານີ້ໃຫ້ກົງກັບແຕ່ລະສາຂາ (khambun | naonua)
+  const BRANCH = 'naonua';
+
+  // ຊື່ສະແດງຜົນຂອງແຕ່ລະສາຂາ (ຕ້ອງກົງກັບ BRANCHES ໃນ Code.gs)
+  const BRANCH_LABELS = { khambun: 'ສາຂາຄຳບຸນ', naonua: 'ສາຂາໜາວເໜືອ' };
+  document.title = 'ບັນທຶກອໍເດີ້ — ' + (BRANCH_LABELS[BRANCH] || BRANCH);
+  document.addEventListener('DOMContentLoaded', () => {
+    const lbl = document.getElementById('branchLabel');
+    if(lbl) lbl.textContent = BRANCH_LABELS[BRANCH] || BRANCH;
+  });
+
+  let currentRoute = 'in';
+
+  function selectRoute(route){
+    currentRoute = route;
+    document.querySelectorAll('.route-btn').forEach(b=>{
+      b.classList.toggle('active', b.dataset.route === route);
+    });
+    const flag = document.getElementById('routeFlag');
+    const label = document.getElementById('submitLabel');
+    const body = document.body;
+    const headerEl = document.querySelector('header');
+
+    if(route === 'in'){
+      flag.textContent = '↙ ຝາກມາ';
+      label.textContent = '＋ ບັນທຶກອໍເດີ້ ຝາກມາ';
+      body.classList.remove('mode-out');
+      body.classList.add('mode-in');
+      headerEl.classList.add('mode-in');
+      document.documentElement.style.setProperty('--mode-color','var(--in)');
+      document.documentElement.style.setProperty('--mode-deep','var(--in-deep)');
+      document.documentElement.style.setProperty('--mode-tint','var(--in-tint)');
+    } else {
+      flag.textContent = '↗ ຝາກໄປ';
+      label.textContent = '＋ ບັນທຶກອໍເດີ້ ຝາກໄປ';
+      body.classList.remove('mode-in');
+      body.classList.add('mode-out');
+      headerEl.classList.remove('mode-in');
+      document.documentElement.style.setProperty('--mode-color','var(--out)');
+      document.documentElement.style.setProperty('--mode-deep','var(--out-deep)');
+      document.documentElement.style.setProperty('--mode-tint','var(--out-tint)');
+    }
+    loadRecent();
+  }
+
+  function toggleCod(e){
+    e.preventDefault();
+    const sw = document.getElementById('codSwitch');
+    const block = document.getElementById('codBlock');
+    const wrap = document.getElementById('codAmountWrap');
+    const isOn = sw.classList.toggle('on');
+    block.classList.toggle('active', isOn);
+    wrap.classList.toggle('show', isOn);
+    if(!isOn){ document.getElementById('codAmount').value=''; }
+  }
+
+  function showToast(msg, isError){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast' + (isError ? ' error' : '') + ' show';
+    setTimeout(()=> t.classList.remove('show'), 2600);
+  }
+
+  // ===== ໝາຍຈຸດອັດຕະໂນມັດໃນຊ່ອງເງິນ =====
+  function formatMoneyInput(el){
+    let raw = el.value.replace(/[^\d]/g, '');
+    if(raw === ''){ el.value = ''; return; }
+    el.value = Number(raw).toLocaleString('en-US');
+  }
+  function unformatMoney(str){
+    if(!str) return 0;
+    return Number(String(str).replace(/[^\d]/g, '')) || 0;
+  }
+  document.querySelectorAll('.money-fmt').forEach(el => {
+    el.addEventListener('input', () => formatMoneyInput(el));
+  });
+
+  // ===== ກວດສອບເລກລະຫັດເຄື່ອງຊ້ຳ (real-time, debounce) =====
+  let isCurrentCodeDuplicate = false;
+  let dupCheckTimer = null;
+  let dupCheckSeq = 0;
+
+  async function checkDuplicateCode(){
+    const input = document.getElementById('trackingCode');
+    const warning = document.getElementById('dupWarning');
+    const code = input.value.trim();
+
+    if(!code){
+      isCurrentCodeDuplicate = false;
+      input.classList.remove('input-error');
+      warning.classList.remove('show');
+      return;
+    }
+
+    const mySeq = ++dupCheckSeq;
+    try {
+      const res = await fetch(`${API_URL}?action=checkDuplicate&trackingCode=${encodeURIComponent(code)}&branch=${BRANCH}`);
+      const result = await res.json();
+      if(mySeq !== dupCheckSeq) return; // ມີການພິມໃໝ່ກວ່າແລ້ວ, ຖິ້ມຜົນເກົ່າ
+
+      isCurrentCodeDuplicate = !!result.isDuplicate;
+      input.classList.toggle('input-error', isCurrentCodeDuplicate);
+      warning.classList.toggle('show', isCurrentCodeDuplicate);
+    } catch(err){
+      // ກວດສອບລົ້ມເຫຼວ (ເຊັ່ນເຄືອຂ່າຍຂັດຂ້ອງ) - ປ່ອຍໃຫ້ກວດອີກຄັ້ງຕອນບັນທຶກແທ້ຢູ່ Backend
+    }
+  }
+
+  document.getElementById('trackingCode').addEventListener('input', function(){
+    clearTimeout(dupCheckTimer);
+    dupCheckTimer = setTimeout(checkDuplicateCode, 500);
+  });
+
+  // ===== Set default date = today =====
+  document.getElementById('date').valueAsDate = new Date();
+
+  // ===== Submit form =====
+  document.getElementById('orderForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    const hasCod = document.getElementById('codSwitch').classList.contains('on');
+
+    const order = {
+      type: currentRoute,
+      branch: BRANCH,
+      date: document.getElementById('date').value,
+      trackingCode: document.getElementById('trackingCode').value.trim(),
+      receiverName: document.getElementById('receiverName').value.trim(),
+      phone: document.getElementById('phone').value.trim(),
+      payOrigin: unformatMoney(document.getElementById('payOrigin').value),
+      payDestination: unformatMoney(document.getElementById('payDestination').value),
+      hasCod: hasCod,
+      codAmount: hasCod ? unformatMoney(document.getElementById('codAmount').value) : 0,
+      note: document.getElementById('note').value.trim()
+    };
+
+    if(!order.trackingCode || !order.receiverName){
+      showToast('ກະລຸນາປ້ອນເລກລະຫັດເຄື່ອງ ແລະ ຊື່ຜູ້ຮັບ', true);
+      return;
+    }
+
+    if(hasCod && unformatMoney(document.getElementById('codAmount').value) <= 0){
+      showToast('ກະລຸນາປ້ອນຈຳນວນເງິນ COD', true);
+      document.getElementById('codAmount').focus();
+      return;
+    }
+
+    // ຖ້າຮູ້ແລ້ວວ່າຊ້ຳ (ຈາກການກວດ real-time ຕອນພິມ) ບໍ່ຕ້ອງເສຍເວລາສົ່ງໄປ Backend
+    if(isCurrentCodeDuplicate){
+      showToast('⚠ ເລກລະຫັດເຄື່ອງນີ້ມີໃນລະບົບແລ້ວ ກະລຸນາກວດສອບເລກບິນ', true);
+      document.getElementById('trackingCode').focus();
+      return;
+    }
+
+    btn.disabled = true;
+    const originalLabel = document.getElementById('submitLabel').textContent;
+    document.getElementById('submitLabel').textContent = 'ກຳລັງບັນທຶກ...';
+
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'addOrder', order: order })
+      });
+      const result = await res.json();
+
+      if(result.success){
+        showToast('✓ ບັນທຶກສຳເລັດແລ້ວ');
+        document.getElementById('orderForm').reset();
+        document.getElementById('date').valueAsDate = new Date();
+        const sw = document.getElementById('codSwitch');
+        sw.classList.remove('on');
+        document.getElementById('codBlock').classList.remove('active');
+        document.getElementById('codAmountWrap').classList.remove('show');
+        document.getElementById('trackingCode').classList.remove('input-error');
+        document.getElementById('dupWarning').classList.remove('show');
+        isCurrentCodeDuplicate = false;
+        loadRecent();
+      } else {
+        showToast('ມີຂໍ້ຜິດພາດ: ' + (result.error || 'ບໍ່ຮູ້ສາເຫດ'), true);
+      }
+    } catch(err){
+      showToast('ເຊື່ອມຕໍ່ບໍ່ໄດ້ ກະລຸນາລອງໃໝ່', true);
+    } finally {
+      btn.disabled = false;
+      document.getElementById('submitLabel').textContent = originalLabel;
+    }
+  });
+
+  // ===== Load recent orders =====
+  async function loadRecent(){
+    const list = document.getElementById('recentList');
+    list.innerHTML = '<div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>';
+
+    try {
+      const res = await fetch(`${API_URL}?action=recent&type=${currentRoute}&limit=8&branch=${BRANCH}`);
+      const items = await res.json();
+
+      if(!items || items.length === 0){
+        list.innerHTML = '<div class="empty-state">ຍັງບໍ່ມີລາຍການ — ເລີ່ມບັນທຶກລາຍການທຳອິດເລີຍ</div>';
+        return;
+      }
+
+      list.innerHTML = items.map(item => {
+        const arrow = currentRoute === 'in' ? '↙' : '↗';
+        const origin = Number(item.payOrigin) || 0;
+        const destination = Number(item.payDestination) || 0;
+        const codAmt = item.hasCod ? (Number(item.codAmount) || 0) : 0;
+        const amountHtml = renderAmountTags(origin, destination, codAmt);
+        return `
+          <div class="recent-item" onclick='openEditModal(${JSON.stringify(item).replace(/'/g,"&#39;")})'>
+            <div class="recent-tag">${arrow}</div>
+            <div class="recent-main">
+              <div class="recent-code">${escapeHtml(item.trackingCode)}</div>
+              <div class="recent-meta">
+                <span>${escapeHtml(item.receiverName)}</span>
+                <span>·</span>
+                <span>${item.date}</span>
+              </div>
+            </div>
+            <div class="recent-amount">
+              ${amountHtml}
+            </div>
+          </div>
+        `;
+      }).join('');
+    } catch(err){
+      list.innerHTML = '<div class="empty-state">ໂຫຼດລາຍການບໍ່ໄດ້ — ກວດສອບການເຊື່ອມຕໍ່</div>';
+    }
+  }
+
+  function renderAmountTags(origin, destination, codAmount){
+    const rows = [];
+    if(origin > 0){
+      rows.push(`<div class="amt-row"><span class="amt-tag origin">ຕົ້ນທາງ</span><span class="amt-num">${origin.toLocaleString()}</span></div>`);
+    }
+    if(destination > 0){
+      rows.push(`<div class="amt-row"><span class="amt-tag dest">ປາຍທາງ</span><span class="amt-num">${destination.toLocaleString()}</span></div>`);
+    }
+    if(codAmount > 0){
+      rows.push(`<div class="amt-row"><span class="amt-tag cod">COD</span><span class="amt-num cod-num">${codAmount.toLocaleString()}</span></div>`);
+    }
+    if(rows.length === 0){
+      rows.push(`<div class="amt-row"><span class="amt-num">0</span></div>`);
+    }
+    return rows.join('') + '<div class="lbl">KIP</div>';
+  }
+
+  function escapeHtml(str){
+    if(!str) return '';
+    return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  }
+
+  // ===== History Modal (ປະຫວັດອໍເດີ້ ມີຄົ້ນຫາ+ແບ່ງໜ້າ) =====
+  let historyPage = 1;
+  let historyTotalPages = 1;
+  let historySearchTimer = null;
+
+  function openHistoryModal(){
+    document.getElementById('historyRouteLabel').textContent = currentRoute === 'in' ? 'ຝາກມາ' : 'ຝາກໄປ';
+    document.getElementById('historyOverlay').classList.add('show');
+    historyPage = 1;
+    loadHistory();
+  }
+
+  function closeHistoryModal(){
+    document.getElementById('historyOverlay').classList.remove('show');
+  }
+
+  function onHistoryFilterChange(){
+    historyPage = 1;
+    loadHistory();
+  }
+
+  function onHistorySearchInput(){
+    clearTimeout(historySearchTimer);
+    historySearchTimer = setTimeout(() => {
+      historyPage = 1;
+      loadHistory();
+    }, 400);
+  }
+
+  function clearHistoryFilters(){
+    document.getElementById('historyDateFilter').value = '';
+    document.getElementById('historySearchInput').value = '';
+    historyPage = 1;
+    loadHistory();
+  }
+
+  function goHistoryPage(delta){
+    const newPage = historyPage + delta;
+    if(newPage < 1 || newPage > historyTotalPages) return;
+    historyPage = newPage;
+    loadHistory();
+  }
+
+  async function loadHistory(){
+    const body = document.getElementById('historyBody');
+    body.innerHTML = '<div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>';
+
+    const dateFilter = document.getElementById('historyDateFilter').value;
+    const searchCode = document.getElementById('historySearchInput').value.trim();
+
+    try {
+      const url = `${API_URL}?action=search&type=${currentRoute}&date=${encodeURIComponent(dateFilter)}&searchCode=${encodeURIComponent(searchCode)}&page=${historyPage}&pageSize=15&branch=${BRANCH}`;
+      const res = await fetch(url);
+      const result = await res.json();
+
+      historyTotalPages = result.totalPages || 1;
+      historyPage = result.page || 1;
+
+      document.getElementById('historyCount').textContent = `ທັງໝົດ ${result.totalCount.toLocaleString()} ລາຍການ`;
+      document.getElementById('historyPageInfo').textContent = `${historyPage} / ${historyTotalPages}`;
+      document.getElementById('historyPrevBtn').disabled = historyPage <= 1;
+      document.getElementById('historyNextBtn').disabled = historyPage >= historyTotalPages;
+
+      if(!result.items || result.items.length === 0){
+        body.innerHTML = '<div class="empty-state">ບໍ່ພົບລາຍການ — ລອງປ່ຽນຕົວກອງ</div>';
+        return;
+      }
+
+      body.innerHTML = result.items.map(item => {
+        const origin = Number(item.payOrigin) || 0;
+        const destination = Number(item.payDestination) || 0;
+        const codAmt = item.hasCod ? (Number(item.codAmount) || 0) : 0;
+        const amountHtml = renderAmountTags(origin, destination, codAmt);
+        return `
+          <div class="history-row" onclick='selectFromHistory(${JSON.stringify(item).replace(/'/g,"&#39;")})'>
+            <div class="history-row-main">
+              <div class="history-row-code">${escapeHtml(item.trackingCode)}</div>
+              <div class="history-row-meta">
+                <span>${escapeHtml(item.receiverName)}</span>
+                <span>·</span>
+                <span>${item.date}</span>
+              </div>
+            </div>
+            <div class="history-row-amounts">
+              ${amountHtml}
+            </div>
+          </div>
+        `;
+      }).join('');
+    } catch(err){
+      body.innerHTML = '<div class="empty-state">ໂຫຼດຂໍ້ມູນບໍ່ໄດ້ — ກວດສອບການເຊື່ອມຕໍ່</div>';
+    }
+  }
+
+  function selectFromHistory(item){
+    closeHistoryModal();
+    openEditModal(item);
+  }
+
+  // ===== Returned Modal (ມາກເຄື່ອງຕີກັບ) =====
+  let returnedFoundOrder = null;
+  let returnedSelectedReason = '';
+
+  function openReturnedModal(){
+    document.getElementById('returnedOverlay').classList.add('show');
+    backToReturnedStep1();
+  }
+
+  function closeReturnedModal(){
+    document.getElementById('returnedOverlay').classList.remove('show');
+  }
+
+  function backToReturnedStep1(){
+    document.getElementById('returnedStep1').style.display = 'block';
+    document.getElementById('returnedStep2').style.display = 'none';
+    document.getElementById('returnedSearchCode').value = '';
+    document.getElementById('returnedSearchMsg').textContent = '';
+    document.getElementById('returnedSearchMsg').className = 'returned-search-msg';
+    returnedFoundOrder = null;
+    returnedSelectedReason = '';
+    document.querySelectorAll('.reason-chip').forEach(c => c.classList.remove('selected'));
+    setTimeout(() => document.getElementById('returnedSearchCode').focus(), 100);
+  }
+
+  async function searchReturnedOrder(){
+    const code = document.getElementById('returnedSearchCode').value.trim();
+    const msg = document.getElementById('returnedSearchMsg');
+    const btn = document.querySelector('#returnedStep1 .submit-btn');
+    const label = document.getElementById('returnedSearchBtnLabel');
+
+    if(!code){
+      msg.textContent = 'ກະລຸນາພິມເລກລະຫັດເຄື່ອງ';
+      msg.className = 'returned-search-msg error';
+      return;
+    }
+
+    btn.disabled = true;
+    label.textContent = 'ກຳລັງຄົ້ນຫາ...';
+    msg.textContent = '';
+    msg.className = 'returned-search-msg';
+
+    try {
+      const res = await fetch(`${API_URL}?action=findInOrder&trackingCode=${encodeURIComponent(code)}&branch=${BRANCH}`);
+      const result = await res.json();
+
+      if(result.found){
+        returnedFoundOrder = result.order;
+        showReturnedStep2(result.order);
+      } else {
+        msg.textContent = '✕ ບໍ່ພົບເລກລະຫັດນີ້ໃນລາຍການ "ຝາກມາ" ກະລຸນາກວດສອບເລກບິນ';
+        msg.className = 'returned-search-msg error';
+      }
+    } catch(err){
+      msg.textContent = 'ເຊື່ອມຕໍ່ບໍ່ໄດ້ ກະລຸນາລອງໃໝ່';
+      msg.className = 'returned-search-msg error';
+    } finally {
+      btn.disabled = false;
+      label.textContent = 'ຄົ້ນຫາລາຍການ';
+    }
+  }
+
+  function showReturnedStep2(order){
+    document.getElementById('returnedStep1').style.display = 'none';
+    document.getElementById('returnedStep2').style.display = 'block';
+
+    const origin = Number(order.payOrigin) || 0;
+    const destination = Number(order.payDestination) || 0;
+    const codAmt = order.hasCod ? (Number(order.codAmount) || 0) : 0;
+
+    document.getElementById('returnedPreview').innerHTML = `
+      <div class="returned-preview-code">${escapeHtml(order.trackingCode)}</div>
+      <div class="returned-preview-name">${escapeHtml(order.receiverName)} · ${order.date}</div>
+      <div class="returned-preview-row"><span class="lbl">ຈ່າຍຕົ້ນທາງ</span><span class="val mono">${origin.toLocaleString()} ກີບ</span></div>
+      <div class="returned-preview-row"><span class="lbl">ຈ່າຍປາຍທາງ</span><span class="val mono">${destination.toLocaleString()} ກີບ</span></div>
+      ${order.hasCod ? `<div class="returned-preview-row"><span class="lbl">ເງິນ COD</span><span class="val mono">${codAmt.toLocaleString()} ກີບ</span></div>` : ''}
+    `;
+  }
+
+  function selectReason(btnEl){
+    document.querySelectorAll('.reason-chip').forEach(c => c.classList.remove('selected'));
+    btnEl.classList.add('selected');
+    returnedSelectedReason = btnEl.dataset.reason;
+  }
+
+  async function confirmMarkReturned(){
+    if(!returnedFoundOrder){
+      showToast('ບໍ່ພົບຂໍ້ມູນລາຍການ ກະລຸນາຄົ້ນຫາໃໝ່', true);
+      return;
+    }
+    if(!returnedSelectedReason){
+      showToast('ກະລຸນາເລືອກສາເຫດຕີກັບ', true);
+      return;
+    }
+
+    const btn = document.getElementById('returnedConfirmBtn');
+    const label = document.getElementById('returnedConfirmLabel');
+    btn.disabled = true;
+    label.textContent = 'ກຳລັງບັນທຶກ...';
+
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        body: JSON.stringify({
+          action: 'markAsReturned',
+          order: { id: returnedFoundOrder.id, reason: returnedSelectedReason, branch: BRANCH }
+        })
+      });
+      const result = await res.json();
+
+      if(result.success){
+        showToast('✓ ບັນທຶກເຄື່ອງຕີກັບສຳເລັດແລ້ວ');
+        closeReturnedModal();
+        loadRecent();
+      } else {
+        showToast('ມີຂໍ້ຜິດພາດ: ' + (result.error || 'ບໍ່ຮູ້ສາເຫດ'), true);
+      }
+    } catch(err){
+      showToast('ເຊື່ອມຕໍ່ບໍ່ໄດ້ ກະລຸນາລອງໃໝ່', true);
+    } finally {
+      btn.disabled = false;
+      label.textContent = '✓ ຢືນຢັນຕີກັບ';
+    }
+  }
+
+  // ===== Edit Modal =====
+  function openEditModal(item){
+    document.getElementById('edit_id').value = item.id;
+    document.getElementById('edit_type').value = currentRoute;
+    document.getElementById('edit_date').value = item.date;
+    document.getElementById('edit_trackingCode').value = item.trackingCode;
+    document.getElementById('edit_receiverName').value = item.receiverName;
+    document.getElementById('edit_phone').value = item.phone || '';
+    document.getElementById('edit_payOrigin').value = item.payOrigin ? Number(item.payOrigin).toLocaleString('en-US') : '';
+    document.getElementById('edit_payDestination').value = item.payDestination ? Number(item.payDestination).toLocaleString('en-US') : '';
+    document.getElementById('edit_note').value = item.note || '';
+
+    const sw = document.getElementById('edit_codSwitch');
+    const block = document.getElementById('edit_codBlock');
+    const wrap = document.getElementById('edit_codAmountWrap');
+    if(item.hasCod){
+      sw.classList.add('on');
+      block.classList.add('active');
+      wrap.classList.add('show');
+      document.getElementById('edit_codAmount').value = item.codAmount ? Number(item.codAmount).toLocaleString('en-US') : '';
+    } else {
+      sw.classList.remove('on');
+      block.classList.remove('active');
+      wrap.classList.remove('show');
+      document.getElementById('edit_codAmount').value = '';
+    }
+
+    document.getElementById('editOverlay').classList.add('show');
+  }
+
+  function closeEditModal(){
+    document.getElementById('editOverlay').classList.remove('show');
+  }
+
+  function toggleEditCod(e){
+    e.preventDefault();
+    const sw = document.getElementById('edit_codSwitch');
+    const block = document.getElementById('edit_codBlock');
+    const wrap = document.getElementById('edit_codAmountWrap');
+    const isOn = sw.classList.toggle('on');
+    block.classList.toggle('active', isOn);
+    wrap.classList.toggle('show', isOn);
+    if(!isOn){ document.getElementById('edit_codAmount').value=''; }
+  }
+
+  // ໝາຍຈຸດອັດຕະໂນມັດ ສຳລັບຊ່ອງເງິນໃນ Modal ນຳ
+  document.querySelectorAll('#editForm .money-fmt').forEach(el => {
+    el.addEventListener('input', () => formatMoneyInput(el));
+  });
+
+  document.getElementById('editForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const btn = document.getElementById('editSubmitBtn');
+    const label = document.getElementById('editSubmitLabel');
+    const hasCod = document.getElementById('edit_codSwitch').classList.contains('on');
+
+    const order = {
+      id: document.getElementById('edit_id').value,
+      type: document.getElementById('edit_type').value,
+      branch: BRANCH,
+      date: document.getElementById('edit_date').value,
+      trackingCode: document.getElementById('edit_trackingCode').value.trim(),
+      receiverName: document.getElementById('edit_receiverName').value.trim(),
+      phone: document.getElementById('edit_phone').value.trim(),
+      payOrigin: unformatMoney(document.getElementById('edit_payOrigin').value),
+      payDestination: unformatMoney(document.getElementById('edit_payDestination').value),
+      hasCod: hasCod,
+      codAmount: hasCod ? unformatMoney(document.getElementById('edit_codAmount').value) : 0,
+      note: document.getElementById('edit_note').value.trim()
+    };
+
+    if(!order.trackingCode || !order.receiverName){
+      showToast('ກະລຸນາປ້ອນເລກລະຫັດເຄື່ອງ ແລະ ຊື່ຜູ້ຮັບ', true);
+      return;
+    }
+
+    if(hasCod && unformatMoney(document.getElementById('edit_codAmount').value) <= 0){
+      showToast('ກະລຸນາປ້ອນຈຳນວນເງິນ COD', true);
+      document.getElementById('edit_codAmount').focus();
+      return;
+    }
+
+    btn.disabled = true;
+    const originalLabel = label.textContent;
+    label.textContent = 'ກຳລັງບັນທຶກ...';
+
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'updateOrder', order: order })
+      });
+      const result = await res.json();
+
+      if(result.success){
+        showToast('✓ ແກ້ໄຂສຳເລັດແລ້ວ');
+        closeEditModal();
+        loadRecent();
+      } else {
+        showToast('ມີຂໍ້ຜິດພາດ: ' + (result.error || 'ບໍ່ຮູ້ສາເຫດ'), true);
+      }
+    } catch(err){
+      showToast('ເຊື່ອມຕໍ່ບໍ່ໄດ້ ກະລຸນາລອງໃໝ່', true);
+    } finally {
+      btn.disabled = false;
+      label.textContent = originalLabel;
+    }
+  });
+
+  // Initial load
+  loadRecent();
+</script>
+
+</body>
+</html>

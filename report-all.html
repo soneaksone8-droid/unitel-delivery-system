@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23c2531f'/%3E%3Ctext x='50' y='68' font-family='Georgia,serif' font-size='58' font-weight='700' fill='white' text-anchor='middle'%3EU%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23c2531f'/%3E%3Ctext x='50' y='68' font-family='Georgia,serif' font-size='58' font-weight='700' fill='white' text-anchor='middle'%3EU%3C/text%3E%3C/svg%3E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ລາຍງານລວມ">
+<meta name="theme-color" content="#c2531f">
+<title>ລາຍງານລວມທຸກສາຂາ — ຢູນິເທວຂົນສົ່ງດ່ວນ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Lao:wght@600;700&family=Noto+Sans+Lao:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#221d1a;
+    --ink-soft:#7c736a;
+    --paper:#faf7f2;
+    --panel:#ffffff;
+    --line:#e9e1d6;
+
+    --out:#c2531f;
+    --out-deep:#9c3f15;
+    --out-tint:#fdf0e6;
+
+    --in:#1f6e6b;
+    --in-deep:#13504e;
+    --in-tint:#e9f4f3;
+
+    --branch-a:#6a4c93;     /* ຄຳບຸນ */
+    --branch-a-tint:#f0ebf7;
+    --branch-b:#1d7a9c;     /* ໜາວເໜືອ */
+    --branch-b-tint:#e7f3f7;
+
+    --warn:#b3261e;
+    --radius:18px;
+    --radius-sm:11px;
+    --shadow: 0 1px 2px rgba(34,29,26,0.05), 0 12px 30px -16px rgba(34,29,26,0.18);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse 900px 460px at 16% -6%, var(--branch-a-tint), transparent 55%),
+      radial-gradient(ellipse 900px 460px at 84% -6%, var(--branch-b-tint), transparent 55%),
+      var(--paper);
+    color:var(--ink);
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
+    min-height:100vh;
+    padding:0 0 60px;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  .serif{font-family:'Noto Serif Lao',serif;}
+
+  header{
+    background:linear-gradient(115deg, var(--branch-a) 0%, #4a3a6e 45%, var(--branch-b) 100%);
+    color:#fff7ee;
+    padding:20px 20px 22px;
+    position:relative;overflow:hidden;
+    border-bottom:3px solid rgba(255,255,255,0.65);
+  }
+  header::before{
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(circle, rgba(255,247,238,0.12) 1px, transparent 1px);
+    background-size:16px 16px;
+    pointer-events:none;
+  }
+  .header-inner{max-width:1080px;margin:0 auto;position:relative;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  .brand-row{display:flex;align-items:center;gap:11px;}
+  .brand-mark{
+    width:38px;height:38px;border-radius:10px;
+    background:linear-gradient(150deg,#fff,#e4d8f5);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:16px;color:var(--branch-a);flex-shrink:0;
+    font-family:'Noto Serif Lao',serif;
+    box-shadow:0 3px 10px rgba(0,0,0,0.18);
+  }
+  .brand-text-lao{font-size:19px;font-weight:700;font-family:'Noto Serif Lao',serif;color:#fff;}
+  .brand-text-sub{font-size:10.5px;color:#ecdff5;letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+
+  .back-btn{
+    display:flex;align-items:center;gap:8px;
+    background:rgba(255,255,255,0.16);
+    border:1.5px solid rgba(255,255,255,0.4);
+    color:#fff;text-decoration:none;font-size:13.5px;font-weight:700;
+    padding:10px 18px;border-radius:99px;
+    transition:background .15s, transform .1s;
+  }
+  .back-btn:hover{background:rgba(255,255,255,0.28);}
+  .back-btn:active{transform:scale(0.97);}
+  .back-btn .ic{font-size:15px;}
+
+  .wrap{max-width:1080px;margin:0 auto;padding:0 16px;}
+
+  /* ===== Filter bar ===== */
+  .filter-bar{
+    display:flex;gap:9px;align-items:center;flex-wrap:wrap;
+    margin-top:18px;
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:13px 15px;box-shadow:var(--shadow);
+  }
+  .filter-tabs{display:flex;gap:4px;background:var(--paper);border-radius:9px;padding:3px;}
+  .filter-tab{
+    border:none;background:transparent;padding:8px 15px;border-radius:8px;
+    font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer;
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;transition:all .15s;
+  }
+  .filter-tab.active{background:var(--ink);color:#fff;}
+  .filter-bar input[type="date"], .filter-bar input[type="month"]{
+    border:1.5px solid var(--line);border-radius:9px;padding:8px 11px;font-size:13.5px;
+    font-family:'JetBrains Mono',monospace;color:var(--ink);
+  }
+  .filter-bar select{
+    border:1.5px solid var(--line);border-radius:9px;padding:8px 11px;font-size:13.5px;
+    font-family:'JetBrains Mono',monospace;color:var(--ink);background:#fff;
+  }
+  .refresh-btn{
+    margin-left:auto;border:1.5px solid var(--line);background:#fff;border-radius:9px;
+    padding:8px 14px;font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer;
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
+  }
+  .refresh-btn:hover{border-color:var(--ink);color:var(--ink);}
+
+  /* ===== Combined summary ===== */
+  .combined-card{
+    margin-top:16px;
+    background:var(--ink);color:#fff7ee;
+    border-radius:var(--radius);
+    padding:22px 24px;
+    box-shadow:var(--shadow);
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px;
+  }
+  .combined-eyebrow{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#cfc5b4;margin-bottom:8px;}
+  .combined-value{font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:700;}
+  .combined-value .unit{font-size:14px;font-weight:600;color:#cfc5b4;margin-left:6px;}
+  .combined-stats{display:flex;gap:26px;flex-wrap:wrap;}
+  .combined-stat{text-align:left;}
+  .combined-stat .lbl{font-size:11.5px;color:#cfc5b4;}
+  .combined-stat .val{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;margin-top:2px;}
+
+  /* ===== Branch comparison cards ===== */
+  .branch-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px;
+  }
+  .branch-card{
+    background:var(--panel);border:1.5px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);overflow:hidden;
+  }
+  .branch-card.a{border-color:#ddd2ec;}
+  .branch-card.b{border-color:#cce5ee;}
+  .branch-card-head{
+    padding:16px 18px;display:flex;align-items:center;gap:10px;
+  }
+  .branch-card.a .branch-card-head{background:var(--branch-a-tint);}
+  .branch-card.b .branch-card-head{background:var(--branch-b-tint);}
+  .branch-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0;}
+  .branch-card.a .branch-dot{background:var(--branch-a);}
+  .branch-card.b .branch-dot{background:var(--branch-b);}
+  .branch-card-head h3{margin:0;font-size:15.5px;font-weight:700;font-family:'Noto Serif Lao',serif;}
+  .branch-card-body{padding:18px;}
+  .branch-stat-row{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:9px 0;font-size:13.5px;border-bottom:1px dashed var(--line);
+  }
+  .branch-stat-row:last-child{border-bottom:none;}
+  .branch-stat-row .lbl{color:var(--ink-soft);}
+  .branch-stat-row .val{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--ink);}
+  .branch-stat-row.returned .val{color:#b3261e;}
+  .branch-stat-row.highlight{
+    background:var(--paper);margin:6px -18px 0;padding:11px 18px;border-bottom:none;border-radius:9px;
+  }
+  .branch-stat-row.highlight .val{font-size:16px;}
+
+  /* ===== Chart Section ===== */
+  .chart-section{margin-top:26px;}
+  .chart-head{
+    display:flex;align-items:center;justify-content:space-between;
+    flex-wrap:wrap;gap:10px;margin-bottom:12px;
+  }
+  .section-title{
+    font-size:13px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;
+    letter-spacing:0.8px;margin:0;display:flex;align-items:center;gap:9px;
+    font-family:'Noto Sans','Noto Sans Lao',sans-serif;
+  }
+  .section-title::before{content:"";width:16px;height:2px;background:var(--ink-soft);border-radius:2px;}
+  .chart-controls{display:flex;align-items:center;gap:10px;}
+  .chart-tabs{display:flex;gap:4px;background:var(--paper);border-radius:9px;padding:3px;}
+  .chart-tab{
+    border:none;background:transparent;padding:7px 14px;border-radius:7px;
+    font-size:12.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;transition:all .15s;
+    white-space:nowrap;
+  }
+  .chart-tab.active{background:var(--ink);color:#fff;}
+  #chartYearSelect{
+    border:1.5px solid var(--line);border-radius:9px;padding:8px 11px;font-size:13px;
+    font-family:'JetBrains Mono',monospace;color:var(--ink);background:#fff;
+  }
+  .chart-subcontrols{
+    display:flex;align-items:center;justify-content:space-between;
+    flex-wrap:wrap;gap:10px;margin-bottom:14px;
+  }
+  .chart-card{
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:18px;position:relative;
+  }
+  .chart-canvas-wrap{height:320px;position:relative;}
+  .chart-empty{
+    position:absolute;inset:18px;display:flex;align-items:center;justify-content:center;
+    color:var(--ink-soft);font-size:14px;background:var(--panel);
+  }
+  .chart-legend-note{
+    display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--ink-soft);
+  }
+  .chart-legend-note span{display:inline-flex;align-items:center;gap:6px;}
+  .chart-legend-note .dot{width:9px;height:9px;border-radius:50%;}
+
+  .empty-state{text-align:center;padding:42px 20px;color:var(--ink-soft);font-size:14px;}
+  .skeleton-card{
+    height:120px;border-radius:var(--radius);
+    background-image:linear-gradient(90deg, #f3ede2 0px, #ebe2d2 40px, #f3ede2 80px);
+    background-size:600px;animation:shimmer 1.4s infinite linear;
+  }
+  @keyframes shimmer{from{background-position:-300px 0;}to{background-position:300px 0;}}
+
+  @media (max-width:760px){
+    .branch-grid{grid-template-columns:1fr;}
+    .combined-card{flex-direction:column;align-items:flex-start;}
+  }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand-row">
+      <div class="brand-mark">U</div>
+      <div>
+        <div class="brand-text-lao">ລາຍງານລວມທຸກສາຂາ</div>
+        <div class="brand-text-sub">ຄຳບຸນ + ໜາວເໜືອ</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="filter-bar">
+    <div class="filter-tabs" id="filterTabs">
+      <button class="filter-tab active" data-mode="all" onclick="setMode('all')">ທັງໝົດ</button>
+      <button class="filter-tab" data-mode="day" onclick="setMode('day')">ລາຍວັນ</button>
+      <button class="filter-tab" data-mode="month" onclick="setMode('month')">ລາຍເດືອນ</button>
+      <button class="filter-tab" data-mode="year" onclick="setMode('year')">ລາຍປີ</button>
+    </div>
+    <input type="date" id="dayPicker" style="display:none" onchange="applyFilter()">
+    <input type="month" id="monthPicker" style="display:none" onchange="applyFilter()">
+    <select id="yearPicker" style="display:none" onchange="applyFilter()"></select>
+    <button class="refresh-btn" onclick="loadAll()">⟳ ໂຫຼດໃໝ່</button>
+  </div>
+
+  <div class="combined-card">
+    <div>
+      <div class="combined-eyebrow">ຍອດລວມທັງ 2 ສາຂາ</div>
+      <div class="combined-value" id="combinedCount">—<span class="unit">ລາຍການ</span></div>
+    </div>
+    <div class="combined-stats">
+      <div class="combined-stat">
+        <div class="lbl">ລາຍຮັບລວມ</div>
+        <div class="val" id="combinedRevenue">—</div>
+      </div>
+      <div class="combined-stat">
+        <div class="lbl">COD ລວມ</div>
+        <div class="val" id="combinedCod">—</div>
+      </div>
+      <div class="combined-stat">
+        <div class="lbl">ເຄື່ອງຕີກັບລວມ</div>
+        <div class="val" id="combinedReturned" style="color:#ff8a7a;">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="branch-grid" id="branchGrid">
+    <div class="skeleton-card"></div>
+    <div class="skeleton-card"></div>
+  </div>
+
+  <div class="chart-section">
+    <div class="chart-head">
+      <div class="section-title">ປຽບທຽບ 2 ສາຂາ — ຈຳນວນອໍເດີ້</div>
+      <div class="chart-controls">
+        <div class="chart-tabs" id="chartModeTabs">
+          <button class="chart-tab active" data-mode="month" onclick="setChartMode('month')">ລາຍເດືອນ</button>
+          <button class="chart-tab" data-mode="year" onclick="setChartMode('year')">ລາຍປີ</button>
+        </div>
+        <select id="chartYearSelect" onchange="onChartYearChange()"></select>
+      </div>
+    </div>
+
+    <div class="chart-subcontrols">
+      <div class="chart-tabs" id="chartMetricTabs">
+        <button class="chart-tab active" data-metric="count" onclick="setChartMetric('count')">ຈຳນວນອໍເດີ້</button>
+        <button class="chart-tab" data-metric="amount" onclick="setChartMetric('amount')">ຈຳນວນເງິນ</button>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-canvas-wrap">
+        <canvas id="mainChart"></canvas>
+      </div>
+      <div class="chart-empty" id="chartEmpty" style="display:none;">ບໍ່ມີຂໍ້ມູນໃນຊ່ວງເວລານີ້</div>
+      <div class="chart-legend-note">
+        <span><span class="dot" style="background:var(--branch-a);"></span> ສາຂາຄຳບຸນ</span>
+        <span><span class="dot" style="background:var(--branch-b);"></span> ສາຂາໜາວເໜືອ</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const API_URL = 'https://script.google.com/macros/s/AKfycbzbBSy_vIFkj3A9Q5j0ZDUwF-t8oszRt2kFMz9cB6OsaMqiI0t__syteoP_hM4Mt_Zu/exec';
+
+  const BRANCH_LABELS = { khambun: 'ສາຂາຄຳບຸນ', naonua: 'ສາຂາໜາວເໜືອ' };
+  const BRANCH_COLOR_A = '#6a4c93'; // khambun
+  const BRANCH_COLOR_B = '#1d7a9c'; // naonua
+
+  let currentMode = 'all';
+  let chartMode = 'month';
+  let chartMetric = 'count';
+  let chartSelectedYear = new Date().getFullYear();
+  let chartYearsLoaded = false;
+  let mainChartInstance = null;
+  let lastChartBranches = null;
+
+  const yearSel = document.getElementById('yearPicker');
+  const thisYear = new Date().getFullYear();
+  for(let y = thisYear; y >= thisYear - 5; y--){
+    const opt = document.createElement('option');
+    opt.value = y; opt.textContent = y;
+    yearSel.appendChild(opt);
+  }
+
+  function setMode(mode){
+    currentMode = mode;
+    document.querySelectorAll('#filterTabs .filter-tab').forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
+    document.getElementById('dayPicker').style.display = mode === 'day' ? 'block' : 'none';
+    document.getElementById('monthPicker').style.display = mode === 'month' ? 'block' : 'none';
+    document.getElementById('yearPicker').style.display = mode === 'year' ? 'block' : 'none';
+
+    if(mode === 'day' && !document.getElementById('dayPicker').value){
+      document.getElementById('dayPicker').valueAsDate = new Date();
+    }
+    if(mode === 'month' && !document.getElementById('monthPicker').value){
+      const now = new Date();
+      document.getElementById('monthPicker').value = now.toISOString().slice(0,7);
+    }
+    if(mode === 'year' && !yearSel.value){
+      yearSel.value = thisYear;
+    }
+    loadSummary();
+  }
+
+  function getFilterValue(){
+    if(currentMode === 'day') return document.getElementById('dayPicker').value;
+    if(currentMode === 'month') return document.getElementById('monthPicker').value;
+    if(currentMode === 'year') return yearSel.value;
+    return '';
+  }
+
+  function applyFilter(){ loadSummary(); }
+
+  function fmt(n){
+    return Math.round(Number(n)||0).toLocaleString();
+  }
+
+  async function loadAll(){
+    await Promise.all([loadSummary(), loadChart()]);
+  }
+
+  async function loadSummary(){
+    const grid = document.getElementById('branchGrid');
+    try{
+      const fv = getFilterValue();
+      const url = `${API_URL}?action=allBranchesSummary&filterType=${currentMode}&filterValue=${encodeURIComponent(fv)}`;
+      const res = await fetch(url);
+      const data = await res.json();
+
+      document.getElementById('combinedCount').innerHTML = fmt(data.combined.count) + '<span class="unit">ລາຍການ</span>';
+      document.getElementById('combinedRevenue').textContent = fmt(data.combined.totalRevenue) + ' ກີບ';
+      document.getElementById('combinedCod').textContent = fmt(data.combined.totalCod) + ' ກີບ';
+      document.getElementById('combinedReturned').textContent = fmt(data.combined.returnedCount) + ' ລາຍການ';
+
+      const branchKeys = ['khambun', 'naonua'];
+      const classes = ['a', 'b'];
+      grid.innerHTML = branchKeys.map((key, i) => {
+        const b = data.branches[key];
+        if(!b) return '';
+        const s = b.summary;
+        return `
+          <div class="branch-card ${classes[i]}">
+            <div class="branch-card-head">
+              <span class="branch-dot"></span>
+              <h3>${b.label}</h3>
+            </div>
+            <div class="branch-card-body">
+              <div class="branch-stat-row highlight">
+                <span class="lbl">ຈຳນວນອໍເດີ້ລວມ</span>
+                <span class="val">${fmt(s.grandTotal.count)} ລາຍການ</span>
+              </div>
+              <div class="branch-stat-row">
+                <span class="lbl">ລາຍຮັບລວມ</span>
+                <span class="val">${fmt(s.grandTotal.totalRevenue)} ກີບ</span>
+              </div>
+              <div class="branch-stat-row">
+                <span class="lbl">COD ລວມ</span>
+                <span class="val">${fmt(s.grandTotal.totalCod)} ກີບ</span>
+              </div>
+              <div class="branch-stat-row">
+                <span class="lbl">↙ ຝາກມາ</span>
+                <span class="val">${fmt(s.in.count)} ລາຍການ</span>
+              </div>
+              <div class="branch-stat-row">
+                <span class="lbl">↗ ຝາກໄປ</span>
+                <span class="val">${fmt(s.out.count)} ລາຍການ</span>
+              </div>
+              <div class="branch-stat-row returned">
+                <span class="lbl">↩ ເຄື່ອງຕີກັບ</span>
+                <span class="val">${fmt(s.returned.count)} ລາຍການ</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    } catch(err){
+      grid.innerHTML = '<div class="empty-state">ໂຫຼດຂໍ້ມູນບໍ່ໄດ້ — ກວດສອບການເຊື່ອມຕໍ່</div>';
+      console.error(err);
+    }
+  }
+
+  function setChartMode(mode){
+    chartMode = mode;
+    document.querySelectorAll('#chartModeTabs .chart-tab').forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
+    document.getElementById('chartYearSelect').style.display = mode === 'month' ? 'inline-block' : 'none';
+    loadChart();
+  }
+
+  function setChartMetric(metric){
+    chartMetric = metric;
+    document.querySelectorAll('#chartMetricTabs .chart-tab').forEach(t => t.classList.toggle('active', t.dataset.metric === metric));
+    document.querySelector('.section-title').textContent = metric === 'count' ? 'ປຽບທຽບ 2 ສາຂາ — ຈຳນວນອໍເດີ້' : 'ປຽບທຽບ 2 ສາຂາ — ຈຳນວນເງິນ';
+    renderMainChart(lastChartBranches);
+  }
+
+  function onChartYearChange(){
+    chartSelectedYear = document.getElementById('chartYearSelect').value;
+    loadChart();
+  }
+
+  async function loadChart(){
+    try{
+      const url = `${API_URL}?action=allBranchesChartData&mode=${chartMode}&year=${chartSelectedYear}`;
+      const res = await fetch(url);
+      const data = await res.json();
+
+      if(!chartYearsLoaded){
+        const anyBranch = Object.values(data)[0];
+        const years = (anyBranch && anyBranch.chart.availableYears) || [String(thisYear)];
+        const sel = document.getElementById('chartYearSelect');
+        sel.innerHTML = years.map(y => `<option value="${y}">${y}</option>`).join('');
+        chartSelectedYear = years[years.length - 1];
+        sel.value = chartSelectedYear;
+        chartYearsLoaded = true;
+        return loadChart();
+      }
+
+      lastChartBranches = data;
+      renderMainChart(data);
+    } catch(err){
+      console.error('Chart load error:', err);
+    }
+  }
+
+  function labelOf(p){
+    if(chartMode === 'month'){
+      const m = Number(p.key.split('-')[1]);
+      return 'ດ.' + m;
+    }
+    return p.key;
+  }
+
+  function renderMainChart(branches){
+    const canvas = document.getElementById('mainChart');
+    const emptyEl = document.getElementById('chartEmpty');
+    if(!branches){
+      emptyEl.style.display = 'flex';
+      return;
+    }
+
+    const khambun = branches.khambun ? branches.khambun.chart.series : [];
+    const naonua = branches.naonua ? branches.naonua.chart.series : [];
+    const series = khambun.length ? khambun : naonua;
+
+    if(!series || series.length === 0){
+      emptyEl.style.display = 'flex';
+      if(mainChartInstance){ mainChartInstance.destroy(); mainChartInstance = null; }
+      return;
+    }
+
+    const hasData = khambun.some(p => p.totalCount > 0) || naonua.some(p => p.totalCount > 0);
+    emptyEl.style.display = hasData ? 'none' : 'flex';
+
+    const labels = series.map(labelOf);
+    const khambunData = khambun.map(p => chartMetric === 'count' ? p.totalCount : p.totalAmount);
+    const naonuaData = naonua.map(p => chartMetric === 'count' ? p.totalCount : p.totalAmount);
+
+    if(mainChartInstance){ mainChartInstance.destroy(); }
+    const ctx = canvas.getContext('2d');
+
+    mainChartInstance = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'ສາຂາຄຳບຸນ',
+            data: khambunData,
+            backgroundColor: BRANCH_COLOR_A,
+            borderRadius: 5
+          },
+          {
+            label: 'ສາຂາໜາວເໜືອ',
+            data: naonuaData,
+            backgroundColor: BRANCH_COLOR_B,
+            borderRadius: 5
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { family: "'Noto Sans Lao'" } } },
+          y: {
+            beginAtZero: true,
+            grid: { color: '#f0e9dc' },
+            ticks: {
+              font: { family: "'JetBrains Mono'" },
+              callback: function(v){ return chartMetric === 'amount' ? fmt(v) : v; }
+            }
+          }
+        },
+        plugins: {
+          legend: { position: 'top', labels: { font: { family: "'Noto Sans Lao'" }, usePointStyle: true, padding: 16 } },
+          tooltip: {
+            callbacks: {
+              label: function(ctx){
+                const v = ctx.parsed.y;
+                const suffix = chartMetric === 'amount' ? ' ກີບ' : ' ລາຍການ';
+                return ctx.dataset.label + ': ' + fmt(v) + suffix;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  loadAll();
+</script>
+
+</body>
+</html>
