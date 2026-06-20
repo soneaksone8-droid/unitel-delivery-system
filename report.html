@@ -272,10 +272,55 @@
   .pw-btn:active{transform:scale(0.98);}
   .pw-btn:hover{opacity:0.92;}
 
+  /* ===== Chart Section ===== */
+  .chart-section{margin-top:26px;}
+  .chart-head{
+    display:flex;align-items:center;justify-content:space-between;
+    flex-wrap:wrap;gap:10px;margin-bottom:12px;
+  }
+  .chart-controls{display:flex;align-items:center;gap:10px;}
+  .chart-tabs{display:flex;gap:4px;background:var(--paper);border-radius:9px;padding:3px;}
+  .chart-tab{
+    border:none;background:transparent;padding:7px 14px;border-radius:7px;
+    font-size:12.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;transition:all .15s;
+    white-space:nowrap;
+  }
+  .chart-tab.active{background:var(--ink);color:#fff;}
+  #chartYearSelect{
+    border:1.5px solid var(--line);border-radius:9px;padding:8px 11px;font-size:13px;
+    font-family:'JetBrains Mono',monospace;color:var(--ink);background:#fff;
+  }
+  .chart-subcontrols{
+    display:flex;align-items:center;justify-content:space-between;
+    flex-wrap:wrap;gap:10px;margin-bottom:14px;
+  }
+
+  .chart-card{
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:18px;position:relative;
+  }
+  .chart-canvas-wrap{height:300px;position:relative;}
+  .chart-empty{
+    position:absolute;inset:18px;display:flex;align-items:center;justify-content:center;
+    color:var(--ink-soft);font-size:14px;background:var(--panel);
+  }
+
+  .returned-rate-card{margin-top:16px;}
+  .returned-rate-head{
+    display:flex;align-items:center;gap:8px;
+    font-size:13px;font-weight:700;color:#8a2e22;
+  }
+  .returned-rate-head .ic{
+    width:22px;height:22px;border-radius:6px;background:#b3261e;color:#fff;
+    display:inline-flex;align-items:center;justify-content:center;font-size:12px;
+  }
+
   @media (max-width:680px){
     .summary-grid{grid-template-columns:1fr;}
   }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 </head>
 <body>
 
@@ -377,6 +422,49 @@
     </div>
   </div>
 
+  <div class="chart-section">
+    <div class="chart-head">
+      <div class="section-title" style="margin:0;">ກຣາຟສະຫຼຸບ — ວັດຜົນທຸລະກິດ</div>
+      <div class="chart-controls">
+        <div class="chart-tabs" id="chartModeTabs">
+          <button class="chart-tab active" data-mode="month" onclick="setChartMode('month')">ລາຍເດືອນ</button>
+          <button class="chart-tab" data-mode="year" onclick="setChartMode('year')">ລາຍປີ</button>
+        </div>
+        <select id="chartYearSelect" onchange="onChartYearChange()"></select>
+      </div>
+    </div>
+
+    <div class="chart-subcontrols">
+      <div class="chart-tabs" id="chartMetricTabs">
+        <button class="chart-tab active" data-metric="count" onclick="setChartMetric('count')">ຈຳນວນອໍເດີ້</button>
+        <button class="chart-tab" data-metric="amount" onclick="setChartMetric('amount')">ຈຳນວນເງິນ</button>
+      </div>
+      <div class="chart-tabs" id="chartTypeTabs">
+        <button class="chart-tab active" data-type="bar" onclick="setChartType('bar')">📊 ແທ່ງ</button>
+        <button class="chart-tab" data-type="line" onclick="setChartType('line')">📈 ເສັ້ນ</button>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-canvas-wrap">
+        <canvas id="mainChart"></canvas>
+      </div>
+      <div class="chart-empty" id="chartEmpty" style="display:none;">ບໍ່ມີຂໍ້ມູນໃນຊ່ວງເວລານີ້</div>
+    </div>
+
+    <div class="returned-rate-card">
+      <div class="returned-rate-head">
+        <span class="ic">↩</span>
+        <span>ອັດຕາສ່ວນເຄື່ອງຕີກັບ (ຄຸນນະພາບການບໍລິການ)</span>
+      </div>
+      <div class="chart-card" style="margin-top:10px;">
+        <div class="chart-canvas-wrap" style="height:180px;">
+          <canvas id="returnedRateChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="table-section">
     <div class="section-title">ປຽບທຽບຍອດແຍກຕາມວັນທີ</div>
     <div class="table-card">
@@ -454,7 +542,7 @@
   }
 
   async function loadAll(){
-    await Promise.all([loadSummary(), loadBreakdown()]);
+    await Promise.all([loadSummary(), loadBreakdown(), loadChart()]);
   }
 
   async function loadSummary(){
@@ -550,6 +638,216 @@
     } catch(err){
       body.innerHTML = '<tr><td colspan="7"><div class="empty-state">ໂຫຼດຂໍ້ມູນບໍ່ໄດ້ — ກວດສອບການເຊື່ອມຕໍ່</div></td></tr>';
     }
+  }
+
+  // ===== Chart Section =====
+  let chartMode = 'month';      // 'month' | 'year'
+  let chartMetric = 'count';    // 'count' | 'amount'
+  let chartType = 'bar';        // 'bar' | 'line'
+  let chartSelectedYear = thisYear;
+  let mainChartInstance = null;
+  let returnedRateChartInstance = null;
+  let chartYearsLoaded = false;
+
+  const CHART_COLOR_IN = '#1f6e6b';   // ຝາກມາ (teal)
+  const CHART_COLOR_OUT = '#f0653c';  // ຝາກໄປ (ສົ້ມ)
+  const CHART_COLOR_RETURNED = '#b3261e';
+
+  function setChartMode(mode){
+    chartMode = mode;
+    document.querySelectorAll('#chartModeTabs .chart-tab').forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
+    document.getElementById('chartYearSelect').style.display = mode === 'month' ? 'inline-block' : 'none';
+    loadChart();
+  }
+
+  function setChartMetric(metric){
+    chartMetric = metric;
+    document.querySelectorAll('#chartMetricTabs .chart-tab').forEach(t => t.classList.toggle('active', t.dataset.metric === metric));
+    renderMainChart(lastChartSeries);
+  }
+
+  function setChartType(type){
+    chartType = type;
+    document.querySelectorAll('#chartTypeTabs .chart-tab').forEach(t => t.classList.toggle('active', t.dataset.type === type));
+    renderMainChart(lastChartSeries);
+  }
+
+  function onChartYearChange(){
+    chartSelectedYear = document.getElementById('chartYearSelect').value;
+    loadChart();
+  }
+
+  let lastChartSeries = [];
+
+  async function loadChart(){
+    try{
+      const url = `${API_URL}?action=chartData&mode=${chartMode}&year=${chartSelectedYear}`;
+      const res = await fetch(url);
+      const data = await res.json();
+
+      // ຕັ້ງ dropdown ປີ ຄັ້ງທຳອິດທີ່ໂຫຼດ
+      if(!chartYearsLoaded && data.availableYears && data.availableYears.length){
+        const sel = document.getElementById('chartYearSelect');
+        sel.innerHTML = data.availableYears.map(y => `<option value="${y}">${y}</option>`).join('');
+        chartSelectedYear = data.availableYears[data.availableYears.length - 1];
+        sel.value = chartSelectedYear;
+        chartYearsLoaded = true;
+        // ໂຫຼດຄືນຄັ້ງດຽວດ້ວຍປີຫຼ້າສຸດ
+        return loadChart();
+      }
+
+      lastChartSeries = data.series || [];
+      renderMainChart(lastChartSeries);
+      renderReturnedRateChart(lastChartSeries);
+    } catch(err){
+      console.error('Chart load error:', err);
+    }
+  }
+
+  function labelOf(p){
+    if(chartMode === 'month'){
+      const m = Number(p.key.split('-')[1]);
+      return 'ດ.' + m;
+    }
+    return p.key;
+  }
+
+  function renderMainChart(series){
+    const canvas = document.getElementById('mainChart');
+    const emptyEl = document.getElementById('chartEmpty');
+    if(!series || series.length === 0){
+      emptyEl.style.display = 'flex';
+      if(mainChartInstance){ mainChartInstance.destroy(); mainChartInstance = null; }
+      return;
+    }
+    const hasData = series.some(p => p.totalCount > 0);
+    emptyEl.style.display = hasData ? 'none' : 'flex';
+
+    const labels = series.map(labelOf);
+    const inData = series.map(p => chartMetric === 'count' ? p.inCount : p.inAmount);
+    const outData = series.map(p => chartMetric === 'count' ? p.outCount : p.outAmount);
+
+    if(mainChartInstance){ mainChartInstance.destroy(); }
+
+    const isBar = chartType === 'bar';
+    const ctx = canvas.getContext('2d');
+
+    mainChartInstance = new Chart(ctx, {
+      type: isBar ? 'bar' : 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'ຝາກມາ',
+            data: inData,
+            backgroundColor: isBar ? CHART_COLOR_IN : 'rgba(31,110,107,0.12)',
+            borderColor: CHART_COLOR_IN,
+            borderWidth: isBar ? 0 : 2.5,
+            stack: 'total',
+            tension: 0.3,
+            fill: isBar ? false : true,
+            pointRadius: isBar ? 0 : 3,
+            pointBackgroundColor: CHART_COLOR_IN,
+            borderRadius: isBar ? 5 : 0
+          },
+          {
+            label: 'ຝາກໄປ',
+            data: outData,
+            backgroundColor: isBar ? CHART_COLOR_OUT : 'rgba(240,101,60,0.12)',
+            borderColor: CHART_COLOR_OUT,
+            borderWidth: isBar ? 0 : 2.5,
+            stack: 'total',
+            tension: 0.3,
+            fill: isBar ? false : true,
+            pointRadius: isBar ? 0 : 3,
+            pointBackgroundColor: CHART_COLOR_OUT,
+            borderRadius: isBar ? 5 : 0
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        scales: {
+          x: { stacked: isBar, grid: { display: false }, ticks: { font: { family: "'Noto Sans Lao'" } } },
+          y: {
+            stacked: isBar, beginAtZero: true,
+            grid: { color: '#f0e9dc' },
+            ticks: {
+              font: { family: "'JetBrains Mono'" },
+              callback: function(v){ return chartMetric === 'amount' ? fmt(v) : v; }
+            }
+          }
+        },
+        plugins: {
+          legend: { position: 'top', labels: { font: { family: "'Noto Sans Lao'" }, usePointStyle: true, padding: 16 } },
+          tooltip: {
+            callbacks: {
+              label: function(ctx){
+                const v = ctx.parsed.y;
+                const suffix = chartMetric === 'amount' ? ' ກີບ' : ' ລາຍການ';
+                return ctx.dataset.label + ': ' + fmt(v) + suffix;
+              },
+              footer: function(items){
+                const total = items.reduce((s, it) => s + it.parsed.y, 0);
+                const suffix = chartMetric === 'amount' ? ' ກີບ' : ' ລາຍການ';
+                return 'ລວມ: ' + fmt(total) + suffix;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  function renderReturnedRateChart(series){
+    const canvas = document.getElementById('returnedRateChart');
+    if(!series || series.length === 0) return;
+
+    const labels = series.map(labelOf);
+    const rateData = series.map(p => p.returnedRate);
+
+    if(returnedRateChartInstance){ returnedRateChartInstance.destroy(); }
+
+    const ctx = canvas.getContext('2d');
+    returnedRateChartInstance = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'ອັດຕາຕີກັບ (%)',
+          data: rateData,
+          borderColor: CHART_COLOR_RETURNED,
+          backgroundColor: 'rgba(179,38,30,0.1)',
+          borderWidth: 2.5,
+          tension: 0.3,
+          fill: true,
+          pointRadius: 3,
+          pointBackgroundColor: CHART_COLOR_RETURNED
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { family: "'Noto Sans Lao'" } } },
+          y: {
+            beginAtZero: true,
+            grid: { color: '#f0e9dc' },
+            ticks: { font: { family: "'JetBrains Mono'" }, callback: v => v + '%' }
+          }
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: ctx => 'ອັດຕາຕີກັບ: ' + ctx.parsed.y + '%'
+            }
+          }
+        }
+      }
+    });
   }
 
   // ===== Password Gate =====
