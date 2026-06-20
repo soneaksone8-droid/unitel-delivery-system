@@ -221,29 +221,55 @@
   .cod-block{
     border:1.5px solid var(--line);
     border-radius:var(--radius-sm);
-    padding:13px 15px;
+    padding:14px 16px;
     margin-bottom:14px;
-    transition:border-color .15s, background .15s;
+    transition:border-color .2s, background .2s, box-shadow .2s;
+    background:var(--panel);
   }
-  .cod-block.active{border-color:var(--gold);background:var(--gold-tint);}
+  .cod-block.active{
+    border-color:var(--gold);
+    background:linear-gradient(135deg, var(--gold-tint), #fffdf6);
+    box-shadow:0 4px 14px -8px rgba(184,134,11,0.45);
+  }
   .cod-head{display:flex;align-items:center;justify-content:space-between;}
-  .cod-label{display:flex;align-items:center;gap:10px;cursor:pointer;}
+  .cod-label{display:flex;align-items:center;gap:11px;cursor:pointer;}
+  .cod-icon{
+    min-width:34px;height:30px;border-radius:9px;
+    padding:0 7px;
+    background:#f1ece0;color:#a89a78;
+    display:flex;align-items:center;justify-content:center;
+    font-size:11px;font-weight:800;flex-shrink:0;
+    letter-spacing:0.2px;
+    transition:background .2s, color .2s;
+  }
+  .cod-block.active .cod-icon{background:var(--gold);color:#fff;}
   .switch{
     width:44px;height:25px;border-radius:99px;background:#e1d8c8;
-    position:relative;cursor:pointer;transition:background .15s;flex-shrink:0;
+    position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;
   }
   .switch.on{background:var(--gold);}
   .switch::after{
     content:"";position:absolute;top:3px;left:3px;width:19px;height:19px;
-    border-radius:50%;background:#fff;transition:left .15s;
+    border-radius:50%;background:#fff;transition:left .2s cubic-bezier(.3,1.4,.4,1);
     box-shadow:0 1px 3px rgba(0,0,0,0.25);
   }
   .switch.on::after{left:22px;}
-  .cod-label span{font-size:14px;font-weight:600;}
+  .cod-label span{font-size:14.5px;font-weight:700;}
   .cod-amount{
-    margin-top:12px;display:none;
+    margin-top:0;max-height:0;overflow:hidden;opacity:0;
+    transition:max-height .25s ease, opacity .2s ease, margin-top .25s ease;
   }
-  .cod-amount.show{display:block;}
+  .cod-amount.show{margin-top:13px;max-height:80px;opacity:1;}
+  .cod-amount .money-input input{
+    border-color:#e8d9ab;
+    font-size:16px;font-weight:700;
+    background:#fffefa;
+  }
+  .cod-amount .money-input input:focus{
+    border-color:var(--gold);
+    box-shadow:0 0 0 3.5px var(--gold-tint);
+  }
+  .cod-amount .money-input::after{color:#c9a73f;}
 
   .submit-btn{
     width:100%;
@@ -317,14 +343,16 @@
   .recent-amount{text-align:right;flex-shrink:0;}
   .recent-amount .lbl{font-size:9.5px;color:var(--ink-soft);margin-top:2px;}
   .amt-row{display:flex;align-items:center;justify-content:flex-end;gap:6px;}
-  .amt-row + .amt-row{margin-top:2px;}
+  .amt-row + .amt-row{margin-top:3px;}
   .amt-tag{
-    font-size:9.5px;font-weight:700;padding:1px 6px;border-radius:5px;
-    letter-spacing:0.2px;white-space:nowrap;
+    font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:5px;
+    letter-spacing:0.3px;white-space:nowrap;
   }
-  .amt-tag.origin{background:#eef1f4;color:#52606d;}
-  .amt-tag.dest{background:var(--mode-tint);color:var(--mode-color);}
+  .amt-tag.origin{background:#e3edfa;color:#1d5fae;}
+  .amt-tag.dest{background:#fce6ea;color:#b4254f;}
+  .amt-tag.cod{background:#fff1cf;color:#92660a;}
   .amt-num{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13.5px;}
+  .amt-num.cod-num{color:#92660a;}
 
   .empty-state{
     text-align:center;padding:38px 20px;color:var(--ink-soft);font-size:14px;
@@ -494,9 +522,10 @@
       <div class="cod-block" id="codBlock">
         <div class="cod-head">
           <label class="cod-label" onclick="toggleCod(event)">
-            <div class="switch" id="codSwitch"></div>
+            <div class="cod-icon">ກີບ</div>
             <span>ເຄື່ອງມີ COD</span>
           </label>
+          <div class="switch" id="codSwitch" onclick="toggleCod(event)"></div>
         </div>
         <div class="cod-amount" id="codAmountWrap">
           <div class="money-input">
@@ -581,9 +610,10 @@
       <div class="cod-block" id="edit_codBlock">
         <div class="cod-head">
           <label class="cod-label" onclick="toggleEditCod(event)">
-            <div class="switch" id="edit_codSwitch"></div>
+            <div class="cod-icon">ກີບ</div>
             <span>ເຄື່ອງມີ COD</span>
           </label>
+          <div class="switch" id="edit_codSwitch" onclick="toggleEditCod(event)"></div>
         </div>
         <div class="cod-amount" id="edit_codAmountWrap">
           <div class="money-input">
@@ -740,8 +770,13 @@
       return;
     }
 
-    // ກວດສອບອີກຄັ້ງກ່ອນສົ່ງ (ກໍລະນີຍັງບໍ່ທັນກວດສຳເລັດ ຫຼື ກວດແລ້ວເຫັນວ່າຊ້ຳ)
-    await checkDuplicateCode();
+    if(hasCod && unformatMoney(document.getElementById('codAmount').value) <= 0){
+      showToast('ກະລຸນາປ້ອນຈຳນວນເງິນ COD', true);
+      document.getElementById('codAmount').focus();
+      return;
+    }
+
+    // ຖ້າຮູ້ແລ້ວວ່າຊ້ຳ (ຈາກການກວດ real-time ຕອນພິມ) ບໍ່ຕ້ອງເສຍເວລາສົ່ງໄປ Backend
     if(isCurrentCodeDuplicate){
       showToast('⚠ ເລກລະຫັດເຄື່ອງນີ້ມີໃນລະບົບແລ້ວ ກະລຸນາກວດສອບເລກບິນ', true);
       document.getElementById('trackingCode').focus();
@@ -800,7 +835,8 @@
         const arrow = currentRoute === 'in' ? '↙' : '↗';
         const origin = Number(item.payOrigin) || 0;
         const destination = Number(item.payDestination) || 0;
-        const amountHtml = renderAmountTags(origin, destination);
+        const codAmt = item.hasCod ? (Number(item.codAmount) || 0) : 0;
+        const amountHtml = renderAmountTags(origin, destination, codAmt);
         return `
           <div class="recent-item" onclick='openEditModal(${JSON.stringify(item).replace(/'/g,"&#39;")})'>
             <div class="recent-tag">${arrow}</div>
@@ -810,7 +846,6 @@
                 <span>${escapeHtml(item.receiverName)}</span>
                 <span>·</span>
                 <span>${item.date}</span>
-                ${item.hasCod ? '<span class="recent-cod-badge">COD</span>' : ''}
               </div>
             </div>
             <div class="recent-amount">
@@ -824,13 +859,16 @@
     }
   }
 
-  function renderAmountTags(origin, destination){
+  function renderAmountTags(origin, destination, codAmount){
     const rows = [];
     if(origin > 0){
       rows.push(`<div class="amt-row"><span class="amt-tag origin">ຕົ້ນທາງ</span><span class="amt-num">${origin.toLocaleString()}</span></div>`);
     }
     if(destination > 0){
       rows.push(`<div class="amt-row"><span class="amt-tag dest">ປາຍທາງ</span><span class="amt-num">${destination.toLocaleString()}</span></div>`);
+    }
+    if(codAmount > 0){
+      rows.push(`<div class="amt-row"><span class="amt-tag cod">COD</span><span class="amt-num cod-num">${codAmount.toLocaleString()}</span></div>`);
     }
     if(rows.length === 0){
       rows.push(`<div class="amt-row"><span class="amt-num">0</span></div>`);
@@ -915,6 +953,12 @@
 
     if(!order.trackingCode || !order.receiverName){
       showToast('ກະລຸນາປ້ອນເລກລະຫັດເຄື່ອງ ແລະ ຊື່ຜູ້ຮັບ', true);
+      return;
+    }
+
+    if(hasCod && unformatMoney(document.getElementById('edit_codAmount').value) <= 0){
+      showToast('ກະລຸນາປ້ອນຈຳນວນເງິນ COD', true);
+      document.getElementById('edit_codAmount').focus();
       return;
     }
 
