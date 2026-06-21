@@ -1165,12 +1165,14 @@
     if(currentTab === 'transfer'){
       const totalFee = (Number(item['ຄ່າທຳນຽມ_ກີບ'])||0);
       const feeThb = Number(item['ຄ່າທຳນຽມ_ບາດ'])||0;
+      const outAmount = Number(item['ຍອດອອກ'])||0;
+      const outCurrency = item['ສະກຸນອອກ'] === 'thb' ? 'ບາດ' : 'ກີບ';
       return `
         <div class="recent-item">
           <div class="recent-tag">💸</div>
           <div class="recent-main">
             <div class="recent-title-text">${TRANSFER_TYPE_LABELS[item['ປະເພດ']]||item['ປະເພດ']}</div>
-            <div class="recent-meta">${item['ວັນທີ']} · ຍອດໂອນ ${fmt(item['ຍອດໂອນ'])}</div>
+            <div class="recent-meta">${item['ວັນທີ']} · ຍອດໂອນ ${fmt(outAmount)} ${outCurrency}</div>
           </div>
           <div class="recent-amount profit">
             <div class="num">${fmt(totalFee)}${feeThb>0 ? ' + '+fmt(feeThb)+'฿' : ''}</div>
