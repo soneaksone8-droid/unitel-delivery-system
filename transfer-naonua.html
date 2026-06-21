@@ -488,7 +488,14 @@
 
       <div class="exchange-note" id="t_exchangeNote" style="display:none;">
         <span class="ic">💱</span>
-        <span id="t_exchangeNoteText">ທຸລະກຳນີ້ມີການແລກປ່ຽນສະກຸນແຝງຢູ່ — ໃຊ້ເລດປະຈຳວັນອັດຕະໂນມັດ, ກະທົບສະຕັອກບາດ</span>
+        <div style="flex:1;">
+          <span id="t_exchangeNoteText">ທຸລະກຳນີ້ມີການແລກປ່ຽນສະກຸນແຝງຢູ່ — ກະທົບສະຕັອກບາດ ແລະ ນັບກຳໄລ</span>
+          <div class="field" style="margin:10px 0 0;">
+            <label>ເລດທີ່ໃຊ້ (ກີບ/ບາດ) <span class="req">*</span></label>
+            <input type="text" id="t_customerRate" class="mono-input money-fmt" inputmode="numeric" placeholder="ເຊັ່ນ 605">
+            <div class="hint-text">ດຶງເລດປະຈຳວັນມາໃຫ້ອັດຕະໂນມັດ — ແກ້ໄຂໄດ້ຕາມລາຄາທີ່ໃຫ້ລູກຄ້າແທ້ຈິງ</div>
+          </div>
+        </div>
       </div>
 
       <div class="flow-box in">
@@ -968,8 +975,9 @@
       inLabel.innerHTML = '<span class="ic">↘</span> ເງິນເຂົ້າຮ້ານ — ບັນຊີບາດໄທ (ອັດຕະໂນມັດ)';
       outLabel.innerHTML = '<span class="ic">↗</span> ເງິນອອກຮ້ານ — ຈ່າຍຜູ້ຮັບຢູ່ລາວ';
       if(t_otherCurrency === 'lak'){
-        exchangeNoteText.textContent = 'ຜູ້ຮັບເອົາກີບ — ໄລ່ຕາມເລດປະຈຳວັນ, ກະທົບສະຕັອກບາດ, ນັບກຳໄລ';
+        exchangeNoteText.textContent = 'ຜູ້ຮັບເອົາກີບ — ກະທົບສະຕັອກບາດ ແລະ ນັບກຳໄລ';
         exchangeNote.style.display = 'flex';
+        loadRateIntoTransferForm();
       } else {
         exchangeNote.style.display = 'none';
       }
@@ -981,12 +989,24 @@
       outLabel.innerHTML = '<span class="ic">↗</span> ເງິນອອກຮ້ານ — ບັນຊີບາດໄທ (ອັດຕະໂນມັດ)';
       inLabel.innerHTML = '<span class="ic">↘</span> ເງິນເຂົ້າຮ້ານ — ຮັບຈາກລູກຄ້າຢູ່ລາວ';
       if(t_otherCurrency === 'lak'){
-        exchangeNoteText.textContent = 'ຮັບກີບຈາກລູກຄ້າ — ໄລ່ຕາມເລດປະຈຳວັນ, ກະທົບສະຕັອກບາດ, ນັບກຳໄລ';
+        exchangeNoteText.textContent = 'ຮັບກີບຈາກລູກຄ້າ — ກະທົບສະຕັອກບາດ ແລະ ນັບກຳໄລ';
         exchangeNote.style.display = 'flex';
+        loadRateIntoTransferForm();
       } else {
         exchangeNote.style.display = 'none';
       }
     }
+  }
+
+  async function loadRateIntoTransferForm(){
+    try {
+      const date = document.getElementById('t_date').value || today;
+      const res = await fetch(`${API_URL}?action=sabeoDailyRate&branch=${BRANCH}&date=${date}`);
+      const rate = await res.json();
+      if(rate && rate.sellThbToLak){
+        document.getElementById('t_customerRate').value = Number(rate.sellThbToLak).toLocaleString('en-US');
+      }
+    } catch(err){ /* ບໍ່ມີເລດອ້າງອີງ - ປ່ອຍຫວ່າງໃຫ້ພິມເອງ */ }
   }
 
   function selectTransferType(el){
@@ -1019,6 +1039,11 @@
   }
 
   updateTransferFields();
+  document.getElementById('t_date').addEventListener('change', function(){
+    if(transferType !== 'lak_lak' && t_otherCurrency === 'lak'){
+      loadRateIntoTransferForm();
+    }
+  });
 
   document.getElementById('transferForm').addEventListener('submit', async function(e){
     e.preventDefault();
@@ -1042,6 +1067,9 @@
       knownSide = 'out';             // ຮູ້ຈຳນວນບາດທີ່ຕ້ອງໂອນອອກແທ້
     }
 
+    const isExchange = inCurrency !== outCurrency;
+    const customerRate = isExchange ? unformatMoney(document.getElementById('t_customerRate').value) : 0;
+
     const order = {
       branch: BRANCH,
       transferType: transferType,
@@ -1050,6 +1078,7 @@
       outCurrency: outCurrency,
       knownAmount: knownAmount,
       knownSide: knownSide,
+      customerRate: customerRate,
       feeLak: unformatMoney(document.getElementById('t_feeLak').value),
       feeThb: unformatMoney(document.getElementById('t_feeThb').value),
       walletIn: document.getElementById('t_walletIn').value,
@@ -1059,6 +1088,10 @@
 
     if(order.knownAmount <= 0){
       showToast('ກະລຸນາປ້ອນຈຳນວນເງິນ', true);
+      return;
+    }
+    if(isExchange && customerRate <= 0){
+      showToast('ກະລຸນາປ້ອນເລດທີ່ໃຊ້', true);
       return;
     }
     if(order.feeLak <= 0 && order.feeThb <= 0){
