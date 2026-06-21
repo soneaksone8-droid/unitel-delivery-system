@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23a01e22'/%3E%3Ctext x='50' y='68' font-family='Georgia,serif' font-size='52' font-weight='700' fill='white' text-anchor='middle'%3Eສພ%3C/text%3E%3C/svg%3E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ລາຍງານສະເບົາພອນ">
+<meta name="theme-color" content="#a01e22">
+<title>ລາຍງານສະຫຼຸບ — ສະເບົາພອນ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Lao:wght@600;700&family=Noto+Sans+Lao:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#241a17;
+    --ink-soft:#7a6a64;
+    --paper:#faf6f1;
+    --panel:#ffffff;
+    --line:#ecdfd6;
+
+    --brand:#a01e22;
+    --brand-deep:#6e1316;
+    --brand-tint:#fbe9e9;
+
+    --gold:#c9941e;
+    --gold-tint:#fbf1dc;
+    --warn:#c0392b;
+    --warn-tint:#fdeceb;
+    --good:#1f7a4d;
+    --good-tint:#e9f6ee;
+
+    --thb:#a64b2a;
+    --thb-tint:#fbeee7;
+    --lak:#1d5fae;
+    --lak-tint:#e7f0fb;
+
+    --radius:18px;
+    --radius-sm:11px;
+    --shadow: 0 1px 2px rgba(36,26,23,0.06), 0 12px 30px -16px rgba(36,26,23,0.22);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse 900px 460px at 16% -6%, var(--brand-tint), transparent 55%),
+      radial-gradient(ellipse 900px 460px at 84% -6%, var(--gold-tint), transparent 55%),
+      var(--paper);
+    color:var(--ink);
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
+    min-height:100vh;
+    padding:0 0 60px;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  .serif{font-family:'Noto Serif Lao',serif;}
+
+  header{
+    background:linear-gradient(135deg, var(--brand-deep) 0%, var(--brand) 70%);
+    color:#fdf3f3;
+    padding:20px 20px 22px;
+    position:relative;overflow:hidden;
+    border-bottom:3px solid rgba(255,255,255,0.5);
+  }
+  header::before{
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(circle, rgba(253,243,243,0.12) 1px, transparent 1px);
+    background-size:16px 16px;
+    pointer-events:none;
+  }
+  .header-inner{max-width:980px;margin:0 auto;position:relative;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  .brand-row{display:flex;align-items:center;gap:11px;}
+  .brand-mark{
+    width:38px;height:38px;border-radius:10px;
+    background:linear-gradient(150deg,#fff,#f3e0e0);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:14px;color:var(--brand-deep);flex-shrink:0;
+    font-family:'Noto Serif Lao',serif;
+    box-shadow:0 3px 10px rgba(0,0,0,0.18);
+  }
+  .brand-text-lao{font-size:19px;font-weight:700;font-family:'Noto Serif Lao',serif;}
+  .brand-text-sub{font-size:10.5px;color:#f0d4d4;letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+
+  .back-btn{
+    display:flex;align-items:center;gap:8px;
+    background:rgba(255,255,255,0.16);
+    border:1.5px solid rgba(255,255,255,0.4);
+    color:#fff;text-decoration:none;font-size:13.5px;font-weight:700;
+    padding:10px 18px;border-radius:99px;
+    transition:background .15s, transform .1s;
+  }
+  .back-btn:hover{background:rgba(255,255,255,0.28);}
+  .back-btn:active{transform:scale(0.97);}
+
+  .wrap{max-width:980px;margin:0 auto;padding:0 16px;}
+
+  /* ===== Filter bar ===== */
+  .filter-bar{
+    display:flex;gap:9px;align-items:center;flex-wrap:wrap;
+    margin-top:18px;
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:13px 15px;box-shadow:var(--shadow);
+  }
+  .filter-tabs{display:flex;gap:4px;background:var(--paper);border-radius:9px;padding:3px;}
+  .filter-tab{
+    border:none;background:transparent;padding:8px 15px;border-radius:8px;
+    font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer;
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;transition:all .15s;
+  }
+  .filter-tab.active{background:var(--ink);color:#fff;}
+  .filter-bar input[type="date"], .filter-bar input[type="month"]{
+    border:1.5px solid var(--line);border-radius:9px;padding:8px 11px;font-size:13.5px;
+    font-family:'JetBrains Mono',monospace;color:var(--ink);
+  }
+  .filter-bar select{
+    border:1.5px solid var(--line);border-radius:9px;padding:8px 11px;font-size:13.5px;
+    font-family:'JetBrains Mono',monospace;color:var(--ink);background:#fff;
+  }
+  .refresh-btn{
+    margin-left:auto;border:1.5px solid var(--line);background:#fff;border-radius:9px;
+    padding:8px 14px;font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer;
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
+  }
+  .refresh-btn:hover{border-color:var(--ink);color:var(--ink);}
+
+  /* ===== Net profit hero ===== */
+  .net-card{
+    margin-top:16px;
+    background:var(--ink);color:#fdf3f3;
+    border-radius:var(--radius);
+    padding:22px 24px;
+    box-shadow:var(--shadow);
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px;
+  }
+  .net-eyebrow{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#d8c8c8;margin-bottom:8px;}
+  .net-value{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;}
+  .net-value.neg{color:#ff9d8f;}
+  .net-value.pos{color:#9bf0c4;}
+  .net-value .unit{font-size:13px;font-weight:600;color:#d8c8c8;margin-left:6px;}
+  .net-stats{display:flex;gap:24px;flex-wrap:wrap;}
+  .net-stat{text-align:left;}
+  .net-stat .lbl{font-size:11.5px;color:#d8c8c8;}
+  .net-stat .val{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;margin-top:2px;}
+
+  /* ===== Summary cards ===== */
+  .summary-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:14px;
+  }
+  .sum-card{
+    background:var(--panel);border:1.5px solid var(--line);border-radius:var(--radius);
+    padding:17px 18px;box-shadow:var(--shadow);position:relative;overflow:hidden;
+  }
+  .sum-card::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;}
+  .sum-card.transfer::before{background:var(--brand);}
+  .sum-card.exchange::before{background:var(--gold);}
+  .sum-card.expense::before{background:var(--ink-soft);}
+  .sum-eyebrow{font-size:11.5px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.7px;margin-bottom:9px;display:flex;align-items:center;gap:7px;}
+  .sum-eyebrow .ic{font-size:13px;width:21px;height:21px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;color:#fff;}
+  .sum-card.transfer .sum-eyebrow .ic{background:var(--brand);}
+  .sum-card.exchange .sum-eyebrow .ic{background:var(--gold);}
+  .sum-card.expense .sum-eyebrow .ic{background:var(--ink-soft);}
+  .sum-value{font-family:'JetBrains Mono',monospace;font-size:23px;font-weight:700;line-height:1.1;}
+  .sum-value .unit{font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-left:5px;}
+  .sum-detail{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);display:flex;flex-direction:column;gap:7px;}
+  .sum-detail-row{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--ink-soft);}
+  .sum-detail-row b{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--ink);font-weight:700;}
+
+  /* ===== Stock card ===== */
+  .stock-card{
+    margin-top:14px;background:var(--gold-tint);border:1.5px solid #e8d2a0;border-radius:var(--radius);
+    padding:16px 18px;box-shadow:var(--shadow);
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+  }
+  .stock-left{display:flex;align-items:center;gap:12px;}
+  .stock-icon{width:38px;height:38px;border-radius:10px;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+  .stock-title{font-size:13px;font-weight:700;color:#8a6315;}
+  .stock-sub{font-size:11.5px;color:#a8804a;margin-top:2px;}
+  .stock-value{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:#8a6315;text-align:right;}
+  .stock-value .unit{font-size:12px;font-weight:600;}
+
+  /* ===== Cash check section ===== */
+  .check-section{margin-top:22px;}
+  .section-title{
+    font-size:13px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;
+    letter-spacing:0.8px;margin:0 2px 11px;display:flex;align-items:center;gap:9px;
+  }
+  .section-title::before{content:"";width:16px;height:2px;background:var(--ink-soft);border-radius:2px;}
+  .check-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:11px;}
+  .check-date-picker{
+    border:1.5px solid var(--line);border-radius:9px;padding:8px 11px;font-size:13.5px;
+    font-family:'JetBrains Mono',monospace;color:var(--ink);background:#fff;
+  }
+
+  .check-card{
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:18px;
+  }
+  .wallet-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .wallet-row{
+    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);
+    padding:13px 15px;
+  }
+  .wallet-row .lbl{font-size:12px;font-weight:700;color:var(--ink-soft);margin-bottom:7px;}
+  .wallet-row .expected{font-size:11.5px;color:var(--ink-soft);}
+  .wallet-row .expected b{font-family:'JetBrains Mono',monospace;color:var(--ink);}
+  .wallet-row .diff{margin-top:6px;padding-top:6px;border-top:1px dashed var(--line);font-size:13px;font-weight:700;font-family:'JetBrains Mono',monospace;}
+  .wallet-row .diff.zero{color:var(--good);}
+  .wallet-row .diff.neg{color:var(--warn);}
+  .wallet-row .diff.pos{color:var(--good);}
+  .wallet-row .diff.pending{color:var(--ink-soft);font-weight:600;font-size:12px;font-family:'Noto Sans Lao','Noto Sans',sans-serif;}
+
+  .total-value-check{
+    margin-top:14px;background:var(--ink);color:#fff;border-radius:var(--radius-sm);
+    padding:15px 17px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
+  }
+  .total-value-check .lbl{font-size:12.5px;color:#d8c8c8;}
+  .total-value-check .val{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;}
+  .total-value-check .val.warn{color:#ff9d8f;}
+  .total-value-check .val.good{color:#9bf0c4;}
+
+  .empty-state{text-align:center;padding:30px 20px;color:var(--ink-soft);font-size:13.5px;}
+
+  @media (max-width:760px){
+    .summary-grid{grid-template-columns:1fr;}
+    .wallet-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand-row">
+      <div class="brand-mark">ສພ</div>
+      <div>
+        <div class="brand-text-lao">ລາຍງານສະຫຼຸບ</div>
+        <div class="brand-text-sub">ສະເບົາພອນ — ໜາວເໜືອ</div>
+      </div>
+    </div>
+    <a href="transfer-naonua.html" class="back-btn">
+      <span>←</span>
+      <span>ກັບໜ້າບັນທຶກ</span>
+    </a>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="filter-bar">
+    <div class="filter-tabs" id="filterTabs">
+      <button class="filter-tab active" data-mode="all" onclick="setMode('all')">ທັງໝົດ</button>
+      <button class="filter-tab" data-mode="day" onclick="setMode('day')">ລາຍວັນ</button>
+      <button class="filter-tab" data-mode="month" onclick="setMode('month')">ລາຍເດືອນ</button>
+      <button class="filter-tab" data-mode="year" onclick="setMode('year')">ລາຍປີ</button>
+    </div>
+    <input type="date" id="dayPicker" style="display:none" onchange="applyFilter()">
+    <input type="month" id="monthPicker" style="display:none" onchange="applyFilter()">
+    <select id="yearPicker" style="display:none" onchange="applyFilter()"></select>
+    <button class="refresh-btn" onclick="loadAll()">⟳ ໂຫຼດໃໝ່</button>
+  </div>
+
+  <div class="net-card">
+    <div>
+      <div class="net-eyebrow">ກຳໄລ/ຂາດທຶນສຸດທິ (ກີບ)</div>
+      <div class="net-value" id="netProfitLak">—<span class="unit">ກີບ</span></div>
+    </div>
+    <div class="net-stats">
+      <div class="net-stat">
+        <div class="lbl">ກຳໄລ/ຂາດທຶນ ບາດ</div>
+        <div class="val" id="netProfitThb">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="summary-grid">
+    <div class="sum-card transfer">
+      <div class="sum-eyebrow"><span class="ic">💸</span> ໂອນເງິນ</div>
+      <div class="sum-value" id="transferCount">—<span class="unit">ລາຍການ</span></div>
+      <div class="sum-detail">
+        <div class="sum-detail-row"><span>ຄ່າທຳນຽມ ກີບ</span><b id="transferFeeLak">—</b></div>
+        <div class="sum-detail-row"><span>ຄ່າທຳນຽມ ບາດ</span><b id="transferFeeThb">—</b></div>
+        <div class="sum-detail-row"><span>ກຳໄລແຝງ (ແລກປ່ຽນໃນໂອນ)</span><b id="transferHiddenProfit">—</b></div>
+      </div>
+    </div>
+    <div class="sum-card exchange">
+      <div class="sum-eyebrow"><span class="ic">💱</span> ແລກປ່ຽນ</div>
+      <div class="sum-value" id="exchangeCount">—<span class="unit">ລາຍການ</span></div>
+      <div class="sum-detail">
+        <div class="sum-detail-row"><span>ຊື້ບາດ</span><b id="buyThbVolume">—</b></div>
+        <div class="sum-detail-row"><span>ຂາຍບາດ</span><b id="sellThbVolume">—</b></div>
+        <div class="sum-detail-row"><span>ກຳໄລລວມແລກປ່ຽນ</span><b id="exchangeTotalProfit">—</b></div>
+      </div>
+    </div>
+    <div class="sum-card expense">
+      <div class="sum-eyebrow"><span class="ic">🧾</span> ລາຍຈ່າຍ</div>
+      <div class="sum-value" id="expenseCount">—<span class="unit">ລາຍການ</span></div>
+      <div class="sum-detail">
+        <div class="sum-detail-row"><span>ລາຍຈ່າຍ ກີບ</span><b id="expenseLak">—</b></div>
+        <div class="sum-detail-row"><span>ລາຍຈ່າຍ ບາດ</span><b id="expenseThb">—</b></div>
+        <div class="sum-detail-row" id="topCategoryRow" style="display:none;"><span>ໝວດສູງສຸດ</span><b id="topCategory">—</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stock-card">
+    <div class="stock-left">
+      <div class="stock-icon">฿</div>
+      <div>
+        <div class="stock-title">ສະຕັອກບາດປະຈຸບັນ</div>
+        <div class="stock-sub">ຕົ້ນທຶນສະເລ່ຍ <span id="stockAvgCost">—</span> ກີບ/ບາດ</div>
+      </div>
+    </div>
+    <div class="stock-value"><span id="stockAmount">—</span><span class="unit"> ฿</span></div>
+  </div>
+
+  <div class="check-section">
+    <div class="check-head">
+      <div class="section-title" style="margin:0;">ກວດສອບເງິນປະຈຳວັນ</div>
+      <input type="date" class="check-date-picker" id="checkDate" onchange="loadCashCheck()">
+    </div>
+    <div class="check-card" id="checkCard">
+      <div class="empty-state">ກຳລັງໂຫຼດ...</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const API_URL = 'https://script.google.com/macros/s/AKfycbzbBSy_vIFkj3A9Q5j0ZDUwF-t8oszRt2kFMz9cB6OsaMqiI0t__syteoP_hM4Mt_Zu/exec';
+  const BRANCH = 'naonua';
+
+  let currentMode = 'all';
+  const thisYear = new Date().getFullYear();
+  const today = new Date().toISOString().slice(0,10);
+
+  const yearSel = document.getElementById('yearPicker');
+  for(let y = thisYear; y >= thisYear - 5; y--){
+    const opt = document.createElement('option');
+    opt.value = y; opt.textContent = y;
+    yearSel.appendChild(opt);
+  }
+
+  document.getElementById('checkDate').value = today;
+
+  function setMode(mode){
+    currentMode = mode;
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
+    document.getElementById('dayPicker').style.display = mode === 'day' ? 'block' : 'none';
+    document.getElementById('monthPicker').style.display = mode === 'month' ? 'block' : 'none';
+    document.getElementById('yearPicker').style.display = mode === 'year' ? 'block' : 'none';
+
+    if(mode === 'day' && !document.getElementById('dayPicker').value){
+      document.getElementById('dayPicker').valueAsDate = new Date();
+    }
+    if(mode === 'month' && !document.getElementById('monthPicker').value){
+      document.getElementById('monthPicker').value = today.slice(0,7);
+    }
+    if(mode === 'year' && !yearSel.value){
+      yearSel.value = thisYear;
+    }
+    loadSummary();
+  }
+
+  function getFilterValue(){
+    if(currentMode === 'day') return document.getElementById('dayPicker').value;
+    if(currentMode === 'month') return document.getElementById('monthPicker').value;
+    if(currentMode === 'year') return yearSel.value;
+    return '';
+  }
+
+  function applyFilter(){ loadSummary(); }
+
+  function fmt(n){ return Math.round(Number(n)||0).toLocaleString(); }
+
+  async function loadAll(){
+    await Promise.all([loadSummary(), loadCashCheck()]);
+  }
+
+  async function loadSummary(){
+    try{
+      const fv = getFilterValue();
+      const url = `${API_URL}?action=sabeoSummary&branch=${BRANCH}&filterType=${currentMode}&filterValue=${encodeURIComponent(fv)}`;
+      const res = await fetch(url);
+      const data = await res.json();
+
+      const netEl = document.getElementById('netProfitLak');
+      netEl.innerHTML = fmt(data.netProfitLak) + '<span class="unit">ກີບ</span>';
+      netEl.className = 'net-value ' + (data.netProfitLak < 0 ? 'neg' : 'pos');
+      document.getElementById('netProfitThb').textContent = fmt(data.netProfitThb) + ' ບາດ';
+
+      document.getElementById('transferCount').innerHTML = fmt(data.transfer.count) + '<span class="unit">ລາຍການ</span>';
+      document.getElementById('transferFeeLak').textContent = fmt(data.transfer.feeLak) + ' ກີບ';
+      document.getElementById('transferFeeThb').textContent = fmt(data.transfer.feeThb) + ' ບາດ';
+      document.getElementById('transferHiddenProfit').textContent = fmt(data.transfer.hiddenProfit) + ' ກີບ';
+
+      document.getElementById('exchangeCount').innerHTML = fmt(data.exchange.count) + '<span class="unit">ລາຍການ</span>';
+      document.getElementById('buyThbVolume').textContent = fmt(data.exchange.buyThb.volume) + ' ฿ (' + data.exchange.buyThb.count + ' ລາຍການ)';
+      document.getElementById('sellThbVolume').textContent = fmt(data.exchange.sellThb.volume) + ' ฿ (' + data.exchange.sellThb.count + ' ລາຍການ)';
+      document.getElementById('exchangeTotalProfit').textContent = fmt(data.exchange.totalProfit) + ' ກີບ';
+
+      document.getElementById('expenseCount').innerHTML = fmt(data.expense.count) + '<span class="unit">ລາຍການ</span>';
+      document.getElementById('expenseLak').textContent = fmt(data.expense.totalLak) + ' ກີບ';
+      document.getElementById('expenseThb').textContent = fmt(data.expense.totalThb) + ' ບາດ';
+
+      const categories = Object.entries(data.expense.byCategory || {});
+      if(categories.length > 0){
+        categories.sort((a,b) => b[1]-a[1]);
+        document.getElementById('topCategoryRow').style.display = 'flex';
+        document.getElementById('topCategory').textContent = categories[0][0] + ' (' + fmt(categories[0][1]) + ')';
+      }
+
+      if(data.currentStock){
+        document.getElementById('stockAmount').textContent = fmt(data.currentStock.amountThb);
+        document.getElementById('stockAvgCost').textContent = data.currentStock.amountThb > 0 ? fmt(data.currentStock.avgCost) : '—';
+      }
+    } catch(err){
+      console.error('Summary load error:', err);
+    }
+  }
+
+  async function loadCashCheck(){
+    const card = document.getElementById('checkCard');
+    const date = document.getElementById('checkDate').value || today;
+    card.innerHTML = '<div class="empty-state">ກຳລັງໂຫຼດ...</div>';
+    try{
+      const res = await fetch(`${API_URL}?action=sabeoCashCheck&branch=${BRANCH}&date=${date}`);
+      const data = await res.json();
+
+      if(!data.hasOpening){
+        card.innerHTML = '<div class="empty-state">' + (data.message || 'ຍັງບໍ່ໄດ້ຕັ້ງຍອດຕັ້ງຕົ້ນສຳລັບວັນທີ່ນີ້') + '</div>';
+        return;
+      }
+
+      const walletKeys = ['cash_lak','cash_thb','bank_lak','bank_thb'];
+      let html = '<div class="wallet-grid">';
+      walletKeys.forEach(w => {
+        const info = data.wallets[w];
+        let diffHtml = '<div class="diff pending">ຍັງບໍ່ໄດ້ນັບ</div>';
+        if(info.diff !== null){
+          const cls = info.diff === 0 ? 'zero' : (info.diff > 0 ? 'pos' : 'neg');
+          const sign = info.diff > 0 ? '+' : '';
+          diffHtml = `<div class="diff ${cls}">ສ່ວນຕ່າງ: ${sign}${fmt(info.diff)}</div>`;
+        }
+        html += `
+          <div class="wallet-row">
+            <div class="lbl">${info.label}</div>
+            <div class="expected">ຄວນມີ <b>${fmt(info.expected)}</b></div>
+            ${diffHtml}
+          </div>
+        `;
+      });
+      html += '</div>';
+
+      if(data.totalValueCheck){
+        const tc = data.totalValueCheck;
+        if(tc.actualTotalLak !== null){
+          const cls = Math.abs(tc.diff) < 1 ? 'good' : 'warn';
+          const sign = tc.diff > 0 ? '+' : '';
+          html += `
+            <div class="total-value-check">
+              <span class="lbl">ມູນຄ່າລວມທັງໝົດ (ແປງເປັນກີບ) — ສ່ວນຕ່າງ</span>
+              <span class="val ${cls}">${sign}${fmt(tc.diff)} ກີບ</span>
+            </div>
+          `;
+        } else {
+          html += `
+            <div class="total-value-check">
+              <span class="lbl">ມູນຄ່າລວມທີ່ຄວນມີ (ແປງເປັນກີບ)</span>
+              <span class="val">${fmt(tc.expectedTotalLak)} ກີບ</span>
+            </div>
+          `;
+        }
+      }
+
+      card.innerHTML = html;
+    } catch(err){
+      card.innerHTML = '<div class="empty-state">ໂຫຼດຂໍ້ມູນບໍ່ໄດ້ — ກວດສອບການເຊື່ອມຕໍ່</div>';
+    }
+  }
+
+  loadAll();
+</script>
+
+</body>
+</html>

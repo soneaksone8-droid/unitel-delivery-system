@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23c2531f'/%3E%3Ctext x='50' y='68' font-family='Georgia,serif' font-size='58' font-weight='700' fill='white' text-anchor='middle'%3EU%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23c2531f'/%3E%3Ctext x='50' y='68' font-family='Georgia,serif' font-size='58' font-weight='700' fill='white' text-anchor='middle'%3EU%3C/text%3E%3C/svg%3E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ສາຂາໜາວເໜືອ">
+<meta name="theme-color" content="#c2531f">
+<link rel="manifest" href="manifest-naonua.json">
+<title>ສາຂາໜາວເໜືອ — ເລືອກບໍລິການ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Lao:wght@600;700&family=Noto+Sans+Lao:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#241a17;
+    --ink-soft:#7a6a64;
+    --paper:#faf6f1;
+    --panel:#ffffff;
+    --line:#ecdfd6;
+
+    /* ຂົນສົ່ງ = ສົ້ມແບຣນ */
+    --ship:#c2531f;
+    --ship-deep:#9c3f15;
+    --ship-tint:#fdf0e6;
+
+    /* ໂອນເງິນ = ແດງ BCEL */
+    --money:#a01e22;
+    --money-deep:#6e1316;
+    --money-tint:#fbe9e9;
+
+    --gold:#c9941e;
+    --gold-tint:#fbf1dc;
+
+    --radius:20px;
+    --radius-sm:12px;
+    --shadow: 0 1px 2px rgba(36,26,23,0.06), 0 16px 36px -18px rgba(36,26,23,0.28);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse 900px 520px at 14% -8%, var(--ship-tint), transparent 55%),
+      radial-gradient(ellipse 900px 520px at 86% -8%, var(--money-tint), transparent 55%),
+      var(--paper);
+    color:var(--ink);
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  .serif{font-family:'Noto Serif Lao',serif;}
+
+  header{
+    padding:34px 20px 18px;
+    text-align:center;
+  }
+  .brand-mark{
+    width:62px;height:62px;border-radius:18px;
+    background:linear-gradient(150deg,#fff,#f3e6d8);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:24px;color:var(--ship-deep);
+    font-family:'Noto Serif Lao',serif;
+    box-shadow:var(--shadow);
+    margin:0 auto 16px;
+  }
+  .brand-text-lao{font-size:21px;font-weight:700;font-family:'Noto Serif Lao',serif;color:var(--ink);}
+  .brand-text-sub{
+    font-size:12.5px;color:var(--ink-soft);margin-top:4px;
+    display:inline-flex;align-items:center;gap:7px;
+  }
+  .brand-text-sub .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 3px var(--gold-tint);}
+
+  .wrap{
+    flex:1;
+    max-width:520px;width:100%;margin:0 auto;
+    padding:10px 20px 30px;
+    display:flex;flex-direction:column;
+    justify-content:center;
+    gap:16px;
+  }
+
+  .choice-title{
+    text-align:center;font-size:13px;font-weight:700;color:var(--ink-soft);
+    text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;
+  }
+
+  .service-card{
+    display:flex;align-items:center;gap:16px;
+    background:var(--panel);border:1.5px solid var(--line);border-radius:var(--radius);
+    padding:22px 22px;text-decoration:none;color:var(--ink);
+    box-shadow:var(--shadow);
+    transition:transform .15s, border-color .15s, box-shadow .2s;
+    position:relative;overflow:hidden;
+  }
+  .service-card::before{
+    content:"";position:absolute;top:0;left:0;bottom:0;width:5px;
+  }
+  .service-card.ship::before{background:var(--ship);}
+  .service-card.money::before{background:var(--money);}
+  .service-card:active{transform:scale(0.98);}
+  .service-card:hover{box-shadow:0 20px 40px -18px rgba(36,26,23,0.35);}
+
+  .service-icon{
+    width:58px;height:58px;border-radius:16px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    font-size:26px;
+  }
+  .service-card.ship .service-icon{background:var(--ship-tint);color:var(--ship);}
+  .service-card.money .service-icon{background:var(--money-tint);color:var(--money);}
+
+  .service-text{flex:1;min-width:0;}
+  .service-title{font-size:17px;font-weight:700;font-family:'Noto Serif Lao',serif;margin-bottom:3px;}
+  .service-sub{font-size:12.5px;color:var(--ink-soft);line-height:1.5;}
+
+  .service-arrow{
+    font-size:18px;color:var(--ink-soft);flex-shrink:0;
+    transition:transform .15s;
+  }
+  .service-card:hover .service-arrow{transform:translateX(3px);}
+
+  footer{
+    text-align:center;padding:18px 20px 26px;
+    font-size:11.5px;color:var(--ink-soft);
+  }
+  footer b{color:var(--ink);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand-mark">U</div>
+  <div class="brand-text-lao">ສາຂາໜາວເໜືອ</div>
+  <div class="brand-text-sub">
+    <span class="dot"></span>
+    <span>ເລືອກບໍລິການທີ່ຕ້ອງການ</span>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="choice-title">ບໍລິການທັງໝົດ</div>
+
+  <a href="index-naonua.html" class="service-card ship">
+    <div class="service-icon">📦</div>
+    <div class="service-text">
+      <div class="service-title">ຂົນສົ່ງດ່ວນ</div>
+      <div class="service-sub">ບັນທຶກອໍເດີ້ ຝາກໄປ-ຝາກມາ, ເຄື່ອງຕີກັບ, ລາຍງານ</div>
+    </div>
+    <div class="service-arrow">→</div>
+  </a>
+
+  <a href="transfer-naonua.html" class="service-card money">
+    <div class="service-icon">💸</div>
+    <div class="service-text">
+      <div class="service-title">ສະເບົາພອນ — ໂອນເງິນດ່ວນຊຸມຊົນ</div>
+      <div class="service-sub">ໂອນເງິນ, ແລກປ່ຽນ, ລາຍຈ່າຍ, ກວດສອບເງິນ</div>
+    </div>
+    <div class="service-arrow">→</div>
+  </a>
+</div>
+
+<footer>
+  <b>ຢູນິເທວຂົນສົ່ງດ່ວນ</b> · ຮ້ານສະເບົາພອນ — ສາຂາໜາວເໜືອ
+</footer>
+
+</body>
+</html>

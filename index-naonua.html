@@ -86,7 +86,15 @@
     pointer-events:none;
   }
   .header-inner{max-width:780px;margin:0 auto;position:relative;}
-  .brand-row{display:flex;align-items:center;gap:11px;}
+  .brand-row{display:flex;align-items:center;gap:11px;justify-content:space-between;}
+  .home-btn{
+    width:36px;height:36px;border-radius:10px;
+    background:rgba(255,255,255,0.16);border:1.5px solid rgba(255,255,255,0.35);
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;text-decoration:none;font-size:16px;flex-shrink:0;
+    transition:background .15s;
+  }
+  .home-btn:hover{background:rgba(255,255,255,0.28);}
   .brand-mark{
     width:38px;height:38px;border-radius:10px;
     background:linear-gradient(150deg,#fff,#ffe2c4);
@@ -605,6 +613,7 @@
         <div class="brand-text-lao">ຢູນິເທວຂົນສົ່ງດ່ວນ</div>
         <div class="brand-text-sub">Express Delivery Log</div>
       </div>
+      <a href="home-naonua.html" class="home-btn" title="ກັບໜ້າຫຼັກ">⌂</a>
     </div>
     <div class="branch-tag">
       <span class="dot"></span>
