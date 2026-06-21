@@ -220,6 +220,41 @@
     font-size:11px;font-weight:700;background:var(--gold-tint);color:#8a6315;
     padding:4px 10px;border-radius:99px;font-family:'JetBrains Mono',monospace;
   }
+  .stock-badge.low{background:var(--warn-tint);color:var(--warn);}
+  .stock-badge.high{background:var(--lak-tint);color:var(--lak);}
+
+  /* ===== Lock status / Close day ===== */
+  .lock-status{margin-bottom:14px;}
+  .lock-status-locked{
+    display:flex;align-items:flex-start;gap:10px;
+    background:var(--warn-tint);border:1.5px solid #f0bdb6;border-radius:var(--radius-sm);
+    padding:13px 15px;margin-bottom:10px;
+  }
+  .lock-status-locked .ic{font-size:18px;flex-shrink:0;}
+  .lock-status-text{font-size:12.5px;color:#8a2e22;line-height:1.5;}
+  .lock-status-text b{display:block;font-size:13.5px;margin-bottom:2px;}
+
+  .unlock-row{display:flex;gap:8px;}
+  .unlock-row input{
+    flex:1;border:1.5px solid var(--line);border-radius:var(--radius-sm);
+    padding:11px 13px;font-size:14px;font-family:'JetBrains Mono',monospace;
+    color:var(--ink);background:#fff;letter-spacing:2px;
+  }
+  .unlock-btn{
+    background:var(--brand);color:#fff;border:none;border-radius:var(--radius-sm);
+    padding:11px 18px;font-size:13.5px;font-weight:700;cursor:pointer;
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;white-space:nowrap;
+  }
+  .unlock-btn:hover{opacity:0.9;}
+
+  .close-day-row{
+    display:flex;align-items:flex-start;gap:10px;
+    background:var(--paper);border:1.5px solid var(--line);border-radius:var(--radius-sm);
+    padding:13px 15px;margin-bottom:14px;cursor:pointer;
+  }
+  .close-day-row input[type="checkbox"]{width:18px;height:18px;flex-shrink:0;margin-top:1px;accent-color:var(--brand);}
+  .close-day-row span{font-size:12px;color:var(--ink-soft);line-height:1.5;}
+  .close-day-row span b{color:var(--ink);}
 
   .submit-btn{
     width:100%;background:var(--brand);color:#fff;border:none;border-radius:var(--radius-sm);
@@ -273,6 +308,43 @@
   .recent-amount .lbl{font-size:9.5px;color:var(--ink-soft);}
 
   .empty-state{text-align:center;padding:36px 20px;color:var(--ink-soft);font-size:13.5px;}
+
+  .rate-history-section{margin-top:18px;padding-top:16px;border-top:1px dashed var(--line);}
+  .rate-history-title{font-size:12px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.7px;margin-bottom:10px;}
+  .rate-history-item{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:9px 0;border-bottom:1px dashed var(--line);font-size:12.5px;
+  }
+  .rate-history-item:last-child{border-bottom:none;}
+  .rate-history-date{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--ink);}
+  .rate-history-rates{display:flex;gap:14px;font-size:11.5px;color:var(--ink-soft);}
+  .rate-history-rates b{font-family:'JetBrains Mono',monospace;color:var(--ink);}
+
+  .filter-toggle-btn{
+    display:flex;align-items:center;gap:6px;background:none;border:none;
+    font-size:12.5px;font-weight:700;color:var(--brand);cursor:pointer;
+    padding:6px 2px;margin-bottom:10px;font-family:'Noto Sans Lao','Noto Sans',sans-serif;
+  }
+  .history-filter-box{
+    background:var(--paper);border:1.5px solid var(--line);border-radius:var(--radius-sm);
+    padding:14px;margin-bottom:14px;
+  }
+  .history-filter-box select{
+    width:100%;border:1.5px solid var(--line);border-radius:var(--radius-sm);
+    padding:10px 12px;font-size:13.5px;font-family:'Noto Sans Lao','Noto Sans',sans-serif;
+    color:var(--ink);background:#fff;
+  }
+  .filter-action-row{display:flex;gap:8px;}
+  .filter-apply-btn{
+    flex:1;background:var(--brand);color:#fff;border:none;border-radius:var(--radius-sm);
+    padding:10px;font-size:13px;font-weight:700;cursor:pointer;
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
+  }
+  .filter-clear-btn{
+    background:#fff;border:1.5px solid var(--line);color:var(--ink-soft);border-radius:var(--radius-sm);
+    padding:10px 16px;font-size:13px;font-weight:700;cursor:pointer;
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
+  }
   .skeleton{
     background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);
     padding:12px 14px;margin-bottom:8px;height:58px;
@@ -669,6 +741,11 @@
       <button type="button" class="submit-btn" id="rateSubmitBtn" onclick="submitRate()">
         <span id="rateSubmitLabel">✓ ບັນທຶກເລດປະຈຳວັນ</span>
       </button>
+
+      <div class="rate-history-section">
+        <div class="rate-history-title">ປະຫວັດເລດ (10 ມື້ຫຼ້າສຸດ)</div>
+        <div id="rateHistoryList"><div class="empty-state">ກຳລັງໂຫຼດ...</div></div>
+      </div>
     </div>
   </div>
 </div>
@@ -720,6 +797,27 @@
 
       <div id="cashCheckResult"></div>
 
+      <div class="lock-status" id="lockStatusBox" style="display:none;">
+        <div class="lock-status-locked" id="lockStatusLocked" style="display:none;">
+          <span class="ic">🔒</span>
+          <div class="lock-status-text">
+            <b>ວັນທີ່ນີ້ປິດບັນຊີແລ້ວ</b>
+            <span>ບໍ່ສາມາດບັນທຶກ/ແກ້ໄຂລາຍການວັນນີ້ໄດ້ — ຕ້ອງປົດລ໋ອກກ່ອນ</span>
+          </div>
+        </div>
+        <div class="unlock-row" id="unlockRow" style="display:none;">
+          <input type="password" id="unlockPassword" placeholder="ລະຫັດຜ່ານຜູ້ບໍລິຫານ" inputmode="numeric">
+          <button type="button" class="unlock-btn" onclick="submitUnlock()">
+            <span id="unlockBtnLabel">ປົດລ໋ອກ</span>
+          </button>
+        </div>
+      </div>
+
+      <label class="close-day-row" id="closeDayRow">
+        <input type="checkbox" id="open_closed">
+        <span><b>ປິດວັນນີ້</b> — ຫຼັງປິດແລ້ວ ຈະບໍ່ສາມາດບັນທຶກ/ແກ້ໄຂລາຍການວັນນີ້ໄດ້ອີກ (ຍົກເວັ້ນປົດລ໋ອກດ້ວຍລະຫັດຜ່ານ)</span>
+      </label>
+
       <button type="button" class="submit-btn" id="openingSubmitBtn" onclick="submitOpening()">
         <span id="openingSubmitLabel">✓ ບັນທຶກ</span>
       </button>
@@ -740,6 +838,44 @@
         <div class="type-chip" data-value="exchange" onclick="switchHistoryType(this)">ແລກປ່ຽນ</div>
         <div class="type-chip" data-value="expense" onclick="switchHistoryType(this)">ລາຍຈ່າຍ</div>
       </div>
+
+      <button type="button" class="filter-toggle-btn" onclick="toggleHistoryFilter()">
+        <span id="filterToggleIcon">▾</span> ກອງລະອຽດ
+      </button>
+
+      <div class="history-filter-box" id="historyFilterBox" style="display:none;">
+        <div class="field-grid" style="margin-bottom:10px;">
+          <div class="field" style="margin-bottom:0;">
+            <label>ຈາກວັນທີ່</label>
+            <input type="date" id="hf_dateFrom">
+          </div>
+          <div class="field" style="margin-bottom:0;">
+            <label>ຫາວັນທີ່</label>
+            <input type="date" id="hf_dateTo">
+          </div>
+        </div>
+        <div class="field-grid" style="margin-bottom:10px;">
+          <div class="field" style="margin-bottom:0;">
+            <label>ຈຳນວນເງິນ ຕັ່ງແຕ່</label>
+            <input type="text" id="hf_amountMin" class="mono-input money-fmt" inputmode="numeric" placeholder="0">
+          </div>
+          <div class="field" style="margin-bottom:0;">
+            <label>ຈຳນວນເງິນ ເຖິງ</label>
+            <input type="text" id="hf_amountMax" class="mono-input money-fmt" inputmode="numeric" placeholder="ບໍ່ຈຳກັດ">
+          </div>
+        </div>
+        <div class="field" style="margin-bottom:10px;">
+          <label>ປະເພດຍ່ອຍ</label>
+          <select id="hf_subType">
+            <option value="">ທັງໝົດ</option>
+          </select>
+        </div>
+        <div class="filter-action-row">
+          <button type="button" class="filter-apply-btn" onclick="applyHistoryFilter()">ນຳໃຊ້ຕົວກອງ</button>
+          <button type="button" class="filter-clear-btn" onclick="clearHistoryFilter()">ລ້າງ</button>
+        </div>
+      </div>
+
       <div id="historyList"></div>
     </div>
   </div>
@@ -957,10 +1093,18 @@
   });
 
   // ===== Exchange tab logic =====
-  let currentStock = { amountThb: 0, valueLak: 0, avgCost: 0 };
+  let currentStock = { amountThb: 0, valueLak: 0, avgCost: 0, alertLevel: 'normal' };
 
   function updateStockBadge(){
-    document.getElementById('stockBadge').textContent = 'ສະຕັອກບາດ: ' + fmt(currentStock.amountThb) + ' ฿';
+    const alertLevel = currentStock.alertLevel || 'normal';
+    const alertText = alertLevel === 'low' ? ' ⚠ ໃກ້ໝົດ' : (alertLevel === 'high' ? ' ⚠ ສະສົມຫຼາຍ' : '');
+    const text = 'ສະຕັອກບາດ: ' + fmt(currentStock.amountThb) + ' ฿' + alertText;
+    ['stockBadge', 'stockBadgeTransfer'].forEach(id => {
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.textContent = text;
+      el.className = 'stock-badge' + (alertLevel !== 'normal' ? ' ' + alertLevel : '');
+    });
   }
 
   async function loadStock(){
@@ -1213,8 +1357,33 @@
   function openRateModal(){
     document.getElementById('rate_date').valueAsDate = new Date();
     document.getElementById('rateOverlay').classList.add('show');
+    loadRateHistory();
   }
   function closeRateModal(){ document.getElementById('rateOverlay').classList.remove('show'); }
+
+  async function loadRateHistory(){
+    const list = document.getElementById('rateHistoryList');
+    list.innerHTML = '<div class="empty-state">ກຳລັງໂຫຼດ...</div>';
+    try {
+      const res = await fetch(`${API_URL}?action=sabeoRateHistory&branch=${BRANCH}`);
+      const rows = await res.json();
+      if(!rows || rows.length === 0){
+        list.innerHTML = '<div class="empty-state">ຍັງບໍ່ມີປະຫວັດເລດ</div>';
+        return;
+      }
+      list.innerHTML = rows.slice(0, 10).map(r => `
+        <div class="rate-history-item">
+          <span class="rate-history-date">${r.date}</span>
+          <span class="rate-history-rates">
+            <span>ບາດ→ກີບ: <b>${fmt(r.sellThbToLak)}</b>/<b>${fmt(r.costThbToLak)}</b></span>
+            <span>ກີບ→ບາດ: <b>${fmt(r.sellLakToThb)}</b>/<b>${fmt(r.costLakToThb)}</b></span>
+          </span>
+        </div>
+      `).join('');
+    } catch(err){
+      list.innerHTML = '<div class="empty-state">ໂຫຼດບໍ່ໄດ້</div>';
+    }
+  }
 
   async function submitRate(){
     const btn = document.getElementById('rateSubmitBtn');
@@ -1234,7 +1403,7 @@
       const result = await res.json();
       if(result.success){
         showToast('✓ ບັນທຶກເລດປະຈຳວັນສຳເລັດແລ້ວ');
-        closeRateModal();
+        await loadRateHistory();
       } else {
         showToast('ມີຂໍ້ຜິດພາດ', true);
       }
@@ -1269,11 +1438,67 @@
         document.getElementById('open_actualCashThb').value = data.actualCashThb!=='' && data.actualCashThb!=null ? Number(data.actualCashThb).toLocaleString('en-US') : '';
         document.getElementById('open_actualBankLak').value = data.actualBankLak!=='' && data.actualBankLak!=null ? Number(data.actualBankLak).toLocaleString('en-US') : '';
         document.getElementById('open_actualBankThb').value = data.actualBankThb!=='' && data.actualBankThb!=null ? Number(data.actualBankThb).toLocaleString('en-US') : '';
+        document.getElementById('open_closed').checked = !!data.closed;
       } else {
         ['open_cashLak','open_cashThb','open_bankLak','open_bankThb','open_actualCashLak','open_actualCashThb','open_actualBankLak','open_actualBankThb'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('open_closed').checked = false;
       }
+      updateLockStatusUI(!!(data && data.closed));
       await loadCashCheck(date);
     } catch(err){ /* ignore */ }
+  }
+
+  function updateLockStatusUI(isLocked){
+    const box = document.getElementById('lockStatusBox');
+    const lockedMsg = document.getElementById('lockStatusLocked');
+    const unlockRow = document.getElementById('unlockRow');
+    const closedCheckbox = document.getElementById('open_closed');
+    const closeDayRow = document.getElementById('closeDayRow');
+
+    if(isLocked){
+      box.style.display = 'block';
+      lockedMsg.style.display = 'flex';
+      unlockRow.style.display = 'flex';
+      closedCheckbox.disabled = true;
+      closeDayRow.style.opacity = '0.55';
+    } else {
+      box.style.display = 'none';
+      lockedMsg.style.display = 'none';
+      unlockRow.style.display = 'none';
+      closedCheckbox.disabled = false;
+      closeDayRow.style.opacity = '1';
+    }
+  }
+
+  async function submitUnlock(){
+    const date = document.getElementById('open_date').value;
+    const password = document.getElementById('unlockPassword').value;
+    const btn = document.querySelector('.unlock-btn');
+    const label = document.getElementById('unlockBtnLabel');
+
+    if(!password){
+      showToast('ກະລຸນາໃສ່ລະຫັດຜ່ານ', true);
+      return;
+    }
+
+    btn.disabled = true;
+    label.textContent = 'ກຳລັງກວດສອບ...';
+    try {
+      const res = await fetch(API_URL, { method:'POST', body: JSON.stringify({ action:'sabeoUnlockDate', order:{ branch: BRANCH, date: date, password: password } }) });
+      const result = await res.json();
+      if(result.success){
+        showToast('✓ ປົດລ໋ອກສຳເລັດແລ້ວ');
+        document.getElementById('unlockPassword').value = '';
+        await loadOpeningForDate();
+      } else {
+        showToast(result.error || 'ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ', true);
+      }
+    } catch(err){
+      showToast('ເຊື່ອມຕໍ່ບໍ່ໄດ້', true);
+    } finally {
+      btn.disabled = false;
+      label.textContent = 'ປົດລ໋ອກ';
+    }
   }
 
   async function loadCashCheck(date){
@@ -1312,7 +1537,8 @@
       actualCashLak: document.getElementById('open_actualCashLak').value ? unformatMoney(document.getElementById('open_actualCashLak').value) : '',
       actualCashThb: document.getElementById('open_actualCashThb').value ? unformatMoney(document.getElementById('open_actualCashThb').value) : '',
       actualBankLak: document.getElementById('open_actualBankLak').value ? unformatMoney(document.getElementById('open_actualBankLak').value) : '',
-      actualBankThb: document.getElementById('open_actualBankThb').value ? unformatMoney(document.getElementById('open_actualBankThb').value) : ''
+      actualBankThb: document.getElementById('open_actualBankThb').value ? unformatMoney(document.getElementById('open_actualBankThb').value) : '',
+      closed: document.getElementById('open_closed').checked
     };
     btn.disabled = true;
     label.textContent = 'ກຳລັງບັນທຶກ...';
@@ -1320,8 +1546,8 @@
       const res = await fetch(API_URL, { method:'POST', body: JSON.stringify({ action:'sabeoSetOpeningBalance', order }) });
       const result = await res.json();
       if(result.success){
-        showToast('✓ ບັນທຶກສຳເລັດແລ້ວ');
-        await loadCashCheck(order.date);
+        showToast(order.closed ? '✓ ບັນທຶກ ແລະ ປິດວັນສຳເລັດແລ້ວ' : '✓ ບັນທຶກສຳເລັດແລ້ວ');
+        await loadOpeningForDate();
       } else {
         showToast('ມີຂໍ້ຜິດພາດ', true);
       }
@@ -1335,24 +1561,83 @@
 
   // ===== History Modal =====
   let historyType = 'transfer';
+  let historyFilterActive = {};
+
+  const SUBTYPE_OPTIONS = {
+    transfer: [['lak_lak','ລາວ→ລາວ'],['thb_lak','ໄທ→ລາວ'],['lak_thb','ລາວ→ໄທ']],
+    exchange: [['buy_thb','ຊື້ບາດ'],['sell_thb','ຂາຍບາດ']],
+    expense: []
+  };
+
   function openHistoryModal(){
     document.getElementById('historyOverlay').classList.add('show');
+    updateSubTypeOptions();
     loadHistory();
   }
   function closeHistoryModal(){ document.getElementById('historyOverlay').classList.remove('show'); }
+
   function switchHistoryType(el){
     document.querySelectorAll('#historyTypeChips .type-chip').forEach(c => c.classList.remove('active'));
     el.classList.add('active');
     historyType = el.dataset.value;
+    historyFilterActive = {}; // ລ້າງຕົວກອງເມື່ອປ່ຽນປະເພດ (subType ບໍ່ກົງກັນຂ້າມປະເພດ)
+    clearFilterInputs();
+    updateSubTypeOptions();
     loadHistory();
   }
+
+  function updateSubTypeOptions(){
+    const sel = document.getElementById('hf_subType');
+    const opts = SUBTYPE_OPTIONS[historyType] || [];
+    sel.innerHTML = '<option value="">ທັງໝົດ</option>' + opts.map(([v,l]) => `<option value="${v}">${l}</option>`).join('');
+    sel.parentElement.style.display = opts.length ? 'block' : 'none';
+  }
+
+  function toggleHistoryFilter(){
+    const box = document.getElementById('historyFilterBox');
+    const icon = document.getElementById('filterToggleIcon');
+    const isOpen = box.style.display !== 'none';
+    box.style.display = isOpen ? 'none' : 'block';
+    icon.textContent = isOpen ? '▾' : '▴';
+  }
+
+  function clearFilterInputs(){
+    ['hf_dateFrom','hf_dateTo','hf_amountMin','hf_amountMax'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('hf_subType').value = '';
+  }
+
+  function applyHistoryFilter(){
+    historyFilterActive = {
+      dateFrom: document.getElementById('hf_dateFrom').value,
+      dateTo: document.getElementById('hf_dateTo').value,
+      amountMin: unformatMoney(document.getElementById('hf_amountMin').value) || '',
+      amountMax: unformatMoney(document.getElementById('hf_amountMax').value) || '',
+      subType: document.getElementById('hf_subType').value
+    };
+    loadHistory();
+  }
+
+  function clearHistoryFilter(){
+    clearFilterInputs();
+    historyFilterActive = {};
+    loadHistory();
+  }
+
   async function loadHistory(){
     const list = document.getElementById('historyList');
     list.innerHTML = '<div class="skeleton"></div><div class="skeleton"></div>';
     const savedTab = currentTab;
     currentTab = historyType;
     try {
-      const res = await fetch(`${API_URL}?action=sabeoSearch&type=${historyType}&branch=${BRANCH}&page=1&pageSize=30`);
+      const f = historyFilterActive;
+      let url = `${API_URL}?action=sabeoSearch&type=${historyType}&branch=${BRANCH}&page=1&pageSize=30`;
+      if(f.dateFrom) url += `&dateFrom=${f.dateFrom}`;
+      if(f.dateTo) url += `&dateTo=${f.dateTo}`;
+      if(f.amountMin !== '' && f.amountMin !== undefined) url += `&amountMin=${f.amountMin}`;
+      if(f.amountMax !== '' && f.amountMax !== undefined) url += `&amountMax=${f.amountMax}`;
+      if(f.subType) url += `&subType=${f.subType}`;
+
+      const res = await fetch(url);
       const result = await res.json();
       const items = result.items || [];
       list.innerHTML = items.length ? items.map(renderRecentItem).join('') : '<div class="empty-state">ບໍ່ມີລາຍການ</div>';

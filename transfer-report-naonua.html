@@ -178,6 +178,39 @@
   .stock-value .unit{font-size:12px;font-weight:600;}
 
   /* ===== Cash check section ===== */
+  /* ===== Chart Section ===== */
+  .chart-section{margin-top:22px;}
+  .chart-head{
+    display:flex;align-items:center;justify-content:space-between;
+    flex-wrap:wrap;gap:10px;margin-bottom:12px;
+  }
+  .chart-controls{display:flex;align-items:center;gap:10px;}
+  .chart-tabs{display:flex;gap:4px;background:var(--paper);border-radius:9px;padding:3px;}
+  .chart-tab{
+    border:none;background:transparent;padding:7px 14px;border-radius:7px;
+    font-size:12.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;
+    font-family:'Noto Sans Lao','Noto Sans',sans-serif;transition:all .15s;
+  }
+  .chart-tab.active{background:var(--ink);color:#fff;}
+  #chartYearSelect{
+    border:1.5px solid var(--line);border-radius:9px;padding:8px 11px;font-size:13px;
+    font-family:'JetBrains Mono',monospace;color:var(--ink);background:#fff;
+  }
+  .chart-card{
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:18px;position:relative;
+  }
+  .chart-canvas-wrap{height:300px;position:relative;}
+  .chart-empty{
+    position:absolute;inset:18px;display:flex;align-items:center;justify-content:center;
+    color:var(--ink-soft);font-size:14px;background:var(--panel);
+  }
+  .chart-legend-note{
+    display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--ink-soft);
+  }
+  .chart-legend-note span{display:inline-flex;align-items:center;gap:6px;}
+  .chart-legend-note .dot{width:9px;height:9px;border-radius:50%;}
+
   .check-section{margin-top:22px;}
   .section-title{
     font-size:13px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;
@@ -224,6 +257,7 @@
     .wallet-grid{grid-template-columns:1fr;}
   }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 </head>
 <body>
 
@@ -312,6 +346,31 @@
     <div class="stock-value"><span id="stockAmount">—</span><span class="unit"> ฿</span></div>
   </div>
 
+  <div class="chart-section">
+    <div class="chart-head">
+      <div class="section-title" style="margin:0;">ກຣາຟແນວໂນ້ມ — ລາຍຮັບ/ລາຍຈ່າຍ/ກຳໄລ</div>
+      <div class="chart-controls">
+        <div class="chart-tabs" id="chartModeTabs">
+          <button class="chart-tab active" data-mode="month" onclick="setChartMode('month')">ລາຍເດືອນ</button>
+          <button class="chart-tab" data-mode="year" onclick="setChartMode('year')">ລາຍປີ</button>
+        </div>
+        <select id="chartYearSelect" onchange="onChartYearChange()"></select>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-canvas-wrap">
+        <canvas id="trendChart"></canvas>
+      </div>
+      <div class="chart-empty" id="chartEmpty" style="display:none;">ບໍ່ມີຂໍ້ມູນໃນຊ່ວງເວລານີ້</div>
+      <div class="chart-legend-note">
+        <span><span class="dot" style="background:#1f7a4d;"></span> ລາຍຮັບ (ກີບ)</span>
+        <span><span class="dot" style="background:#c0392b;"></span> ລາຍຈ່າຍ (ກີບ)</span>
+        <span><span class="dot" style="background:#241a17;"></span> ກຳໄລສຸດທິ (ກີບ)</span>
+      </div>
+    </div>
+  </div>
+
   <div class="check-section">
     <div class="check-head">
       <div class="section-title" style="margin:0;">ກວດສອບເງິນປະຈຳວັນ</div>
@@ -372,7 +431,7 @@
   function fmt(n){ return Math.round(Number(n)||0).toLocaleString(); }
 
   async function loadAll(){
-    await Promise.all([loadSummary(), loadCashCheck()]);
+    await Promise.all([loadSummary(), loadCashCheck(), loadChart()]);
   }
 
   async function loadSummary(){
@@ -475,6 +534,120 @@
     } catch(err){
       card.innerHTML = '<div class="empty-state">ໂຫຼດຂໍ້ມູນບໍ່ໄດ້ — ກວດສອບການເຊື່ອມຕໍ່</div>';
     }
+  }
+
+  // ===== Chart Section =====
+  let chartMode = 'month';
+  let chartSelectedYear = thisYear;
+  let chartYearsLoaded = false;
+  let trendChartInstance = null;
+
+  function setChartMode(mode){
+    chartMode = mode;
+    document.querySelectorAll('#chartModeTabs .chart-tab').forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
+    document.getElementById('chartYearSelect').style.display = mode === 'month' ? 'inline-block' : 'none';
+    loadChart();
+  }
+
+  function onChartYearChange(){
+    chartSelectedYear = document.getElementById('chartYearSelect').value;
+    loadChart();
+  }
+
+  let lastChartSeries = [];
+
+  async function loadChart(){
+    try{
+      const url = `${API_URL}?action=sabeoChartData&branch=${BRANCH}&mode=${chartMode}&year=${chartSelectedYear}`;
+      const res = await fetch(url);
+      const data = await res.json();
+
+      if(!chartYearsLoaded && data.availableYears && data.availableYears.length){
+        const sel = document.getElementById('chartYearSelect');
+        sel.innerHTML = data.availableYears.map(y => `<option value="${y}">${y}</option>`).join('');
+        chartSelectedYear = data.availableYears[data.availableYears.length - 1];
+        sel.value = chartSelectedYear;
+        chartYearsLoaded = true;
+        return loadChart();
+      }
+
+      lastChartSeries = data.series || [];
+      renderTrendChart(lastChartSeries);
+    } catch(err){
+      console.error('Chart load error:', err);
+    }
+  }
+
+  function labelOf(p){
+    if(chartMode === 'month'){
+      const m = Number(p.key.split('-')[1]);
+      return 'ດ.' + m;
+    }
+    return p.key;
+  }
+
+  function renderTrendChart(series){
+    const canvas = document.getElementById('trendChart');
+    const emptyEl = document.getElementById('chartEmpty');
+    if(!series || series.length === 0){
+      emptyEl.style.display = 'flex';
+      if(trendChartInstance){ trendChartInstance.destroy(); trendChartInstance = null; }
+      return;
+    }
+    const hasData = series.some(p => p.revenueLak !== 0 || p.expenseLak !== 0);
+    emptyEl.style.display = hasData ? 'none' : 'flex';
+
+    const labels = series.map(labelOf);
+    const revenueData = series.map(p => p.revenueLak);
+    const expenseData = series.map(p => p.expenseLak);
+    const netData = series.map(p => p.netLak);
+
+    if(trendChartInstance){ trendChartInstance.destroy(); }
+    const ctx = canvas.getContext('2d');
+
+    trendChartInstance = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'ລາຍຮັບ', data: revenueData,
+            borderColor: '#1f7a4d', backgroundColor: 'rgba(31,122,77,0.08)',
+            borderWidth: 2.5, tension: 0.3, fill: false, pointRadius: 3
+          },
+          {
+            label: 'ລາຍຈ່າຍ', data: expenseData,
+            borderColor: '#c0392b', backgroundColor: 'rgba(192,57,43,0.08)',
+            borderWidth: 2.5, tension: 0.3, fill: false, pointRadius: 3
+          },
+          {
+            label: 'ກຳໄລສຸດທິ', data: netData,
+            borderColor: '#241a17', backgroundColor: 'rgba(36,26,23,0.08)',
+            borderWidth: 2.5, tension: 0.3, fill: true, pointRadius: 3
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { family: "'Noto Sans Lao'" } } },
+          y: {
+            grid: { color: '#f0e9dc' },
+            ticks: { font: { family: "'JetBrains Mono'" }, callback: v => fmt(v) }
+          }
+        },
+        plugins: {
+          legend: { position: 'top', labels: { font: { family: "'Noto Sans Lao'" }, usePointStyle: true, padding: 16 } },
+          tooltip: {
+            callbacks: {
+              label: ctx => ctx.dataset.label + ': ' + fmt(ctx.parsed.y) + ' ກີບ'
+            }
+          }
+        }
+      }
+    });
   }
 
   loadAll();
