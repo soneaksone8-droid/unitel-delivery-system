@@ -7,400 +7,157 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ສະເບົາພອນ">
 <meta name="theme-color" content="#146356">
-<title>ສະເບົາພອນ — ບໍລິການເງິນດ່ວນຊຸມຊົນ</title>
+<title>ສະເບົາພອນ v2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Lao:wght@600;700&family=Noto+Sans+Lao:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --ink:#241a17;
-    --ink-soft:#7a6a64;
-    --paper:#faf6f1;
-    --panel:#ffffff;
-    --line:#ecdfd6;
-
-    --brand:#a01e22;
-    --brand-deep:#6e1316;
-    --brand-tint:#fbe9e9;
-
-    --gold:#c9941e;
-    --gold-tint:#fbf1dc;
-    --warn:#c0392b;
-    --warn-tint:#fdeceb;
-    --good:#1f7a4d;
-    --good-tint:#e9f6ee;
-
-    --thb:#a64b2a;
-    --thb-tint:#fbeee7;
-    --lak:#1d5fae;
-    --lak-tint:#e7f0fb;
-
-    --radius:18px;
-    --radius-sm:11px;
-    --shadow: 0 1px 2px rgba(20,99,86,0.06), 0 12px 30px -16px rgba(20,99,86,0.22);
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    background:
-      radial-gradient(ellipse 900px 500px at 50% -8%, var(--brand-tint), transparent 60%),
-      var(--paper);
-    color:var(--ink);
-    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
-    min-height:100vh;
-    padding:0 0 80px;
-  }
-  .mono{font-family:'JetBrains Mono',monospace;}
-  .serif{font-family:'Noto Serif Lao',serif;}
-
-  header{
-    background:linear-gradient(135deg, var(--brand-deep) 0%, var(--brand) 70%);
-    color:#f3fbf8;
-    padding:20px 20px 18px;
-    position:relative;overflow:hidden;
-    border-bottom:3px solid rgba(255,255,255,0.5);
-  }
-  header::before{
-    content:"";position:absolute;inset:0;
-    background-image:radial-gradient(circle, rgba(243,251,248,0.1) 1px, transparent 1px);
-    background-size:16px 16px;
-    pointer-events:none;
-  }
-  .header-inner{max-width:720px;margin:0 auto;position:relative;}
-  .brand-row{display:flex;align-items:center;justify-content:space-between;gap:10px;}
-  .brand-left{display:flex;align-items:center;gap:11px;}
-  .brand-mark{
-    width:38px;height:38px;border-radius:10px;
-    background:linear-gradient(150deg,#fff,#d9efe7);
-    display:flex;align-items:center;justify-content:center;
-    font-weight:800;font-size:14px;color:var(--brand-deep);flex-shrink:0;
-    font-family:'Noto Serif Lao',serif;
-    box-shadow:0 3px 10px rgba(0,0,0,0.18);
-  }
-  .brand-text-lao{font-size:18px;font-weight:700;font-family:'Noto Serif Lao',serif;}
-  .brand-text-sub{font-size:10.5px;color:#bfe3d8;letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
-  .home-btn{
-    width:36px;height:36px;border-radius:10px;
-    background:rgba(255,255,255,0.16);border:1.5px solid rgba(255,255,255,0.35);
-    display:flex;align-items:center;justify-content:center;
-    color:#fff;text-decoration:none;font-size:16px;flex-shrink:0;
-  }
-  .branch-tag{
-    display:inline-flex;align-items:center;gap:7px;
-    margin-top:12px;font-size:12.5px;color:#e3f3ed;
-  }
-  .branch-tag .dot{width:6px;height:6px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px rgba(255,255,255,0.25);}
-  .branch-tag b{color:#fff;font-weight:700;}
-
-  .wrap{max-width:720px;margin:0 auto;padding:0 16px;}
-
-  /* ===== Main Tabs ===== */
-  .main-tabs{
-    display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;
-    margin-top:-20px;position:relative;z-index:2;
-  }
-  .main-tab{
-    background:var(--panel);border:2px solid var(--line);border-radius:var(--radius-sm);
-    padding:13px 8px;cursor:pointer;text-align:center;
-    transition:border-color .15s, background .15s, transform .1s;
-    box-shadow:var(--shadow);
-  }
-  .main-tab:active{transform:scale(0.97);}
-  .main-tab .ic{font-size:18px;display:block;margin-bottom:4px;}
-  .main-tab .lbl{font-size:12px;font-weight:700;}
-  .main-tab.active{border-color:var(--brand);background:var(--brand-tint);color:var(--brand-deep);}
-
-  /* ===== Top utility row ===== */
-  .util-row{display:flex;gap:8px;margin-top:14px;}
-  .util-btn{
-    flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
-    background:var(--panel);border:1.5px solid var(--line);border-radius:var(--radius-sm);
-    padding:11px;font-size:12.5px;font-weight:700;color:var(--ink-soft);cursor:pointer;
-    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
-  }
-  .util-btn:hover{border-color:var(--brand);color:var(--brand-deep);}
-  .util-btn .ic{font-size:14px;}
-
-  /* ===== Card ===== */
-  .card{
-    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
-    box-shadow:var(--shadow);margin-top:14px;overflow:hidden;
-  }
-  .card-head{
-    padding:16px 18px 14px;border-bottom:1px dashed var(--line);
-    display:flex;align-items:center;justify-content:space-between;
-  }
-  .card-head h2{margin:0;font-size:15.5px;font-weight:700;font-family:'Noto Serif Lao',serif;}
-  .form-body{padding:16px 18px 18px;}
-
-  .field-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
-  .field{margin-bottom:14px;}
-  .field.full{grid-column:1/-1;}
-  .field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;}
-  .field label .req{color:var(--warn);margin-left:2px;}
-  .field input, .field select, .field textarea{
-    width:100%;border:1.5px solid var(--line);border-radius:var(--radius-sm);
-    padding:11px 13px;font-size:15px;font-family:'Noto Sans Lao','Noto Sans',sans-serif;
-    color:var(--ink);background:#fff;transition:border-color .15s, box-shadow .15s;
-  }
-  .field input.mono-input{font-family:'JetBrains Mono',monospace;font-weight:600;}
-  .field input:focus, .field select:focus, .field textarea:focus{
-    outline:none;border-color:var(--brand);box-shadow:0 0 0 3.5px var(--brand-tint);
-  }
-  .field input::placeholder{color:#b8c2bb;}
-
-  .money-input{position:relative;}
-  .money-input input{padding-right:46px;}
-  .money-input::after{
-    content:attr(data-unit);position:absolute;right:13px;top:50%;transform:translateY(-50%);
-    font-size:10px;color:#b8c2bb;font-weight:700;letter-spacing:0.5px;font-family:'JetBrains Mono',monospace;
-  }
-
-  /* ===== Type selector chips ===== */
-  .type-chips{display:flex;gap:8px;flex-wrap:wrap;}
-  .type-chip{
-    flex:1;min-width:100px;border:1.5px solid var(--line);background:#fff;border-radius:var(--radius-sm);
-    padding:11px 10px;text-align:center;cursor:pointer;
-    font-size:12.5px;font-weight:700;color:var(--ink-soft);
-    transition:border-color .15s, background .15s, color .15s;
-  }
-  .type-chip.active{border-color:var(--brand);background:var(--brand-tint);color:var(--brand-deep);}
-
-  /* ===== Wallet selector ===== */
-  .wallet-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-  .wallet-chip{
-    border:1.5px solid var(--line);background:#fff;border-radius:var(--radius-sm);
-    padding:10px;text-align:center;cursor:pointer;font-size:12px;font-weight:700;color:var(--ink-soft);
-  }
-  .wallet-chip.active{border-color:var(--gold);background:var(--gold-tint);color:#8a6315;}
-
-  /* ===== Exchange profit preview ===== */
-  .profit-preview{
-    background:var(--good-tint);border:1.5px solid #bfe3cc;border-radius:var(--radius-sm);
-    padding:13px 15px;margin-bottom:14px;display:none;
-  }
-  .profit-preview.show{display:block;}
-  .profit-preview-row{display:flex;justify-content:space-between;font-size:12.5px;padding:3px 0;color:#2e5c40;}
-  .profit-preview-row b{font-family:'JetBrains Mono',monospace;}
-  .profit-preview-total{
-    display:flex;justify-content:space-between;margin-top:6px;padding-top:8px;border-top:1px dashed #bfe3cc;
-    font-size:14px;font-weight:700;color:var(--good);
-  }
-  .profit-preview-total b{font-family:'JetBrains Mono',monospace;font-size:16px;}
-
-  /* ===== Flow box (ເງິນເຂົ້າ/ເງິນອອກ) ===== */
-  .flow-box{
-    border:1.5px solid var(--line);border-radius:var(--radius-sm);
-    padding:13px 15px;margin-bottom:14px;
-  }
-  .flow-box.in{border-color:#bcd9cf;background:#f4faf7;}
-  .flow-box.out{border-color:#ecd2c4;background:#fdf6f2;}
-  .flow-box-title{
-    font-size:12.5px;font-weight:700;margin-bottom:9px;display:flex;align-items:center;gap:6px;
-  }
-  .flow-box.in .flow-box-title{color:#1f6e4f;}
-  .flow-box.out .flow-box-title{color:#a64b2a;}
-  .flow-box select{
-    width:100%;border:1.5px solid var(--line);border-radius:var(--radius-sm);
-    padding:10px 12px;font-size:14px;font-family:'Noto Sans Lao','Noto Sans',sans-serif;
-    color:var(--ink);background:#fff;
-  }
-
-  .hint-text{font-size:11.5px;color:var(--ink-soft);margin-top:6px;}
-  .hint-text b{color:var(--brand-deep);font-family:'JetBrains Mono',monospace;}
-
-  .exchange-note{
-    display:flex;align-items:flex-start;gap:8px;
-    background:var(--gold-tint);border:1.5px solid #e8d9ab;border-radius:var(--radius-sm);
-    padding:11px 13px;margin-bottom:14px;font-size:12px;color:#8a6315;line-height:1.5;
-  }
-  .exchange-note .ic{font-size:14px;flex-shrink:0;}
-
-  .stock-badge{
-    font-size:11px;font-weight:700;background:var(--gold-tint);color:#8a6315;
-    padding:4px 10px;border-radius:99px;font-family:'JetBrains Mono',monospace;
-  }
-  .stock-badge.low{background:var(--warn-tint);color:var(--warn);}
-  .stock-badge.high{background:var(--lak-tint);color:var(--lak);}
-
-  /* ===== Lock status / Close day ===== */
-  .lock-status{margin-bottom:14px;}
-  .lock-status-locked{
-    display:flex;align-items:flex-start;gap:10px;
-    background:var(--warn-tint);border:1.5px solid #f0bdb6;border-radius:var(--radius-sm);
-    padding:13px 15px;margin-bottom:10px;
-  }
-  .lock-status-locked .ic{font-size:18px;flex-shrink:0;}
-  .lock-status-text{font-size:12.5px;color:#8a2e22;line-height:1.5;}
-  .lock-status-text b{display:block;font-size:13.5px;margin-bottom:2px;}
-
-  .unlock-row{display:flex;gap:8px;}
-  .unlock-row input{
-    flex:1;border:1.5px solid var(--line);border-radius:var(--radius-sm);
-    padding:11px 13px;font-size:14px;font-family:'JetBrains Mono',monospace;
-    color:var(--ink);background:#fff;letter-spacing:2px;
-  }
-  .unlock-btn{
-    background:var(--brand);color:#fff;border:none;border-radius:var(--radius-sm);
-    padding:11px 18px;font-size:13.5px;font-weight:700;cursor:pointer;
-    font-family:'Noto Sans Lao','Noto Sans',sans-serif;white-space:nowrap;
-  }
-  .unlock-btn:hover{opacity:0.9;}
-
-  .close-day-row{
-    display:flex;align-items:flex-start;gap:10px;
-    background:var(--paper);border:1.5px solid var(--line);border-radius:var(--radius-sm);
-    padding:13px 15px;margin-bottom:14px;cursor:pointer;
-  }
-  .close-day-row input[type="checkbox"]{width:18px;height:18px;flex-shrink:0;margin-top:1px;accent-color:var(--brand);}
-  .close-day-row span{font-size:12px;color:var(--ink-soft);line-height:1.5;}
-  .close-day-row span b{color:var(--ink);}
-
-  .submit-btn{
-    width:100%;background:var(--brand);color:#fff;border:none;border-radius:var(--radius-sm);
-    padding:15px;font-size:15px;font-weight:700;font-family:'Noto Sans Lao','Noto Sans',sans-serif;
-    cursor:pointer;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:9px;
-    box-shadow:0 10px 22px -10px var(--brand);transition:opacity .15s, transform .1s;
-  }
-  .submit-btn:active{transform:scale(0.985);}
-  .submit-btn:disabled{opacity:0.55;cursor:not-allowed;}
-
-  .toast{
-    position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120%);
-    background:var(--ink);color:#fff;padding:13px 22px;border-radius:99px;font-size:14px;font-weight:600;
-    box-shadow:0 8px 24px rgba(0,0,0,0.3);transition:transform .25s cubic-bezier(.34,1.56,.64,1);
-    z-index:50;display:flex;align-items:center;gap:8px;
-  }
-  .toast.show{transform:translateX(-50%) translateY(0);}
-  .toast.error{background:var(--warn);}
-
-  /* ===== Recent list ===== */
-  .recent-section{margin-top:26px;}
-  .recent-title-row{display:flex;align-items:center;justify-content:space-between;margin:0 2px 12px;}
-  .recent-title{
-    display:flex;align-items:center;gap:9px;font-size:13px;font-weight:700;color:var(--ink-soft);
-    text-transform:uppercase;letter-spacing:1px;
-  }
-  .recent-title::before{content:"";width:16px;height:2px;background:var(--brand);border-radius:2px;}
-  .history-btn{
-    display:flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;
-    font-size:12.5px;font-weight:700;color:var(--brand);padding:4px 6px;border-radius:6px;
-  }
-  .history-btn:hover{background:var(--brand-tint);}
-
-  .recent-item{
-    background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--brand);
-    border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:8px;
-    display:flex;align-items:center;gap:12px;box-shadow:var(--shadow);
-    animation:slideIn .3s ease;
-  }
-  @keyframes slideIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
-  .recent-tag{
-    width:30px;height:30px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
-    font-size:13px;font-weight:800;background:var(--brand-tint);color:var(--brand);
-  }
-  .recent-main{flex:1;min-width:0;}
-  .recent-title-text{font-size:13.5px;font-weight:700;}
-  .recent-meta{font-size:11.5px;color:var(--ink-soft);margin-top:2px;}
-  .recent-amount{text-align:right;flex-shrink:0;}
-  .recent-amount .num{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13.5px;}
-  .recent-amount.profit .num{color:var(--good);}
-  .recent-amount .lbl{font-size:9.5px;color:var(--ink-soft);}
-
-  .empty-state{text-align:center;padding:36px 20px;color:var(--ink-soft);font-size:13.5px;}
-
-  .rate-history-section{margin-top:18px;padding-top:16px;border-top:1px dashed var(--line);}
-  .rate-history-title{font-size:12px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.7px;margin-bottom:10px;}
-  .rate-history-item{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:9px 0;border-bottom:1px dashed var(--line);font-size:12.5px;
-  }
-  .rate-history-item:last-child{border-bottom:none;}
-  .rate-history-date{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--ink);}
-  .rate-history-rates{display:flex;gap:14px;font-size:11.5px;color:var(--ink-soft);}
-  .rate-history-rates b{font-family:'JetBrains Mono',monospace;color:var(--ink);}
-
-  .filter-toggle-btn{
-    display:flex;align-items:center;gap:6px;background:none;border:none;
-    font-size:12.5px;font-weight:700;color:var(--brand);cursor:pointer;
-    padding:6px 2px;margin-bottom:10px;font-family:'Noto Sans Lao','Noto Sans',sans-serif;
-  }
-  .history-filter-box{
-    background:var(--paper);border:1.5px solid var(--line);border-radius:var(--radius-sm);
-    padding:14px;margin-bottom:14px;
-  }
-  .history-filter-box select{
-    width:100%;border:1.5px solid var(--line);border-radius:var(--radius-sm);
-    padding:10px 12px;font-size:13.5px;font-family:'Noto Sans Lao','Noto Sans',sans-serif;
-    color:var(--ink);background:#fff;
-  }
-  .filter-action-row{display:flex;gap:8px;}
-  .filter-apply-btn{
-    flex:1;background:var(--brand);color:#fff;border:none;border-radius:var(--radius-sm);
-    padding:10px;font-size:13px;font-weight:700;cursor:pointer;
-    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
-  }
-  .filter-clear-btn{
-    background:#fff;border:1.5px solid var(--line);color:var(--ink-soft);border-radius:var(--radius-sm);
-    padding:10px 16px;font-size:13px;font-weight:700;cursor:pointer;
-    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
-  }
-  .skeleton{
-    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);
-    padding:12px 14px;margin-bottom:8px;height:58px;
-    background-image:linear-gradient(90deg, #eef2ec 0px, #e3e9e0 40px, #eef2ec 80px);
-    background-size:600px;animation:shimmer 1.4s infinite linear;
-  }
-  @keyframes shimmer{from{background-position:-300px 0;}to{background-position:300px 0;}}
-
-  /* ===== Modal (shared) ===== */
-  .modal-overlay{
-    position:fixed;inset:0;z-index:60;background:rgba(20,30,26,0.5);display:none;
-    align-items:flex-end;justify-content:center;backdrop-filter:blur(2px);
-  }
-  .modal-overlay.show{display:flex;}
-  .modal-card{
-    background:var(--panel);width:100%;max-width:560px;max-height:90vh;
-    border-radius:20px 20px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,0.25);
-    display:flex;flex-direction:column;animation:modalUp .25s cubic-bezier(.2,.9,.3,1);
-  }
-  @media (min-width:620px){
-    .modal-overlay{align-items:center;}
-    .modal-card{border-radius:var(--radius);max-height:88vh;}
-  }
-  @keyframes modalUp{from{transform:translateY(40px);opacity:0;}to{transform:translateY(0);opacity:1;}}
-  .modal-head{
-    display:flex;align-items:center;justify-content:space-between;padding:18px 20px;
-    border-bottom:1px solid var(--line);flex-shrink:0;
-  }
-  .modal-head h3{margin:0;font-size:16.5px;font-weight:700;font-family:'Noto Serif Lao',serif;}
-  .modal-close{
-    width:32px;height:32px;border-radius:9px;border:none;background:var(--paper);color:var(--ink-soft);
-    font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;
-  }
-  .modal-close:hover{background:#e3e9e0;}
-  .modal-body{padding:20px;overflow-y:auto;}
-
-  /* ===== FAB ===== */
-  .fab-row{position:fixed;right:20px;bottom:22px;z-index:40;display:flex;flex-direction:column;gap:10px;align-items:flex-end;}
-  .fab-btn{
-    display:flex;align-items:center;gap:9px;border:none;border-radius:99px;padding:14px 20px;
-    font-size:14px;color:#fff;text-decoration:none;font-weight:700;cursor:pointer;
-    font-family:'Noto Sans Lao','Noto Sans',sans-serif;
-    box-shadow:0 10px 26px -8px rgba(0,0,0,0.4);transition:opacity .15s, transform .12s;
-  }
-  .fab-btn:active{transform:scale(0.95);}
-  .fab-btn:hover{opacity:0.92;}
-  .fab-btn.report{background:var(--ink);}
-  .fab-btn.cash{background:var(--gold);}
-
-  @media (max-width:420px){
-    .field-grid{grid-template-columns:1fr;}
-  }
+:root{
+  --ink:#241a17;--ink-soft:#7a6a64;--paper:#faf6f1;--panel:#fff;--line:#ecdfd6;
+  --brand:#a01e22;--brand-deep:#6e1316;--brand-tint:#fbe9e9;
+  --gold:#c9941e;--gold-tint:#fbf1dc;
+  --warn:#c0392b;--warn-tint:#fdeceb;
+  --good:#1f7a4d;--good-tint:#e9f6ee;
+  --thb:#a64b2a;--thb-tint:#fbeee7;
+  --lak:#1d5fae;--lak-tint:#e7f0fb;
+  --radius:18px;--radius-sm:11px;
+  --shadow:0 1px 2px rgba(20,99,86,.06),0 12px 30px -16px rgba(20,99,86,.22);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{background:radial-gradient(ellipse 900px 500px at 50% -8%,var(--brand-tint),transparent 60%),var(--paper);color:var(--ink);font-family:'Noto Sans Lao','Noto Sans',sans-serif;min-height:100vh;padding:0 0 80px;}
+header{background:linear-gradient(135deg,var(--brand-deep),var(--brand) 70%);color:#f3fbf8;padding:20px 20px 18px;position:relative;overflow:hidden;border-bottom:3px solid rgba(255,255,255,.5);}
+header::before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle,rgba(243,251,248,.1) 1px,transparent 1px);background-size:16px 16px;pointer-events:none;}
+.header-inner{max-width:720px;margin:0 auto;position:relative;}
+.brand-row{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.brand-left{display:flex;align-items:center;gap:11px;}
+.brand-mark{width:38px;height:38px;border-radius:10px;background:linear-gradient(150deg,#fff,#d9efe7);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--brand-deep);font-family:'Noto Serif Lao',serif;box-shadow:0 3px 10px rgba(0,0,0,.18);}
+.brand-text-lao{font-size:18px;font-weight:700;font-family:'Noto Serif Lao',serif;}
+.brand-text-sub{font-size:10.5px;color:#bfe3d8;letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+.home-btn{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.16);border:1.5px solid rgba(255,255,255,.35);display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;font-size:16px;}
+.branch-tag{display:inline-flex;align-items:center;gap:7px;margin-top:12px;font-size:12.5px;color:#e3f3ed;}
+.branch-tag .dot{width:6px;height:6px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.25);}
+.branch-tag b{color:#fff;}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px;}
+.main-tabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:-20px;position:relative;z-index:2;}
+.main-tab{background:var(--panel);border:2px solid var(--line);border-radius:var(--radius-sm);padding:13px 8px;cursor:pointer;text-align:center;transition:border-color .15s,background .15s,transform .1s;box-shadow:var(--shadow);}
+.main-tab:active{transform:scale(.97);}
+.main-tab .ic{font-size:18px;display:block;margin-bottom:4px;}
+.main-tab .lbl{font-size:12px;font-weight:700;}
+.main-tab.active{border-color:var(--brand);background:var(--brand-tint);color:var(--brand-deep);}
+.util-row{display:flex;gap:8px;margin-top:14px;}
+.util-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;background:var(--panel);border:1.5px solid var(--line);border-radius:var(--radius-sm);padding:11px;font-size:12.5px;font-weight:700;color:var(--ink-soft);cursor:pointer;font-family:'Noto Sans Lao','Noto Sans',sans-serif;}
+.util-btn:hover{border-color:var(--brand);color:var(--brand-deep);}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);margin-top:14px;overflow:hidden;}
+.card-head{padding:16px 18px 14px;border-bottom:1px dashed var(--line);display:flex;align-items:center;justify-content:space-between;}
+.card-head h2{margin:0;font-size:15.5px;font-weight:700;font-family:'Noto Serif Lao',serif;}
+.form-body{padding:16px 18px 18px;}
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;}
+.field label .req{color:var(--warn);margin-left:2px;}
+.field input,.field select,.field textarea{width:100%;border:1.5px solid var(--line);border-radius:var(--radius-sm);padding:11px 13px;font-size:15px;font-family:'Noto Sans Lao','Noto Sans',sans-serif;color:var(--ink);background:#fff;transition:border-color .15s,box-shadow .15s;}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3.5px var(--brand-tint);}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+.money-input{position:relative;}
+.money-input input{padding-right:46px;font-family:'JetBrains Mono',monospace;font-weight:600;}
+.money-input::after{content:attr(data-unit);position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:10px;color:#b8c2bb;font-weight:700;letter-spacing:.5px;font-family:'JetBrains Mono',monospace;}
+/* chips */
+.type-chips{display:flex;gap:8px;flex-wrap:wrap;}
+.type-chip{flex:1;min-width:70px;border:1.5px solid var(--line);background:#fff;border-radius:var(--radius-sm);padding:11px 8px;text-align:center;cursor:pointer;font-size:12.5px;font-weight:700;color:var(--ink-soft);transition:border-color .15s,background .15s,color .15s;}
+.type-chip .cic{font-size:18px;display:block;margin-bottom:3px;}
+.type-chip .clbl{font-size:11.5px;display:block;}
+.type-chip.active{border-color:var(--brand);background:var(--brand-tint);color:var(--brand-deep);}
+.type-chip.act-thb{border-color:var(--thb);background:var(--thb-tint);color:var(--thb);}
+.type-chip.act-lak{border-color:var(--lak);background:var(--lak-tint);color:var(--lak);}
+/* section label */
+.sec-lbl{font-size:11px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;letter-spacing:1px;margin:16px 0 8px;display:flex;align-items:center;gap:8px;}
+.sec-lbl::before,.sec-lbl::after{content:"";flex:1;height:1px;background:var(--line);}
+/* flow summary */
+.flow-sum{background:var(--good-tint);border:1.5px solid #bfe3cc;border-radius:var(--radius-sm);padding:13px 15px;margin-bottom:14px;display:none;}
+.flow-sum.show{display:block;}
+.flow-sum-title{font-size:11.5px;font-weight:700;color:#1f6e4f;text-transform:uppercase;letter-spacing:.5px;margin-bottom:9px;}
+.flow-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:13px;border-bottom:1px dashed #c8e8d5;}
+.flow-row:last-child{border-bottom:none;}
+.flow-row .lbl{color:#2e5c40;}
+.flow-row .val{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--good);font-size:14px;}
+.flow-row .val.warn{color:var(--warn);}
+/* exchange badge */
+.exch-badge{display:inline-flex;align-items:center;gap:6px;background:var(--gold-tint);border:1.5px solid #e8d9ab;border-radius:99px;padding:6px 12px;font-size:12px;font-weight:700;color:#8a6315;margin-bottom:10px;}
+/* profit preview */
+.profit-preview{background:var(--good-tint);border:1.5px solid #bfe3cc;border-radius:var(--radius-sm);padding:13px 15px;margin-bottom:14px;display:none;}
+.profit-preview.show{display:block;}
+.profit-preview-row{display:flex;justify-content:space-between;font-size:12.5px;padding:3px 0;color:#2e5c40;}
+.profit-preview-row b{font-family:'JetBrains Mono',monospace;}
+.profit-preview-total{display:flex;justify-content:space-between;margin-top:6px;padding-top:8px;border-top:1px dashed #bfe3cc;font-size:14px;font-weight:700;color:var(--good);}
+.profit-preview-total b{font-family:'JetBrains Mono',monospace;font-size:16px;}
+/* lock */
+.lock-locked{display:flex;align-items:flex-start;gap:10px;background:var(--warn-tint);border:1.5px solid #f0bdb6;border-radius:var(--radius-sm);padding:13px 15px;margin-bottom:10px;}
+.lock-text{font-size:12.5px;color:#8a2e22;line-height:1.5;}
+.lock-text b{display:block;font-size:13.5px;margin-bottom:2px;}
+.unlock-row{display:flex;gap:8px;}
+.unlock-row input{flex:1;border:1.5px solid var(--line);border-radius:var(--radius-sm);padding:11px 13px;font-size:14px;font-family:'JetBrains Mono',monospace;color:var(--ink);background:#fff;}
+.unlock-btn{background:var(--brand);color:#fff;border:none;border-radius:var(--radius-sm);padding:11px 18px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:'Noto Sans Lao','Noto Sans',sans-serif;}
+.close-day-row{display:flex;align-items:flex-start;gap:10px;background:var(--paper);border:1.5px solid var(--line);border-radius:var(--radius-sm);padding:13px 15px;margin-bottom:14px;cursor:pointer;}
+.close-day-row input[type=checkbox]{width:18px;height:18px;flex-shrink:0;margin-top:1px;accent-color:var(--brand);}
+.close-day-row span{font-size:12px;color:var(--ink-soft);line-height:1.5;}
+.stock-badge{font-size:11px;font-weight:700;background:var(--gold-tint);color:#8a6315;padding:4px 10px;border-radius:99px;font-family:'JetBrains Mono',monospace;}
+.stock-badge.low{background:var(--warn-tint);color:var(--warn);}
+.stock-badge.high{background:var(--lak-tint);color:var(--lak);}
+.submit-btn{width:100%;background:var(--brand);color:#fff;border:none;border-radius:var(--radius-sm);padding:15px;font-size:15px;font-weight:700;font-family:'Noto Sans Lao','Noto Sans',sans-serif;cursor:pointer;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 10px 22px -10px var(--brand);transition:opacity .15s,transform .1s;}
+.submit-btn:active{transform:scale(.985);}
+.submit-btn:disabled{opacity:.55;cursor:not-allowed;}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120%);background:var(--ink);color:#fff;padding:13px 22px;border-radius:99px;font-size:14px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.3);transition:transform .25s cubic-bezier(.34,1.56,.64,1);z-index:50;display:flex;align-items:center;gap:8px;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.toast.error{background:var(--warn);}
+/* recent */
+.recent-section{margin-top:26px;}
+.recent-title-row{display:flex;align-items:center;justify-content:space-between;margin:0 2px 12px;}
+.recent-title{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;letter-spacing:1px;}
+.recent-title::before{content:"";width:16px;height:2px;background:var(--brand);border-radius:2px;}
+.history-btn{display:flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;font-size:12.5px;font-weight:700;color:var(--brand);padding:4px 6px;border-radius:6px;}
+.history-btn:hover{background:var(--brand-tint);}
+.recent-item{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--brand);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow);animation:slideIn .3s ease;}
+@keyframes slideIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+.recent-tag{width:30px;height:30px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;}
+.recent-main{flex:1;min-width:0;}
+.recent-title-text{font-size:13.5px;font-weight:700;}
+.recent-meta{font-size:11.5px;color:var(--ink-soft);margin-top:2px;}
+.recent-amount{text-align:right;flex-shrink:0;}
+.recent-amount .num{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13.5px;}
+.recent-amount.profit .num{color:var(--good);}
+.recent-amount .lbl{font-size:9.5px;color:var(--ink-soft);}
+.empty-state{text-align:center;padding:36px 20px;color:var(--ink-soft);font-size:13.5px;}
+.skeleton{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:8px;height:58px;background-image:linear-gradient(90deg,#eef2ec 0,#e3e9e0 40px,#eef2ec 80px);background-size:600px;animation:shimmer 1.4s infinite linear;}
+@keyframes shimmer{from{background-position:-300px 0;}to{background-position:300px 0;}}
+/* modal */
+.modal-overlay{position:fixed;inset:0;z-index:60;background:rgba(20,30,26,.5);display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(2px);}
+.modal-overlay.show{display:flex;}
+.modal-card{background:var(--panel);width:100%;max-width:560px;max-height:90vh;border-radius:20px 20px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,.25);display:flex;flex-direction:column;animation:modalUp .25s cubic-bezier(.2,.9,.3,1);}
+@media(min-width:620px){.modal-overlay{align-items:center;}.modal-card{border-radius:var(--radius);max-height:88vh;}}
+@keyframes modalUp{from{transform:translateY(40px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--line);flex-shrink:0;}
+.modal-head h3{margin:0;font-size:16.5px;font-weight:700;font-family:'Noto Serif Lao',serif;}
+.modal-close{width:32px;height:32px;border-radius:9px;border:none;background:var(--paper);color:var(--ink-soft);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.modal-body{padding:20px;overflow-y:auto;}
+.rate-history-item{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--line);font-size:12.5px;}
+.rate-history-item:last-child{border-bottom:none;}
+.rate-history-date{font-family:'JetBrains Mono',monospace;font-weight:700;}
+.rate-history-rates{display:flex;gap:14px;font-size:11.5px;color:var(--ink-soft);}
+.rate-history-rates b{font-family:'JetBrains Mono',monospace;color:var(--ink);}
+.filter-toggle-btn{display:flex;align-items:center;gap:6px;background:none;border:none;font-size:12.5px;font-weight:700;color:var(--brand);cursor:pointer;padding:6px 2px;margin-bottom:10px;font-family:'Noto Sans Lao','Noto Sans',sans-serif;}
+.hfbox{background:var(--paper);border:1.5px solid var(--line);border-radius:var(--radius-sm);padding:14px;margin-bottom:14px;}
+.filter-action-row{display:flex;gap:8px;}
+.filter-apply-btn{flex:1;background:var(--brand);color:#fff;border:none;border-radius:var(--radius-sm);padding:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans Lao','Noto Sans',sans-serif;}
+.filter-clear-btn{background:#fff;border:1.5px solid var(--line);color:var(--ink-soft);border-radius:var(--radius-sm);padding:10px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans Lao','Noto Sans',sans-serif;}
+.fab-row{position:fixed;right:20px;bottom:22px;z-index:40;display:flex;flex-direction:column;gap:10px;align-items:flex-end;}
+.fab-btn{display:flex;align-items:center;gap:9px;border:none;border-radius:99px;padding:14px 20px;font-size:14px;color:#fff;text-decoration:none;font-weight:700;cursor:pointer;font-family:'Noto Sans Lao','Noto Sans',sans-serif;box-shadow:0 10px 26px -8px rgba(0,0,0,.4);}
+.fab-btn.report{background:var(--ink);}
+.hint-text{font-size:11.5px;color:var(--ink-soft);margin-top:5px;}
+.hint-text b{color:var(--brand-deep);font-family:'JetBrains Mono',monospace;}
+@media(max-width:420px){.field-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
-
 <header>
   <div class="header-inner">
     <div class="brand-row">
@@ -411,1280 +168,453 @@
           <div class="brand-text-sub">ບໍລິການເງິນດ່ວນຊຸມຊົນ</div>
         </div>
       </div>
-      <a href="home-naonua.html" class="home-btn" title="ກັບໜ້າຫຼັກ">⌂</a>
+      <a href="home-naonua.html" class="home-btn">&#8962;</a>
     </div>
-    <div class="branch-tag">
-      <span class="dot"></span>
-      <span><b id="branchLabel">ສາຂາໜາວເໜືອ</b> — ບັນທຶກທຸລະກຳ</span>
-    </div>
+    <div class="branch-tag"><span class="dot"></span><span><b>ສາຂາໜາວເໜືອ</b> — ບັນທຶກທຸລະກຳ</span></div>
   </div>
 </header>
 
 <div class="wrap">
-
   <div class="main-tabs">
-    <button class="main-tab active" data-tab="transfer" onclick="switchTab('transfer')">
-      <span class="ic">💸</span><span class="lbl">ໂອນເງິນ</span>
-    </button>
-    <button class="main-tab" data-tab="exchange" onclick="switchTab('exchange')">
-      <span class="ic">💱</span><span class="lbl">ແລກປ່ຽນ</span>
-    </button>
-    <button class="main-tab" data-tab="expense" onclick="switchTab('expense')">
-      <span class="ic">🧾</span><span class="lbl">ລາຍຈ່າຍ</span>
-    </button>
+    <button class="main-tab active" data-tab="transfer" onclick="switchTab('transfer')"><span class="ic">&#128184;</span><span class="lbl">ໂອນເງິນ</span></button>
+    <button class="main-tab" data-tab="exchange" onclick="switchTab('exchange')"><span class="ic">&#128177;</span><span class="lbl">ແລກປ່ຽນ</span></button>
+    <button class="main-tab" data-tab="expense" onclick="switchTab('expense')"><span class="ic">&#129534;</span><span class="lbl">ລາຍຈ່າຍ</span></button>
   </div>
-
   <div class="util-row">
-    <button class="util-btn" onclick="openRateModal()"><span class="ic">📈</span> ຕັ້ງເລດປະຈຳວັນ</button>
-    <button class="util-btn" onclick="openOpeningModal()"><span class="ic">💼</span> ຍອດຕັ້ງຕົ້ນ/ປິດວັນ</button>
+    <button class="util-btn" onclick="openRateModal()">&#128200; ຕັ້ງເລດ</button>
+    <button class="util-btn" onclick="openOpeningModal()">&#128188; ຍອດຕັ້ງຕົ້ນ/ປິດວັນ</button>
   </div>
 
-  <!-- ===== TAB: ໂອນເງິນ ===== -->
+  <!-- TAB: ໂອນເງິນ (ໃໝ່) -->
   <form class="card" id="transferForm" data-tabpanel="transfer">
     <div class="card-head">
       <h2>ບັນທຶກໂອນເງິນ</h2>
-      <span class="stock-badge" id="stockBadgeTransfer">ສະຕັອກບາດ: —</span>
+      <span class="stock-badge" id="stockBadgeTransfer">ສະຕັອກ: —</span>
     </div>
     <div class="form-body">
-      <div class="field full">
-        <label>ປະເພດໂອນ <span class="req">*</span></label>
-        <div class="type-chips" id="transferTypeChips">
-          <div class="type-chip active" data-value="lak_lak" onclick="selectTransferType(this)">ລາວ → ລາວ</div>
-          <div class="type-chip" data-value="thb_lak" onclick="selectTransferType(this)">ໄທ → ລາວ</div>
-          <div class="type-chip" data-value="lak_thb" onclick="selectTransferType(this)">ລາວ → ໄທ</div>
-        </div>
-      </div>
-
-      <!-- ລາວ-ລາວ: ເລືອກສະກຸນທີ່ໂອນ -->
-      <div class="field full" id="t_lakLakCurrencyField">
-        <label>ໂອນເປັນສະກຸນໃດ</label>
-        <div class="type-chips" id="t_lakLakCurrencyChips">
-          <div class="type-chip active" data-value="lak" onclick="selectLakLakCurrency(this)">ກີບ</div>
-          <div class="type-chip" data-value="thb" onclick="selectLakLakCurrency(this)">ບາດ (ບັນຊີລາວ)</div>
-        </div>
-      </div>
-
-      <!-- ໄທ-ລາວ / ລາວ-ໄທ: ຜູ້ຮັບ/ຜູ້ສົ່ງ ເລືອກສະກຸນທີ່ບໍ່ແມ່ນບາດທະນາຄານໄທ -->
-      <div class="field full" id="t_otherCurrencyField" style="display:none;">
-        <label id="t_otherCurrencyLabel">ປະເພດເງິນທີ່ຜູ້ຮັບເອົາ</label>
-        <div class="type-chips" id="t_otherCurrencyChips">
-          <div class="type-chip active" data-value="thb" onclick="selectOtherCurrency(this)">ບາດ</div>
-          <div class="type-chip" data-value="lak" onclick="selectOtherCurrency(this)">ກີບ (ໄລ່ຕາມເລດປະຈຳວັນ)</div>
-        </div>
-      </div>
-
-      <div class="field-grid">
-        <div class="field">
+      <div class="field-grid" style="margin-bottom:14px;">
+        <div class="field" style="margin-bottom:0;">
           <label>ວັນທີ <span class="req">*</span></label>
           <input type="date" id="t_date" required>
         </div>
+        <div class="field" style="margin-bottom:0;">
+          <label id="t_amtLbl">ຈຳນວນ (ຕາມ Slip) <span class="req">*</span></label>
+          <div class="money-input" id="t_amtWrap" data-unit="THB">
+            <input type="text" id="t_amount" class="mfmt" inputmode="numeric" placeholder="0">
+          </div>
+        </div>
+      </div>
+
+      <div class="sec-lbl">ລູກຄ້າຈ່າຍຮ້ານດ້ວຍ</div>
+      <div class="type-chips" id="payChips" style="margin-bottom:14px;">
+        <div class="type-chip" data-pay="bank_thb" onclick="selPay(this)"><span class="cic">&#128241;</span><span class="clbl">ໂອນ &#3647;</span></div>
+        <div class="type-chip" data-pay="cash_thb" onclick="selPay(this)"><span class="cic">&#128181;</span><span class="clbl">ສົດ &#3647;</span></div>
+        <div class="type-chip" data-pay="cash_lak" onclick="selPay(this)"><span class="cic">&#128180;</span><span class="clbl">ສົດ &#8365;</span></div>
+        <div class="type-chip" data-pay="bank_lak" onclick="selPay(this)"><span class="cic">&#128242;</span><span class="clbl">ໂອນ &#8365;</span></div>
+      </div>
+
+      <div class="sec-lbl">ຜູ້ຮັບເອົາ</div>
+      <div class="type-chips" id="recChips" style="margin-bottom:14px;">
+        <div class="type-chip" data-rec="cash_thb" onclick="selRec(this)"><span class="cic">&#128181;</span><span class="clbl">ສົດ &#3647;</span></div>
+        <div class="type-chip" data-rec="cash_lak" onclick="selRec(this)"><span class="cic">&#128180;</span><span class="clbl">ສົດ &#8365;</span></div>
+        <div class="type-chip" data-rec="bank_thb" onclick="selRec(this)"><span class="cic">&#128241;</span><span class="clbl">ໂອນ &#3647;</span></div>
+        <div class="type-chip" data-rec="bank_lak" onclick="selRec(this)"><span class="cic">&#128242;</span><span class="clbl">ໂອນ &#8365;</span></div>
+      </div>
+
+      <div id="t_rateRow" style="display:none;">
+        <div class="exch-badge">&#128177; ມີການແລກປ່ຽນ — ໃສ່ເລດທີ່ໃຫ້ລູກຄ້າ</div>
         <div class="field">
-          <label id="t_amountLabel">ຈຳນວນເງິນ <span class="req">*</span></label>
-          <div class="money-input" id="t_amountUnit" data-unit="KIP">
-            <input type="text" id="t_knownAmount" class="mono-input money-fmt" inputmode="numeric" placeholder="ຈຳນວນເງິນ">
+          <label>ເລດທີ່ໃຊ້ (ກີບ/ບາດ) <span class="req">*</span></label>
+          <div class="money-input" data-unit="KIP/THB">
+            <input type="text" id="t_rate" class="mfmt" inputmode="numeric" placeholder="605">
           </div>
+          <div class="hint-text">ອ້າງອີງ: <b id="t_refRate">—</b> ກີບ/ບາດ — ແກ້ໄຂໄດ້</div>
         </div>
       </div>
 
-      <div class="exchange-note" id="t_exchangeNote" style="display:none;">
-        <span class="ic">💱</span>
-        <div style="flex:1;">
-          <span id="t_exchangeNoteText">ທຸລະກຳນີ້ມີການແລກປ່ຽນສະກຸນແຝງຢູ່ — ກະທົບສະຕັອກບາດ ແລະ ນັບກຳໄລ</span>
-          <div class="field" style="margin:10px 0 0;">
-            <label>ເລດທີ່ໃຊ້ (ກີບ/ບາດ) <span class="req">*</span></label>
-            <input type="text" id="t_customerRate" class="mono-input money-fmt" inputmode="numeric" placeholder="ເຊັ່ນ 605">
-            <div class="hint-text">ດຶງເລດປະຈຳວັນມາໃຫ້ອັດຕະໂນມັດ — ແກ້ໄຂໄດ້ຕາມລາຄາທີ່ໃຫ້ລູກຄ້າແທ້ຈິງ</div>
-          </div>
-        </div>
+      <div class="sec-lbl">ຄ່າທຳນຽມ</div>
+      <div class="field-grid" style="margin-bottom:14px;">
+        <div class="field" style="margin-bottom:0;"><label>ກີບ</label><div class="money-input" data-unit="KIP"><input type="text" id="t_feeLak" class="mfmt" inputmode="numeric" placeholder="0"></div></div>
+        <div class="field" style="margin-bottom:0;"><label>ບາດ</label><div class="money-input" data-unit="THB"><input type="text" id="t_feeThb" class="mfmt" inputmode="numeric" placeholder="0"></div></div>
       </div>
 
-      <div class="flow-box in">
-        <div class="flow-box-title" id="t_inLabel"><span class="ic">↘</span> ເງິນເຂົ້າຮ້ານ — ລູກຄ້າເອົາມາໃຫ້</div>
-        <select id="t_walletIn">
-          <option value="cash_lak">ເງິນສົດ ກີບ</option>
-          <option value="cash_thb">ເງິນສົດ ບາດ</option>
-          <option value="bank_lak">ບັນຊີ ກີບ</option>
-          <option value="bank_thb">ບັນຊີ ບາດ</option>
-        </select>
+      <div class="flow-sum" id="flowSum">
+        <div class="flow-sum-title">&#10003; ລະບົບຄິດໄລ່ໃຫ້ — ກວດສອບກ່ອນ Save</div>
+        <div class="flow-row"><span class="lbl">ເງິນເຂົ້າຮ້ານ</span><span class="val" id="fs_in">—</span></div>
+        <div class="flow-row"><span class="lbl">ເງິນອອກຮ້ານ</span><span class="val warn" id="fs_out">—</span></div>
+        <div class="flow-row" id="fs_profRow" style="display:none;"><span class="lbl">ກຳໄລແຝງ</span><span class="val" id="fs_prof">—</span></div>
+        <div class="flow-row"><span class="lbl">Wallet</span><span class="val" id="fs_wlt" style="font-size:11px;text-align:right;max-width:55%;">—</span></div>
       </div>
 
-      <div class="flow-box out">
-        <div class="flow-box-title" id="t_outLabel"><span class="ic">↗</span> ເງິນອອກຮ້ານ — ຈ່າຍ/ໂອນອອກໃຫ້ຜູ້ຮັບ</div>
-        <select id="t_walletOut">
-          <option value="cash_lak">ເງິນສົດ ກີບ</option>
-          <option value="cash_thb">ເງິນສົດ ບາດ</option>
-          <option value="bank_lak">ບັນຊີ ກີບ</option>
-          <option value="bank_thb">ບັນຊີ ບາດ</option>
-        </select>
-      </div>
-
-      <div class="field full" id="t_feeWrap">
-        <label>ຄ່າທຳນຽມ <span class="req">*</span></label>
-        <div class="field-grid" style="margin-bottom:0;">
-          <div class="field" style="margin-bottom:0;">
-            <div class="money-input" data-unit="KIP">
-              <input type="text" id="t_feeLak" class="mono-input money-fmt" inputmode="numeric" placeholder="ຄ່າທຳນຽມ ກີບ">
-            </div>
-          </div>
-          <div class="field" style="margin-bottom:0;">
-            <div class="money-input" data-unit="THB">
-              <input type="text" id="t_feeThb" class="mono-input money-fmt" inputmode="numeric" placeholder="ຄ່າທຳນຽມ ບາດ">
-            </div>
-          </div>
-        </div>
-        <div class="hint-text">ໃສ່ໄດ້ທັງສອງຊ່ອງ ຖ້າລູກຄ້າຈ່າຍຄ່າທຳນຽມປະສົມ — ຄ່າທຳນຽມບໍ່ກະທົບສະຕັອກບາດ ເຂົ້າຕາມຊ່ອງທາງ "ເງິນເຂົ້າ" ຂ້າງເທິງ</div>
-      </div>
-
-      <div class="field full">
-        <label>ໝາຍເຫດ</label>
-        <textarea id="t_note" rows="2" placeholder="ບັນທຶກເພີ່ມເຕີມ (ຖ້າມີ)"></textarea>
-      </div>
-
-      <button type="submit" class="submit-btn" id="transferSubmitBtn">
-        <span id="transferSubmitLabel">＋ ບັນທຶກໂອນເງິນ</span>
-      </button>
+      <div class="field"><label>ໝາຍເຫດ</label><textarea id="t_note" rows="2" placeholder="ບັນທຶກ (ຖ້າມີ)"></textarea></div>
+      <button type="submit" class="submit-btn" id="tSubmitBtn"><span id="tSubmitLbl">&#65291; ບັນທຶກໂອນເງິນ</span></button>
     </div>
   </form>
 
-  <!-- ===== TAB: ແລກປ່ຽນ ===== -->
+  <!-- TAB: ແລກປ່ຽນ -->
   <form class="card" id="exchangeForm" data-tabpanel="exchange" style="display:none;">
-    <div class="card-head">
-      <h2>ບັນທຶກແລກປ່ຽນເງິນຕາ</h2>
-      <span class="stock-badge" id="stockBadge">ສະຕັອກບາດ: —</span>
-    </div>
+    <div class="card-head"><h2>ບັນທຶກແລກປ່ຽນ</h2><span class="stock-badge" id="stockBadge">ສະຕັອກ: —</span></div>
     <div class="form-body">
-      <div class="field full">
-        <label>ປະເພດແລກປ່ຽນ <span class="req">*</span></label>
-        <div class="type-chips" id="exchangeTypeChips">
-          <div class="type-chip active" data-value="buy_thb" onclick="selectExchangeType(this)">ຊື້ບາດ (ລູກຄ້າເອົາບາດມາແລກກີບ)</div>
-          <div class="type-chip" data-value="sell_thb" onclick="selectExchangeType(this)">ຂາຍບາດ (ລູກຄ້າເອົາກີບມາຊື້ບາດ)</div>
+      <div class="field"><label>ປະເພດ <span class="req">*</span></label>
+        <div class="type-chips" id="exchTypeChips">
+          <div class="type-chip active" data-value="buy_thb" onclick="selExchType(this)">ຊື້ບາດ (ລູກຄ້າໂອນ/ເອົາບາດ)</div>
+          <div class="type-chip" data-value="sell_thb" onclick="selExchType(this)">ຂາຍບາດ (ລູກຄ້າຊື້ບາດ)</div>
         </div>
       </div>
-
       <div class="field-grid">
-        <div class="field">
-          <label>ວັນທີ <span class="req">*</span></label>
-          <input type="date" id="e_date" required>
-        </div>
-        <div class="field">
-          <label>ຈຳນວນບາດ <span class="req">*</span></label>
-          <div class="money-input" data-unit="THB">
-            <input type="text" id="e_amount" class="mono-input money-fmt" inputmode="numeric" placeholder="ຈຳນວນບາດ">
-          </div>
-        </div>
+        <div class="field"><label>ວັນທີ <span class="req">*</span></label><input type="date" id="e_date" required></div>
+        <div class="field"><label>ຈຳນວນບາດ <span class="req">*</span></label><div class="money-input" data-unit="THB"><input type="text" id="e_amount" class="mfmt" inputmode="numeric" placeholder="0"></div></div>
       </div>
-
-      <div class="field full">
-        <label id="e_rateLabel">ລາຄາໃຫ້ລູກຄ້າ (ກີບ/ບາດ) <span class="req">*</span></label>
-        <input type="text" id="e_customerRate" class="mono-input money-fmt" inputmode="numeric" placeholder="ເຊັ່ນ 600">
-        <div class="hint-text" id="e_costHint">ຕົ້ນທຶນສະເລ່ຍປະຈຸບັນ: <b id="e_avgCostDisplay">—</b> ກີບ/ບາດ</div>
+      <div class="field"><label id="e_rateLbl">ລາຄາໃຫ້ລູກຄ້າ (ກີບ/ບາດ) <span class="req">*</span></label>
+        <input type="text" id="e_rate" class="mfmt" inputmode="numeric" style="font-family:'JetBrains Mono',monospace;font-weight:600;" placeholder="605">
+        <div class="hint-text">ຕົ້ນທຶນສະເລ່ຍ: <b id="e_avgCost">—</b> ກີບ/ບາດ</div>
       </div>
-
-      <div class="field full">
-        <label>ຄ່າທຳນຽມເພີ່ມ (ຖ້າມີ, ນອກເໝືອກຳໄລສ່ວນຕ່າງ)</label>
-        <div class="money-input" data-unit="KIP">
-          <input type="text" id="e_extraFee" class="mono-input money-fmt" inputmode="numeric" placeholder="0">
-        </div>
-      </div>
-
+      <div class="field"><label>ຄ່າທຳນຽມ (ຖ້າມີ)</label><div class="money-input" data-unit="KIP"><input type="text" id="e_fee" class="mfmt" inputmode="numeric" placeholder="0"></div></div>
       <div class="profit-preview" id="profitPreview">
-        <div class="profit-preview-row"><span id="pv_spreadLabel">ກຳໄລສ່ວນຕ່າງ</span><b id="pv_spread">0</b></div>
-        <div class="profit-preview-row"><span>ຄ່າທຳນຽມເພີ່ມ</span><b id="pv_fee">0</b></div>
-        <div class="profit-preview-total"><span>ກຳໄລລວມ (ກີບ)</span><b id="pv_total">0</b></div>
+        <div class="profit-preview-row"><span id="pvSpreadLbl">ກຳໄລສ່ວນຕ່າງ</span><b id="pvSpread">0</b></div>
+        <div class="profit-preview-row"><span>ຄ່າທຳນຽມ</span><b id="pvFee">0</b></div>
+        <div class="profit-preview-total"><span>ກຳໄລລວມ</span><b id="pvTotal">0 ₭</b></div>
       </div>
-
-      <div class="flow-box in">
-        <div class="flow-box-title" id="e_inLabel"><span class="ic">↘</span> ເງິນເຂົ້າຮ້ານ</div>
-        <select id="e_walletIn">
-          <option value="cash_lak">ເງິນສົດ ກີບ</option>
-          <option value="cash_thb">ເງິນສົດ ບາດ</option>
-          <option value="bank_lak">ບັນຊີ ກີບ</option>
-          <option value="bank_thb">ບັນຊີ ບາດ</option>
-        </select>
+      <div class="sec-lbl">ຊ່ອງທາງ</div>
+      <div class="field-grid">
+        <div class="field"><label id="eInLbl">ເງິນເຂົ້າ</label><select id="e_walletIn"><option value="cash_lak">ສົດ ກີບ</option><option value="cash_thb">ສົດ ບາດ</option><option value="bank_lak">ບັນຊີ ກີບ</option><option value="bank_thb">ບັນຊີ ບາດ</option></select></div>
+        <div class="field"><label id="eOutLbl">ເງິນອອກ</label><select id="e_walletOut"><option value="cash_lak">ສົດ ກີບ</option><option value="cash_thb">ສົດ ບາດ</option><option value="bank_lak">ບັນຊີ ກີບ</option><option value="bank_thb">ບັນຊີ ບາດ</option></select></div>
       </div>
-      <div class="flow-box out">
-        <div class="flow-box-title" id="e_outLabel"><span class="ic">↗</span> ເງິນອອກຮ້ານ</div>
-        <select id="e_walletOut">
-          <option value="cash_lak">ເງິນສົດ ກີບ</option>
-          <option value="cash_thb">ເງິນສົດ ບາດ</option>
-          <option value="bank_lak">ບັນຊີ ກີບ</option>
-          <option value="bank_thb">ບັນຊີ ບາດ</option>
-        </select>
-      </div>
-
-      <div class="field full">
-        <label>ໝາຍເຫດ</label>
-        <textarea id="e_note" rows="2" placeholder="ບັນທຶກເພີ່ມເຕີມ (ຖ້າມີ)"></textarea>
-      </div>
-
-      <button type="submit" class="submit-btn" id="exchangeSubmitBtn">
-        <span id="exchangeSubmitLabel">＋ ບັນທຶກແລກປ່ຽນ</span>
-      </button>
+      <div class="field"><label>ໝາຍເຫດ</label><textarea id="e_note" rows="2" placeholder="ບັນທຶກ (ຖ້າມີ)"></textarea></div>
+      <button type="submit" class="submit-btn" id="eSubmitBtn"><span id="eSubmitLbl">&#65291; ບັນທຶກແລກປ່ຽນ</span></button>
     </div>
   </form>
 
-  <!-- ===== TAB: ລາຍຈ່າຍ ===== -->
+  <!-- TAB: ລາຍຈ່າຍ -->
   <form class="card" id="expenseForm" data-tabpanel="expense" style="display:none;">
     <div class="card-head"><h2>ບັນທຶກລາຍຈ່າຍ</h2></div>
     <div class="form-body">
-      <div class="field full">
-        <label>ໝວດໝູ່ <span class="req">*</span></label>
-        <select id="x_category">
-          <option value="ຄ່າເງິນກູ້">ຄ່າເງິນກູ້ທະນາຄານ</option>
-          <option value="ຄ່າຫວຍ">ຄ່າຫວຍ</option>
-          <option value="ຄ່າໄຟ">ຄ່າໄຟ</option>
-          <option value="ຄ່າເຊົ່າທີ່">ຄ່າເຊົ່າທີ່</option>
-          <option value="ຄ່າອາກອນ">ຄ່າເສຍອາກອນ</option>
-          <option value="ສ່ວນຕົວ">ຄ່າໃຊ້ຈ່າຍສ່ວນຕົວ</option>
-          <option value="ອື່ນໆ">ອື່ນໆ</option>
-        </select>
+      <div class="field"><label>ໝວດໝູ່ <span class="req">*</span></label>
+        <select id="x_cat"><option value="ຄ່າເງິນກູ້">ຄ່າເງິນກູ້ທະນາຄານ</option><option value="ຄ່າຫວຍ">ຄ່າຫວຍ</option><option value="ຄ່າໄຟ">ຄ່າໄຟ</option><option value="ຄ່າເຊົ່າທີ່">ຄ່າເຊົ່າທີ່</option><option value="ຄ່າອາກອນ">ຄ່າເສຍອາກອນ</option><option value="ສ່ວນຕົວ">ຄ່າໃຊ້ຈ່າຍສ່ວນຕົວ</option><option value="ອື່ນໆ">ອື່ນໆ</option></select>
       </div>
-
-      <div class="field full">
-        <label>ລາຍລະອຽດ <span class="req">*</span></label>
-        <input type="text" id="x_description" placeholder="ເຊັ່ນ ຄ່າໄຟເດືອນ 6">
-      </div>
-
+      <div class="field"><label>ລາຍລະອຽດ <span class="req">*</span></label><input type="text" id="x_desc" placeholder="ເຊັ່ນ ຄ່າໄຟເດືອນ 6"></div>
       <div class="field-grid">
-        <div class="field">
-          <label>ວັນທີ <span class="req">*</span></label>
-          <input type="date" id="x_date" required>
-        </div>
-        <div class="field">
-          <label>ສະກຸນເງິນ</label>
-          <div class="type-chips" id="x_currencyChips">
-            <div class="type-chip active" data-value="LAK" onclick="selectCurrency(this)">ກີບ</div>
-            <div class="type-chip" data-value="THB" onclick="selectCurrency(this)">ບາດ</div>
+        <div class="field"><label>ວັນທີ <span class="req">*</span></label><input type="date" id="x_date" required></div>
+        <div class="field"><label>ສະກຸນ</label>
+          <div class="type-chips" id="xCurrChips">
+            <div class="type-chip active" data-value="LAK" onclick="selXCurr(this)">ກີບ</div>
+            <div class="type-chip" data-value="THB" onclick="selXCurr(this)">ບາດ</div>
           </div>
         </div>
       </div>
-
-      <div class="field full">
-        <label>ຈຳນວນເງິນ <span class="req">*</span></label>
-        <div class="money-input" id="x_amountUnit" data-unit="KIP">
-          <input type="text" id="x_amount" class="mono-input money-fmt" inputmode="numeric" placeholder="ຈຳນວນເງິນ">
-        </div>
-      </div>
-
-      <div class="field full">
-        <label>ຈ່າຍຈາກຊ່ອງທາງໃດ</label>
-        <div class="wallet-grid" id="x_walletGrid">
-          <div class="wallet-chip active" data-value="cash_lak" onclick="selectWallet(this,'x_wallet')">ເງິນສົດ ກີບ</div>
-          <div class="wallet-chip" data-value="cash_thb" onclick="selectWallet(this,'x_wallet')">ເງິນສົດ ບາດ</div>
-          <div class="wallet-chip" data-value="bank_lak" onclick="selectWallet(this,'x_wallet')">ບັນຊີ ກີບ</div>
-          <div class="wallet-chip" data-value="bank_thb" onclick="selectWallet(this,'x_wallet')">ບັນຊີ ບາດ</div>
-        </div>
-      </div>
-
-      <div class="field full">
-        <label>ໝາຍເຫດ</label>
-        <textarea id="x_note" rows="2" placeholder="ບັນທຶກເພີ່ມເຕີມ (ຖ້າມີ)"></textarea>
-      </div>
-
-      <button type="submit" class="submit-btn" id="expenseSubmitBtn">
-        <span id="expenseSubmitLabel">＋ ບັນທຶກລາຍຈ່າຍ</span>
-      </button>
+      <div class="field"><label>ຈຳນວນ <span class="req">*</span></label><div class="money-input" id="xAmtUnit" data-unit="KIP"><input type="text" id="x_amount" class="mfmt" inputmode="numeric" placeholder="0"></div></div>
+      <div class="field"><label>ຈ່າຍຈາກ</label><select id="x_wallet"><option value="cash_lak">ສົດ ກີບ</option><option value="cash_thb">ສົດ ບາດ</option><option value="bank_lak">ບັນຊີ ກີບ</option><option value="bank_thb">ບັນຊີ ບາດ</option></select></div>
+      <div class="field"><label>ໝາຍເຫດ</label><textarea id="x_note" rows="2" placeholder="ບັນທຶກ (ຖ້າມີ)"></textarea></div>
+      <button type="submit" class="submit-btn" id="xSubmitBtn"><span id="xSubmitLbl">&#65291; ບັນທຶກລາຍຈ່າຍ</span></button>
     </div>
   </form>
 
   <div class="recent-section">
     <div class="recent-title-row">
       <div class="recent-title">ລາຍການລ່າສຸດ</div>
-      <button type="button" class="history-btn" onclick="openHistoryModal()">
-        <span>ປະຫວັດທັງໝົດ</span><span>→</span>
-      </button>
+      <button type="button" class="history-btn" onclick="openHistoryModal()">ປະຫວັດທັງໝົດ &#8594;</button>
     </div>
-    <div id="recentList">
-      <div class="skeleton"></div>
-      <div class="skeleton"></div>
-      <div class="skeleton"></div>
-    </div>
+    <div id="recentList"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
   </div>
-
 </div>
 
-<div class="fab-row">
-  <a href="transfer-report-naonua.html" class="fab-btn report">
-    <span>📊</span><span>ລາຍງານ</span>
-  </a>
-</div>
-
+<div class="fab-row"><a href="transfer-report-naonua.html" class="fab-btn report">&#128202; ລາຍງານ</a></div>
 <div class="toast" id="toast"></div>
 
-<!-- ===== Rate Modal ===== -->
-<div class="modal-overlay" id="rateOverlay" onclick="if(event.target===this) closeRateModal()">
+<!-- Rate Modal -->
+<div class="modal-overlay" id="rateOverlay" onclick="if(event.target===this)closeRateModal()">
   <div class="modal-card">
-    <div class="modal-head">
-      <h3>ຕັ້ງເລດປະຈຳວັນ</h3>
-      <button type="button" class="modal-close" onclick="closeRateModal()">✕</button>
-    </div>
+    <div class="modal-head"><h3>ຕັ້ງເລດປະຈຳວັນ</h3><button type="button" class="modal-close" onclick="closeRateModal()">&#10005;</button></div>
     <div class="modal-body">
-      <div class="field full">
-        <label>ວັນທີ</label>
-        <input type="date" id="rate_date">
-      </div>
-      <div class="card-head" style="padding:10px 0;border:none;"><h2 style="font-size:14px;">ບາດ → ກີບ</h2></div>
+      <div class="field"><label>ວັນທີ</label><input type="date" id="rate_date"></div>
       <div class="field-grid">
-        <div class="field">
-          <label>ເລດຂາຍ</label>
-          <input type="text" id="rate_sellThbToLak" class="mono-input money-fmt" inputmode="numeric" placeholder="ເລດຂາຍ">
-        </div>
-        <div class="field">
-          <label>ເລດແລກຕໍ່</label>
-          <input type="text" id="rate_costThbToLak" class="mono-input money-fmt" inputmode="numeric" placeholder="ເລດແລກຕໍ່">
-        </div>
+        <div class="field"><label>ເລດຂາຍ &#3647;&#8594;&#8365;</label><div class="money-input" data-unit="KIP"><input type="text" id="rSell" class="mfmt" inputmode="numeric" placeholder="610"></div></div>
+        <div class="field"><label>ຕົ້ນທຶນ &#3647;&#8594;&#8365;</label><div class="money-input" data-unit="KIP"><input type="text" id="rCost" class="mfmt" inputmode="numeric" placeholder="605"></div></div>
+        <div class="field"><label>ເລດຂາຍ &#8365;&#8594;&#3647;</label><div class="money-input" data-unit="KIP"><input type="text" id="rSellLak" class="mfmt" inputmode="numeric" placeholder="600"></div></div>
+        <div class="field"><label>ຕົ້ນທຶນ &#8365;&#8594;&#3647;</label><div class="money-input" data-unit="KIP"><input type="text" id="rCostLak" class="mfmt" inputmode="numeric" placeholder="595"></div></div>
       </div>
-      <div class="card-head" style="padding:10px 0;border:none;"><h2 style="font-size:14px;">ກີບ → ບາດ</h2></div>
-      <div class="field-grid">
-        <div class="field">
-          <label>ເລດຂາຍ</label>
-          <input type="text" id="rate_sellLakToThb" class="mono-input money-fmt" inputmode="numeric" placeholder="ເລດຂາຍ">
-        </div>
-        <div class="field">
-          <label>ເລດແລກຕໍ່</label>
-          <input type="text" id="rate_costLakToThb" class="mono-input money-fmt" inputmode="numeric" placeholder="ເລດແລກຕໍ່">
-        </div>
-      </div>
-      <button type="button" class="submit-btn" id="rateSubmitBtn" onclick="submitRate()">
-        <span id="rateSubmitLabel">✓ ບັນທຶກເລດປະຈຳວັນ</span>
-      </button>
-
-      <div class="rate-history-section">
-        <div class="rate-history-title">ປະຫວັດເລດ (10 ມື້ຫຼ້າສຸດ)</div>
-        <div id="rateHistoryList"><div class="empty-state">ກຳລັງໂຫຼດ...</div></div>
+      <button type="button" class="submit-btn" onclick="submitRate()"><span id="rSubmitLbl">&#10003; ບັນທຶກເລດ</span></button>
+      <div style="margin-top:18px;padding-top:16px;border-top:1px dashed var(--line);">
+        <div style="font-size:12px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.7px;margin-bottom:10px;">ປະຫວັດ 10 ມື້</div>
+        <div id="rateHistList"><div class="empty-state">ກຳລັງໂຫຼດ...</div></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ===== Opening Balance Modal ===== -->
-<div class="modal-overlay" id="openingOverlay" onclick="if(event.target===this) closeOpeningModal()">
+<!-- Opening Modal -->
+<div class="modal-overlay" id="openingOverlay" onclick="if(event.target===this)closeOpeningModal()">
   <div class="modal-card">
-    <div class="modal-head">
-      <h3>ຍອດຕັ້ງຕົ້ນ / ປິດວັນ</h3>
-      <button type="button" class="modal-close" onclick="closeOpeningModal()">✕</button>
-    </div>
+    <div class="modal-head"><h3>ຍອດຕັ້ງຕົ້ນ / ປິດວັນ</h3><button type="button" class="modal-close" onclick="closeOpeningModal()">&#10005;</button></div>
     <div class="modal-body">
-      <div class="field full">
-        <label>ວັນທີ</label>
-        <input type="date" id="open_date" onchange="loadOpeningForDate()">
-      </div>
-
-      <div class="card-head" style="padding:10px 0;border:none;"><h2 style="font-size:14px;">ຍອດຕັ້ງຕົ້ນ (ຕອນເຊົ້າ)</h2></div>
+      <div class="field"><label>ວັນທີ</label><input type="date" id="open_date" onchange="loadOpeningForDate()"></div>
+      <div style="font-size:13px;font-weight:700;margin:10px 0 8px;color:var(--ink-soft);">ຍອດຕັ້ງຕົ້ນ</div>
       <div class="field-grid">
-        <div class="field"><label>ເງິນສົດ ກີບ</label>
-          <div class="money-input" data-unit="KIP"><input type="text" id="open_cashLak" class="mono-input money-fmt" inputmode="numeric" placeholder="0"></div>
-        </div>
-        <div class="field"><label>ເງິນສົດ ບາດ</label>
-          <div class="money-input" data-unit="THB"><input type="text" id="open_cashThb" class="mono-input money-fmt" inputmode="numeric" placeholder="0"></div>
-        </div>
-        <div class="field"><label>ບັນຊີ ກີບ</label>
-          <div class="money-input" data-unit="KIP"><input type="text" id="open_bankLak" class="mono-input money-fmt" inputmode="numeric" placeholder="0"></div>
-        </div>
-        <div class="field"><label>ບັນຊີ ບາດ</label>
-          <div class="money-input" data-unit="THB"><input type="text" id="open_bankThb" class="mono-input money-fmt" inputmode="numeric" placeholder="0"></div>
-        </div>
+        <div class="field"><label>ສົດ &#8365;</label><div class="money-input" data-unit="KIP"><input type="text" id="open_cashLak" class="mfmt" inputmode="numeric" placeholder="0"></div></div>
+        <div class="field"><label>ສົດ &#3647;</label><div class="money-input" data-unit="THB"><input type="text" id="open_cashThb" class="mfmt" inputmode="numeric" placeholder="0"></div></div>
+        <div class="field"><label>ບັນຊີ &#8365;</label><div class="money-input" data-unit="KIP"><input type="text" id="open_bankLak" class="mfmt" inputmode="numeric" placeholder="0"></div></div>
+        <div class="field"><label>ບັນຊີ &#3647;</label><div class="money-input" data-unit="THB"><input type="text" id="open_bankThb" class="mfmt" inputmode="numeric" placeholder="0"></div></div>
       </div>
-
-      <div class="card-head" style="padding:10px 0;border:none;"><h2 style="font-size:14px;">ຍອດຕົວຈິງ (ນັບຕອນທ້າຍວັນ — ບໍ່ບັງຄັບ)</h2></div>
+      <div style="font-size:13px;font-weight:700;margin:10px 0 8px;color:var(--ink-soft);">ຍອດຕົວຈິງ (ທ້າຍວັນ)</div>
       <div class="field-grid">
-        <div class="field"><label>ເງິນສົດ ກີບ</label>
-          <div class="money-input" data-unit="KIP"><input type="text" id="open_actualCashLak" class="mono-input money-fmt" inputmode="numeric" placeholder="ຍັງບໍ່ໄດ້ນັບ"></div>
-        </div>
-        <div class="field"><label>ເງິນສົດ ບາດ</label>
-          <div class="money-input" data-unit="THB"><input type="text" id="open_actualCashThb" class="mono-input money-fmt" inputmode="numeric" placeholder="ຍັງບໍ່ໄດ້ນັບ"></div>
-        </div>
-        <div class="field"><label>ບັນຊີ ກີບ</label>
-          <div class="money-input" data-unit="KIP"><input type="text" id="open_actualBankLak" class="mono-input money-fmt" inputmode="numeric" placeholder="ຍັງບໍ່ໄດ້ນັບ"></div>
-        </div>
-        <div class="field"><label>ບັນຊີ ບາດ</label>
-          <div class="money-input" data-unit="THB"><input type="text" id="open_actualBankThb" class="mono-input money-fmt" inputmode="numeric" placeholder="ຍັງບໍ່ໄດ້ນັບ"></div>
-        </div>
+        <div class="field"><label>ສົດ &#8365;</label><div class="money-input" data-unit="KIP"><input type="text" id="open_actualCashLak" class="mfmt" inputmode="numeric" placeholder="ຍັງບໍ່ນັບ"></div></div>
+        <div class="field"><label>ສົດ &#3647;</label><div class="money-input" data-unit="THB"><input type="text" id="open_actualCashThb" class="mfmt" inputmode="numeric" placeholder="ຍັງບໍ່ນັບ"></div></div>
+        <div class="field"><label>ບັນຊີ &#8365;</label><div class="money-input" data-unit="KIP"><input type="text" id="open_actualBankLak" class="mfmt" inputmode="numeric" placeholder="ຍັງບໍ່ນັບ"></div></div>
+        <div class="field"><label>ບັນຊີ &#3647;</label><div class="money-input" data-unit="THB"><input type="text" id="open_actualBankThb" class="mfmt" inputmode="numeric" placeholder="ຍັງບໍ່ນັບ"></div></div>
       </div>
-
       <div id="cashCheckResult"></div>
-
-      <div class="lock-status" id="lockStatusBox" style="display:none;">
-        <div class="lock-status-locked" id="lockStatusLocked" style="display:none;">
-          <span class="ic">🔒</span>
-          <div class="lock-status-text">
-            <b>ວັນທີ່ນີ້ປິດບັນຊີແລ້ວ</b>
-            <span>ບໍ່ສາມາດບັນທຶກ/ແກ້ໄຂລາຍການວັນນີ້ໄດ້ — ຕ້ອງປົດລ໋ອກກ່ອນ</span>
-          </div>
-        </div>
+      <div id="lockStatusBox" style="display:none;">
+        <div class="lock-locked" id="lockStatusLocked" style="display:none;"><span style="font-size:18px;">&#128274;</span><div class="lock-text"><b>ວັນທີ່ນີ້ປິດບັນຊີແລ້ວ</b><span>ຕ້ອງປົດລ໋ອກກ່ອນ</span></div></div>
         <div class="unlock-row" id="unlockRow" style="display:none;">
-          <input type="password" id="unlockPassword" placeholder="ລະຫັດຜ່ານຜູ້ບໍລິຫານ" inputmode="numeric">
-          <button type="button" class="unlock-btn" onclick="submitUnlock()">
-            <span id="unlockBtnLabel">ປົດລ໋ອກ</span>
-          </button>
+          <input type="password" id="unlockPw" placeholder="ລະຫັດຜ່ານ" inputmode="numeric">
+          <button type="button" class="unlock-btn" onclick="submitUnlock()"><span id="unlockLbl">ປົດລ໋ອກ</span></button>
         </div>
       </div>
-
-      <label class="close-day-row" id="closeDayRow">
-        <input type="checkbox" id="open_closed">
-        <span><b>ປິດວັນນີ້</b> — ຫຼັງປິດແລ້ວ ຈະບໍ່ສາມາດບັນທຶກ/ແກ້ໄຂລາຍການວັນນີ້ໄດ້ອີກ (ຍົກເວັ້ນປົດລ໋ອກດ້ວຍລະຫັດຜ່ານ)</span>
-      </label>
-
-      <button type="button" class="submit-btn" id="openingSubmitBtn" onclick="submitOpening()">
-        <span id="openingSubmitLabel">✓ ບັນທຶກ</span>
-      </button>
+      <label class="close-day-row" id="closeDayRow"><input type="checkbox" id="open_closed"><span><b>ປິດວັນນີ້</b> — ຫຼັງປິດຕ້ອງໃຊ້ລະຫັດຜ່ານຈຶ່ງແກ້ໄຂໄດ້</span></label>
+      <button type="button" class="submit-btn" onclick="submitOpening()"><span id="openSubmitLbl">&#10003; ບັນທຶກ</span></button>
     </div>
   </div>
 </div>
 
-<!-- ===== History Modal ===== -->
-<div class="modal-overlay" id="historyOverlay" onclick="if(event.target===this) closeHistoryModal()">
+<!-- History Modal -->
+<div class="modal-overlay" id="historyOverlay" onclick="if(event.target===this)closeHistoryModal()">
   <div class="modal-card">
-    <div class="modal-head">
-      <h3>ປະຫວັດທຸລະກຳ</h3>
-      <button type="button" class="modal-close" onclick="closeHistoryModal()">✕</button>
-    </div>
+    <div class="modal-head"><h3>ປະຫວັດທຸລະກຳ</h3><button type="button" class="modal-close" onclick="closeHistoryModal()">&#10005;</button></div>
     <div class="modal-body">
-      <div class="type-chips" id="historyTypeChips" style="margin-bottom:14px;">
-        <div class="type-chip active" data-value="transfer" onclick="switchHistoryType(this)">ໂອນເງິນ</div>
-        <div class="type-chip" data-value="exchange" onclick="switchHistoryType(this)">ແລກປ່ຽນ</div>
-        <div class="type-chip" data-value="expense" onclick="switchHistoryType(this)">ລາຍຈ່າຍ</div>
+      <div class="type-chips" id="histTypeChips" style="margin-bottom:14px;">
+        <div class="type-chip active" data-value="transfer" onclick="switchHistType(this)">ໂອນ</div>
+        <div class="type-chip" data-value="exchange" onclick="switchHistType(this)">ແລກ</div>
+        <div class="type-chip" data-value="expense" onclick="switchHistType(this)">ລາຍຈ່າຍ</div>
       </div>
-
-      <button type="button" class="filter-toggle-btn" onclick="toggleHistoryFilter()">
-        <span id="filterToggleIcon">▾</span> ກອງລະອຽດ
-      </button>
-
-      <div class="history-filter-box" id="historyFilterBox" style="display:none;">
+      <button type="button" class="filter-toggle-btn" onclick="toggleHF()"><span id="hfIcon">&#9660;</span> ກອງ</button>
+      <div class="hfbox" id="hfBox" style="display:none;">
         <div class="field-grid" style="margin-bottom:10px;">
-          <div class="field" style="margin-bottom:0;">
-            <label>ຈາກວັນທີ່</label>
-            <input type="date" id="hf_dateFrom">
-          </div>
-          <div class="field" style="margin-bottom:0;">
-            <label>ຫາວັນທີ່</label>
-            <input type="date" id="hf_dateTo">
-          </div>
+          <div class="field" style="margin-bottom:0;"><label>ຈາກ</label><input type="date" id="hf_from"></div>
+          <div class="field" style="margin-bottom:0;"><label>ຫາ</label><input type="date" id="hf_to"></div>
         </div>
-        <div class="field-grid" style="margin-bottom:10px;">
-          <div class="field" style="margin-bottom:0;">
-            <label>ຈຳນວນເງິນ ຕັ່ງແຕ່</label>
-            <input type="text" id="hf_amountMin" class="mono-input money-fmt" inputmode="numeric" placeholder="0">
-          </div>
-          <div class="field" style="margin-bottom:0;">
-            <label>ຈຳນວນເງິນ ເຖິງ</label>
-            <input type="text" id="hf_amountMax" class="mono-input money-fmt" inputmode="numeric" placeholder="ບໍ່ຈຳກັດ">
-          </div>
-        </div>
-        <div class="field" style="margin-bottom:10px;">
-          <label>ປະເພດຍ່ອຍ</label>
-          <select id="hf_subType">
-            <option value="">ທັງໝົດ</option>
-          </select>
-        </div>
+        <div class="field" style="margin-bottom:10px;"><label>ປະເພດ</label><select id="hf_sub"><option value="">ທັງໝົດ</option></select></div>
         <div class="filter-action-row">
-          <button type="button" class="filter-apply-btn" onclick="applyHistoryFilter()">ນຳໃຊ້ຕົວກອງ</button>
-          <button type="button" class="filter-clear-btn" onclick="clearHistoryFilter()">ລ້າງ</button>
+          <button type="button" class="filter-apply-btn" onclick="applyHF()">ນຳໃຊ້</button>
+          <button type="button" class="filter-clear-btn" onclick="clearHF()">ລ້າງ</button>
         </div>
       </div>
-
-      <div id="historyList"></div>
+      <div id="histList"></div>
     </div>
   </div>
 </div>
 
 <script>
-  const API_URL = 'https://script.google.com/macros/s/AKfycbzbBSy_vIFkj3A9Q5j0ZDUwF-t8oszRt2kFMz9cB6OsaMqiI0t__syteoP_hM4Mt_Zu/exec';
-  const BRANCH = 'naonua';
-  const BRANCH_LABELS = { naonua: 'ສາຂາໜາວເໜືອ' };
-  document.addEventListener('DOMContentLoaded', () => {
-    const lbl = document.getElementById('branchLabel');
-    if(lbl) lbl.textContent = BRANCH_LABELS[BRANCH] || BRANCH;
-  });
+const API='https://script.google.com/macros/s/AKfycbzbBSy_vIFkj3A9Q5j0ZDUwF-t8oszRt2kFMz9cB6OsaMqiI0t__syteoP_hM4Mt_Zu/exec';
+const BRANCH='naonua';
+const today=new Date().toISOString().slice(0,10);
+let tPay=null,tRec=null,curTab='transfer',exchType='buy_thb',xCurr='LAK';
+let stock={amountThb:0,valueLak:0,avgCost:0,alertLevel:'normal'};
 
-  let currentTab = 'transfer';
-  let transferType = 'lak_lak';
-  let exchangeType = 'buy_thb';
-  let expenseCurrency = 'LAK';
-  let x_wallet = 'cash_lak';
+// Format
+function fmt(n){return Math.round(Number(n)||0).toLocaleString();}
+function unf(s){return Number(String(s||'').replace(/[^\d]/g,''))||0;}
+function fmtEl(el){let r=el.value.replace(/[^\d]/g,'');el.value=r?Number(r).toLocaleString('en-US'):'';}
+document.querySelectorAll('.mfmt').forEach(el=>el.addEventListener('input',()=>fmtEl(el)));
 
-  const today = new Date().toISOString().slice(0,10);
-  ['t_date','e_date','x_date'].forEach(id => document.getElementById(id).valueAsDate = new Date());
+function toast(msg,err){const t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(err?' error':'')+' show';setTimeout(()=>t.classList.remove('show'),2800);}
 
-  // ===== ໝາຍຈຸດອັດຕະໂນມັດ =====
-  function formatMoneyInput(el){
-    let raw = el.value.replace(/[^\d]/g, '');
-    if(raw === ''){ el.value = ''; return; }
-    el.value = Number(raw).toLocaleString('en-US');
+// Tab
+function switchTab(tab){curTab=tab;document.querySelectorAll('.main-tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===tab));document.querySelectorAll('[data-tabpanel]').forEach(p=>{p.style.display=p.dataset.tabpanel===tab?'block':'none';});loadRecent();}
+
+// =====================
+// TRANSFER: ໃໝ່
+// =====================
+// Map pay+receive → backend params
+function resolveLogic(pay,rec){
+  if(!pay||!rec)return null;
+  const pc=pay.split('_')[1],rc=rec.split('_')[1];
+  const hasExch=pc!==rc;
+  let ttype;
+  if(pc==='thb'&&rc==='lak')ttype='thb_lak';
+  else if(pc==='lak'&&rc==='thb')ttype='lak_thb';
+  else ttype='lak_lak';
+  const wlbls={cash_lak:'ສົດ ₭',cash_thb:'ສົດ ฿',bank_lak:'ໂອນ ₭',bank_thb:'ໂອນ ฿'};
+  return{ttype,inCurr:pc,outCurr:rc,hasExch,walletIn:pay,walletOut:rec,unit:pc==='thb'?'THB':'KIP',amtLbl:pc==='thb'?'ຈຳນວນບາດ (Slip)':'ຈຳນວນກີບ (Slip)',wIn:wlbls[pay]||pay,wOut:wlbls[rec]||rec};
+}
+
+function selPay(el){
+  document.querySelectorAll('#payChips .type-chip').forEach(c=>c.classList.remove('act-thb','act-lak'));
+  el.classList.add(el.dataset.pay.endsWith('thb')?'act-thb':'act-lak');
+  tPay=el.dataset.pay; updateTUI();
+}
+function selRec(el){
+  document.querySelectorAll('#recChips .type-chip').forEach(c=>c.classList.remove('act-thb','act-lak'));
+  el.classList.add(el.dataset.rec.endsWith('thb')?'act-thb':'act-lak');
+  tRec=el.dataset.rec; updateTUI();
+}
+
+function updateTUI(){
+  const l=resolveLogic(tPay,tRec);
+  if(l){
+    document.getElementById('t_amtWrap').setAttribute('data-unit',l.unit);
+    document.getElementById('t_amtLbl').innerHTML=l.amtLbl+' <span class="req">*</span>';
   }
-  function unformatMoney(str){
-    if(!str) return 0;
-    return Number(String(str).replace(/[^\d]/g, '')) || 0;
+  const rr=document.getElementById('t_rateRow');
+  if(l&&l.hasExch){rr.style.display='block';loadRateHint();}else rr.style.display='none';
+  updateFlowSum(l);
+}
+
+async function loadRateHint(){
+  try{const res=await fetch(`${API}?action=sabeoDailyRate&branch=${BRANCH}&date=${document.getElementById('t_date').value||today}`);const r=await res.json();if(r&&r.sellThbToLak){document.getElementById('t_refRate').textContent=fmt(r.sellThbToLak);if(!unf(document.getElementById('t_rate').value))document.getElementById('t_rate').value=Number(r.sellThbToLak).toLocaleString('en-US');}}catch{}
+}
+
+function updateFlowSum(l){
+  const s=document.getElementById('flowSum');
+  if(!l||!tPay||!tRec){s.classList.remove('show');return;}
+  const amt=unf(document.getElementById('t_amount').value);
+  const rate=unf(document.getElementById('t_rate').value);
+  let inA=amt,outA=amt,prof=0;
+  if(l.hasExch&&rate>0){
+    if(l.inCurr==='thb'){inA=amt;outA=amt*rate;}
+    else{inA=amt;outA=rate>0?amt/rate:0;prof=(rate-stock.avgCost)*outA;}
   }
-  document.querySelectorAll('.money-fmt').forEach(el => {
-    el.addEventListener('input', () => formatMoneyInput(el));
-  });
-
-  function fmt(n){ return Math.round(Number(n)||0).toLocaleString(); }
-
-  // ===== Tab switching =====
-  function switchTab(tab){
-    currentTab = tab;
-    document.querySelectorAll('.main-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
-    document.querySelectorAll('[data-tabpanel]').forEach(p => {
-      p.style.display = p.dataset.tabpanel === tab ? 'block' : 'none';
-    });
-    loadRecent();
-  }
-
-  function showToast(msg, isError){
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className = 'toast' + (isError ? ' error' : '') + ' show';
-    setTimeout(()=> t.classList.remove('show'), 2600);
-  }
-
-  // ===== Transfer tab logic =====
-  let t_lakLakCurrency = 'lak';  // ສຳລັບປະເພດ lak_lak
-  let t_otherCurrency = 'thb';   // ສຳລັບປະເພດ thb_lak/lak_thb (ສະກຸນຝັ່ງທີ່ບໍ່ແມ່ນບັນຊີໄທ)
-
-  function updateTransferFields(){
-    const lakLakField = document.getElementById('t_lakLakCurrencyField');
-    const otherField = document.getElementById('t_otherCurrencyField');
-    const otherLabel = document.getElementById('t_otherCurrencyLabel');
-    const amountLabel = document.getElementById('t_amountLabel');
-    const amountUnit = document.getElementById('t_amountUnit');
-    const exchangeNote = document.getElementById('t_exchangeNote');
-    const exchangeNoteText = document.getElementById('t_exchangeNoteText');
-    const inLabel = document.getElementById('t_inLabel');
-    const outLabel = document.getElementById('t_outLabel');
-    const walletIn = document.getElementById('t_walletIn');
-    const walletOut = document.getElementById('t_walletOut');
-
-    lakLakField.style.display = transferType === 'lak_lak' ? 'block' : 'none';
-    otherField.style.display = transferType !== 'lak_lak' ? 'block' : 'none';
-
-    if(transferType === 'lak_lak'){
-      amountLabel.innerHTML = 'ຍອດໂອນ <span class="req">*</span>';
-      amountUnit.setAttribute('data-unit', t_lakLakCurrency === 'thb' ? 'THB' : 'KIP');
-      exchangeNote.style.display = 'none';
-      inLabel.innerHTML = '<span class="ic">↘</span> ເງິນເຂົ້າຮ້ານ — ລູກຄ້າເອົາມາໃຫ້';
-      outLabel.innerHTML = '<span class="ic">↗</span> ເງິນອອກຮ້ານ — ຈ່າຍ/ໂອນອອກໃຫ້ຜູ້ຮັບ';
-      walletIn.value = t_lakLakCurrency === 'thb' ? 'bank_thb' : 'cash_lak';
-      walletOut.value = t_lakLakCurrency === 'thb' ? 'bank_thb' : 'cash_lak';
-    } else if(transferType === 'thb_lak'){
-      otherLabel.textContent = 'ປະເພດເງິນທີ່ຜູ້ຮັບເອົາ';
-      amountLabel.innerHTML = 'ຈຳນວນບາດທີ່ເຂົ້າບັນຊີ (ຈາກ slip) <span class="req">*</span>';
-      amountUnit.setAttribute('data-unit', 'THB');
-      walletIn.value = 'bank_thb'; // ລັອກ 100% ບັນຊີໄທ
-      inLabel.innerHTML = '<span class="ic">↘</span> ເງິນເຂົ້າຮ້ານ — ບັນຊີບາດໄທ (ອັດຕະໂນມັດ)';
-      outLabel.innerHTML = '<span class="ic">↗</span> ເງິນອອກຮ້ານ — ຈ່າຍຜູ້ຮັບຢູ່ລາວ';
-      if(t_otherCurrency === 'lak'){
-        exchangeNoteText.textContent = 'ຜູ້ຮັບເອົາກີບ — ກະທົບສະຕັອກບາດ ແລະ ນັບກຳໄລ';
-        exchangeNote.style.display = 'flex';
-        loadRateIntoTransferForm();
-      } else {
-        exchangeNote.style.display = 'none';
-      }
-    } else { // lak_thb
-      otherLabel.textContent = 'ປະເພດເງິນທີ່ຮັບຈາກລູກຄ້າ';
-      amountLabel.innerHTML = 'ຈຳນວນບາດທີ່ໂອນອອກ (ຕ້ອງສົ່ງອອກ) <span class="req">*</span>';
-      amountUnit.setAttribute('data-unit', 'THB');
-      walletOut.value = 'bank_thb'; // ລັອກ 100% ບັນຊີໄທ
-      outLabel.innerHTML = '<span class="ic">↗</span> ເງິນອອກຮ້ານ — ບັນຊີບາດໄທ (ອັດຕະໂນມັດ)';
-      inLabel.innerHTML = '<span class="ic">↘</span> ເງິນເຂົ້າຮ້ານ — ຮັບຈາກລູກຄ້າຢູ່ລາວ';
-      if(t_otherCurrency === 'lak'){
-        exchangeNoteText.textContent = 'ຮັບກີບຈາກລູກຄ້າ — ກະທົບສະຕັອກບາດ ແລະ ນັບກຳໄລ';
-        exchangeNote.style.display = 'flex';
-        loadRateIntoTransferForm();
-      } else {
-        exchangeNote.style.display = 'none';
-      }
-    }
-  }
-
-  async function loadRateIntoTransferForm(){
-    try {
-      const date = document.getElementById('t_date').value || today;
-      const res = await fetch(`${API_URL}?action=sabeoDailyRate&branch=${BRANCH}&date=${date}`);
-      const rate = await res.json();
-      if(rate && rate.sellThbToLak){
-        document.getElementById('t_customerRate').value = Number(rate.sellThbToLak).toLocaleString('en-US');
-      }
-    } catch(err){ /* ບໍ່ມີເລດອ້າງອີງ - ປ່ອຍຫວ່າງໃຫ້ພິມເອງ */ }
-  }
-
-  function selectTransferType(el){
-    document.querySelectorAll('#transferTypeChips .type-chip').forEach(c => c.classList.remove('active'));
-    el.classList.add('active');
-    transferType = el.dataset.value;
-    const lakField = document.getElementById('t_feeLak').parentElement.parentElement;
-    updateTransferFields();
-  }
-
-  function selectLakLakCurrency(el){
-    document.querySelectorAll('#t_lakLakCurrencyChips .type-chip').forEach(c => c.classList.remove('active'));
-    el.classList.add('active');
-    t_lakLakCurrency = el.dataset.value;
-    updateTransferFields();
-  }
-
-  function selectOtherCurrency(el){
-    document.querySelectorAll('#t_otherCurrencyChips .type-chip').forEach(c => c.classList.remove('active'));
-    el.classList.add('active');
-    t_otherCurrency = el.dataset.value;
-    updateTransferFields();
-  }
-
-  function selectWallet(el, varName){
-    const grid = el.parentElement;
-    grid.querySelectorAll('.wallet-chip').forEach(c => c.classList.remove('active'));
-    el.classList.add('active');
-    if(varName === 'x_wallet') x_wallet = el.dataset.value;
-  }
-
-  updateTransferFields();
-  document.getElementById('t_date').addEventListener('change', function(){
-    if(transferType !== 'lak_lak' && t_otherCurrency === 'lak'){
-      loadRateIntoTransferForm();
-    }
-  });
-
-  document.getElementById('transferForm').addEventListener('submit', async function(e){
-    e.preventDefault();
-    const btn = document.getElementById('transferSubmitBtn');
-    const label = document.getElementById('transferSubmitLabel');
-
-    let inCurrency, outCurrency, knownSide;
-    const knownAmount = unformatMoney(document.getElementById('t_knownAmount').value);
-
-    if(transferType === 'lak_lak'){
-      inCurrency = t_lakLakCurrency;
-      outCurrency = t_lakLakCurrency;
-      knownSide = 'out';
-    } else if(transferType === 'thb_lak'){
-      inCurrency = 'thb';            // ບັນຊີໄທ ລັອກ 100%
-      outCurrency = t_otherCurrency; // ຜູ້ຮັບເລືອກ
-      knownSide = 'in';              // ຮູ້ຈຳນວນບາດແທ້ (ຈາກ slip)
-    } else { // lak_thb
-      outCurrency = 'thb';           // ບັນຊີໄທ ລັອກ 100%
-      inCurrency = t_otherCurrency;  // ຮັບຈາກລູກຄ້າ
-      knownSide = 'out';             // ຮູ້ຈຳນວນບາດທີ່ຕ້ອງໂອນອອກແທ້
-    }
-
-    const isExchange = inCurrency !== outCurrency;
-    const customerRate = isExchange ? unformatMoney(document.getElementById('t_customerRate').value) : 0;
-
-    const order = {
-      branch: BRANCH,
-      transferType: transferType,
-      date: document.getElementById('t_date').value,
-      inCurrency: inCurrency,
-      outCurrency: outCurrency,
-      knownAmount: knownAmount,
-      knownSide: knownSide,
-      customerRate: customerRate,
-      feeLak: unformatMoney(document.getElementById('t_feeLak').value),
-      feeThb: unformatMoney(document.getElementById('t_feeThb').value),
-      walletIn: document.getElementById('t_walletIn').value,
-      walletOut: document.getElementById('t_walletOut').value,
-      note: document.getElementById('t_note').value.trim()
-    };
-
-    if(order.knownAmount <= 0){
-      showToast('ກະລຸນາປ້ອນຈຳນວນເງິນ', true);
-      return;
-    }
-    if(isExchange && customerRate <= 0){
-      showToast('ກະລຸນາປ້ອນເລດທີ່ໃຊ້', true);
-      return;
-    }
-    if(order.feeLak <= 0 && order.feeThb <= 0){
-      showToast('ກະລຸນາປ້ອນຄ່າທຳນຽມ', true);
-      return;
-    }
-
-    btn.disabled = true;
-    const orig = label.textContent;
-    label.textContent = 'ກຳລັງບັນທຶກ...';
-
-    try {
-      const res = await fetch(API_URL, { method:'POST', body: JSON.stringify({ action:'sabeoAddTransfer', order }) });
-      const result = await res.json();
-      if(result.success){
-        const profitMsg = result.profit ? ' (ກຳໄລແຝງ ' + fmt(result.profit) + ' ກີບ)' : '';
-        showToast('✓ ບັນທຶກໂອນເງິນສຳເລັດແລ້ວ' + profitMsg);
-        document.getElementById('transferForm').reset();
-        document.getElementById('t_date').valueAsDate = new Date();
-        updateTransferFields();
-        await loadStock();
-        loadRecent();
-      } else {
-        showToast('ມີຂໍ້ຜິດພາດ: ' + (result.error||'ບໍ່ຮູ້ສາເຫດ'), true);
-      }
-    } catch(err){
-      showToast('ເຊື່ອມຕໍ່ບໍ່ໄດ້ ກະລຸນາລອງໃໝ່', true);
-    } finally {
-      btn.disabled = false;
-      label.textContent = orig;
-    }
-  });
-
-  // ===== Exchange tab logic =====
-  let currentStock = { amountThb: 0, valueLak: 0, avgCost: 0, alertLevel: 'normal' };
-
-  function updateStockBadge(){
-    const alertLevel = currentStock.alertLevel || 'normal';
-    const alertText = alertLevel === 'low' ? ' ⚠ ໃກ້ໝົດ' : (alertLevel === 'high' ? ' ⚠ ສະສົມຫຼາຍ' : '');
-    const text = 'ສະຕັອກບາດ: ' + fmt(currentStock.amountThb) + ' ฿' + alertText;
-    ['stockBadge', 'stockBadgeTransfer'].forEach(id => {
-      const el = document.getElementById(id);
-      if(!el) return;
-      el.textContent = text;
-      el.className = 'stock-badge' + (alertLevel !== 'normal' ? ' ' + alertLevel : '');
-    });
-  }
-
-  async function loadStock(){
-    try {
-      const res = await fetch(`${API_URL}?action=sabeoSummary&branch=${BRANCH}&filterType=all`);
-      const data = await res.json();
-      if(data.currentStock){
-        currentStock = data.currentStock;
-        updateStockBadge();
-        updateExchangeLabels();
-      }
-    } catch(err){ /* ignore */ }
-  }
-
-  function updateExchangeLabels(){
-    const rateLabel = document.getElementById('e_rateLabel');
-    const spreadLabel = document.getElementById('pv_spreadLabel');
-    const inLabel = document.getElementById('e_inLabel');
-    const outLabel = document.getElementById('e_outLabel');
-    const costHint = document.getElementById('e_costHint');
-
-    if(exchangeType === 'buy_thb'){
-      rateLabel.innerHTML = 'ລາຄາໃຫ້ລູກຄ້າ (ກີບ/ບາດ) <span class="req">*</span>';
-      spreadLabel.textContent = 'ກຳໄລ (ຈະຮັບຮູ້ຕອນຂາຍບາດນີ້ອອກ)';
-      inLabel.innerHTML = '<span class="ic">↘</span> ເງິນເຂົ້າຮ້ານ (ບາດທີ່ໄດ້ຈາກລູກຄ້າ)';
-      outLabel.innerHTML = '<span class="ic">↗</span> ເງິນອອກຮ້ານ (ກີບທີ່ຈ່າຍລູກຄ້າ)';
-      costHint.style.display = 'block';
-    } else {
-      rateLabel.innerHTML = 'ລາຄາໃຫ້ລູກຄ້າ (ກີບ/ບາດ) <span class="req">*</span>';
-      spreadLabel.textContent = 'ກຳໄລສ່ວນຕ່າງ';
-      inLabel.innerHTML = '<span class="ic">↘</span> ເງິນເຂົ້າຮ້ານ (ກີບທີ່ໄດ້ຈາກລູກຄ້າ)';
-      outLabel.innerHTML = '<span class="ic">↗</span> ເງິນອອກຮ້ານ (ບາດທີ່ຈ່າຍລູກຄ້າ)';
-      costHint.style.display = 'block';
-    }
-    document.getElementById('e_avgCostDisplay').textContent = currentStock.amountThb > 0 ? fmt(currentStock.avgCost) : 'ຍັງບໍ່ມີສະຕັອກ';
-    updateProfitPreview();
-  }
-
-  function selectExchangeType(el){
-    document.querySelectorAll('#exchangeTypeChips .type-chip').forEach(c => c.classList.remove('active'));
-    el.classList.add('active');
-    exchangeType = el.dataset.value;
-    updateExchangeLabels();
-  }
-
-  function updateProfitPreview(){
-    const amount = unformatMoney(document.getElementById('e_amount').value);
-    const customerRate = unformatMoney(document.getElementById('e_customerRate').value);
-    const extraFee = unformatMoney(document.getElementById('e_extraFee').value);
-    const preview = document.getElementById('profitPreview');
-
-    if(amount > 0 && customerRate > 0){
-      let spread = 0;
-      if(exchangeType === 'sell_thb'){
-        spread = (customerRate - currentStock.avgCost) * amount;
-      }
-      // buy_thb: ບໍ່ມີກຳໄລທັນທີ (spread = 0) - ມັນຄືການຊື້ເຂົ້າສະຕັອກ
-      const total = spread + extraFee;
-      document.getElementById('pv_spread').textContent = fmt(spread) + ' ກີບ';
-      document.getElementById('pv_fee').textContent = fmt(extraFee) + ' ກີບ';
-      document.getElementById('pv_total').textContent = fmt(total) + ' ກີບ';
-      preview.classList.add('show');
-    } else {
-      preview.classList.remove('show');
-    }
-  }
-  ['e_amount','e_customerRate','e_extraFee'].forEach(id => {
-    document.getElementById(id).addEventListener('input', updateProfitPreview);
-  });
-
-  document.getElementById('exchangeForm').addEventListener('submit', async function(e){
-    e.preventDefault();
-    const btn = document.getElementById('exchangeSubmitBtn');
-    const label = document.getElementById('exchangeSubmitLabel');
-
-    const order = {
-      branch: BRANCH,
-      exchangeType: exchangeType,
-      date: document.getElementById('e_date').value,
-      amount: unformatMoney(document.getElementById('e_amount').value),
-      customerRate: unformatMoney(document.getElementById('e_customerRate').value),
-      extraFee: unformatMoney(document.getElementById('e_extraFee').value),
-      walletIn: document.getElementById('e_walletIn').value,
-      walletOut: document.getElementById('e_walletOut').value,
-      note: document.getElementById('e_note').value.trim()
-    };
-
-    if(order.amount <= 0 || order.customerRate <= 0){
-      showToast('ກະລຸນາປ້ອນຈຳນວນບາດ ແລະ ລາຄາໃຫ້ຄົບ', true);
-      return;
-    }
-    if(exchangeType === 'sell_thb' && order.amount > currentStock.amountThb){
-      showToast('⚠ ສະຕັອກບາດບໍ່ພໍ (ມີຢູ່ ' + fmt(currentStock.amountThb) + ' ບາດ)', true);
-      return;
-    }
-
-    btn.disabled = true;
-    const orig = label.textContent;
-    label.textContent = 'ກຳລັງບັນທຶກ...';
-
-    try {
-      const res = await fetch(API_URL, { method:'POST', body: JSON.stringify({ action:'sabeoAddExchange', order }) });
-      const result = await res.json();
-      if(result.success){
-        const profitMsg = exchangeType === 'sell_thb' ? ' (ກຳໄລ ' + fmt(result.totalProfit) + ' ກີບ)' : '';
-        showToast('✓ ບັນທຶກແລກປ່ຽນສຳເລັດແລ້ວ' + profitMsg);
-        document.getElementById('exchangeForm').reset();
-        document.getElementById('e_date').valueAsDate = new Date();
-        document.getElementById('profitPreview').classList.remove('show');
-        await loadStock();
-        loadRecent();
-      } else {
-        showToast('ມີຂໍ້ຜິດພາດ: ' + (result.error||'ບໍ່ຮູ້ສາເຫດ'), true);
-      }
-    } catch(err){
-      showToast('ເຊື່ອມຕໍ່ບໍ່ໄດ້ ກະລຸນາລອງໃໝ່', true);
-    } finally {
-      btn.disabled = false;
-      label.textContent = orig;
-    }
-  });
-
-  // ===== Expense tab logic =====
-  function selectCurrency(el){
-    document.querySelectorAll('#x_currencyChips .type-chip').forEach(c => c.classList.remove('active'));
-    el.classList.add('active');
-    expenseCurrency = el.dataset.value;
-    document.getElementById('x_amountUnit').setAttribute('data-unit', expenseCurrency === 'THB' ? 'THB' : 'KIP');
-  }
-
-  document.getElementById('expenseForm').addEventListener('submit', async function(e){
-    e.preventDefault();
-    const btn = document.getElementById('expenseSubmitBtn');
-    const label = document.getElementById('expenseSubmitLabel');
-
-    const order = {
-      branch: BRANCH,
-      category: document.getElementById('x_category').value,
-      description: document.getElementById('x_description').value.trim(),
-      date: document.getElementById('x_date').value,
-      amount: unformatMoney(document.getElementById('x_amount').value),
-      currency: expenseCurrency,
-      wallet: x_wallet,
-      note: document.getElementById('x_note').value.trim()
-    };
-
-    if(!order.description || order.amount <= 0){
-      showToast('ກະລຸນາປ້ອນລາຍລະອຽດ ແລະ ຈຳນວນເງິນ', true);
-      return;
-    }
-
-    btn.disabled = true;
-    const orig = label.textContent;
-    label.textContent = 'ກຳລັງບັນທຶກ...';
-
-    try {
-      const res = await fetch(API_URL, { method:'POST', body: JSON.stringify({ action:'sabeoAddExpense', order }) });
-      const result = await res.json();
-      if(result.success){
-        showToast('✓ ບັນທຶກລາຍຈ່າຍສຳເລັດແລ້ວ');
-        document.getElementById('expenseForm').reset();
-        document.getElementById('x_date').valueAsDate = new Date();
-        loadRecent();
-      } else {
-        showToast('ມີຂໍ້ຜິດພາດ: ' + (result.error||'ບໍ່ຮູ້ສາເຫດ'), true);
-      }
-    } catch(err){
-      showToast('ເຊື່ອມຕໍ່ບໍ່ໄດ້ ກະລຸນາລອງໃໝ່', true);
-    } finally {
-      btn.disabled = false;
-      label.textContent = orig;
-    }
-  });
-
-  // ===== Recent list =====
-  const TRANSFER_TYPE_LABELS = { lak_lak:'ລາວ→ລາວ', thb_lak:'ໄທ→ລາວ', lak_thb:'ລາວ→ໄທ' };
-  const EXCHANGE_TYPE_LABELS = { buy_thb:'ຊື້ບາດ', sell_thb:'ຂາຍບາດ' };
-
-  function escapeHtml(str){
-    if(!str) return '';
-    return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-  }
-
-  async function loadRecent(){
-    const list = document.getElementById('recentList');
-    list.innerHTML = '<div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>';
-    try {
-      const res = await fetch(`${API_URL}?action=sabeoSearch&type=${currentTab}&branch=${BRANCH}&page=1&pageSize=8`);
-      const result = await res.json();
-      const items = result.items || [];
-      if(items.length === 0){
-        list.innerHTML = '<div class="empty-state">ຍັງບໍ່ມີລາຍການ — ເລີ່ມບັນທຶກລາຍການທຳອິດເລີຍ</div>';
-        return;
-      }
-      list.innerHTML = items.map(renderRecentItem).join('');
-    } catch(err){
-      list.innerHTML = '<div class="empty-state">ໂຫຼດລາຍການບໍ່ໄດ້ — ກວດສອບການເຊື່ອມຕໍ່</div>';
-    }
-  }
-
-  function renderRecentItem(item){
-    if(currentTab === 'transfer'){
-      const totalFee = (Number(item['ຄ່າທຳນຽມ_ກີບ'])||0);
-      const feeThb = Number(item['ຄ່າທຳນຽມ_ບາດ'])||0;
-      const outAmount = Number(item['ຍອດອອກ'])||0;
-      const outCurrency = item['ສະກຸນອອກ'] === 'thb' ? 'ບາດ' : 'ກີບ';
-      return `
-        <div class="recent-item">
-          <div class="recent-tag">💸</div>
-          <div class="recent-main">
-            <div class="recent-title-text">${TRANSFER_TYPE_LABELS[item['ປະເພດ']]||item['ປະເພດ']}</div>
-            <div class="recent-meta">${item['ວັນທີ']} · ຍອດໂອນ ${fmt(outAmount)} ${outCurrency}</div>
-          </div>
-          <div class="recent-amount profit">
-            <div class="num">${fmt(totalFee)}${feeThb>0 ? ' + '+fmt(feeThb)+'฿' : ''}</div>
-            <div class="lbl">ຄ່າທຳນຽມ</div>
-          </div>
-        </div>`;
-    }
-    if(currentTab === 'exchange'){
-      return `
-        <div class="recent-item">
-          <div class="recent-tag">💱</div>
-          <div class="recent-main">
-            <div class="recent-title-text">${EXCHANGE_TYPE_LABELS[item['ປະເພດ']]||item['ປະເພດ']}</div>
-            <div class="recent-meta">${item['ວັນທີ']} · ${fmt(item['ຈຳນວນບາດ'])} ບາດ @ ${fmt(item['ລາຄາໃຫ້ລູກຄ້າ'])}</div>
-          </div>
-          <div class="recent-amount profit">
-            <div class="num">${fmt(item['ກຳໄລລວມ'])}</div>
-            <div class="lbl">ກຳໄລ (ກີບ)</div>
-          </div>
-        </div>`;
-    }
-    // expense
-    return `
-      <div class="recent-item">
-        <div class="recent-tag">🧾</div>
-        <div class="recent-main">
-          <div class="recent-title-text">${escapeHtml(item['ໝວດໝູ່'])}</div>
-          <div class="recent-meta">${item['ວັນທີ']} · ${escapeHtml(item['ລາຍລະອຽດ'])}</div>
-        </div>
-        <div class="recent-amount">
-          <div class="num">${fmt(item['ຈຳນວນເງິນ'])}</div>
-          <div class="lbl">${item['ສະກຸນ']==='THB'?'ບາດ':'ກີບ'}</div>
-        </div>
-      </div>`;
-  }
-
-  // ===== Rate Modal =====
-  function openRateModal(){
-    document.getElementById('rate_date').valueAsDate = new Date();
-    document.getElementById('rateOverlay').classList.add('show');
-    loadRateHistory();
-  }
-  function closeRateModal(){ document.getElementById('rateOverlay').classList.remove('show'); }
-
-  async function loadRateHistory(){
-    const list = document.getElementById('rateHistoryList');
-    list.innerHTML = '<div class="empty-state">ກຳລັງໂຫຼດ...</div>';
-    try {
-      const res = await fetch(`${API_URL}?action=sabeoRateHistory&branch=${BRANCH}`);
-      const rows = await res.json();
-      if(!rows || rows.length === 0){
-        list.innerHTML = '<div class="empty-state">ຍັງບໍ່ມີປະຫວັດເລດ</div>';
-        return;
-      }
-      list.innerHTML = rows.slice(0, 10).map(r => `
-        <div class="rate-history-item">
-          <span class="rate-history-date">${r.date}</span>
-          <span class="rate-history-rates">
-            <span>ບາດ→ກີບ: <b>${fmt(r.sellThbToLak)}</b>/<b>${fmt(r.costThbToLak)}</b></span>
-            <span>ກີບ→ບາດ: <b>${fmt(r.sellLakToThb)}</b>/<b>${fmt(r.costLakToThb)}</b></span>
-          </span>
-        </div>
-      `).join('');
-    } catch(err){
-      list.innerHTML = '<div class="empty-state">ໂຫຼດບໍ່ໄດ້</div>';
-    }
-  }
-
-  async function submitRate(){
-    const btn = document.getElementById('rateSubmitBtn');
-    const label = document.getElementById('rateSubmitLabel');
-    const order = {
-      branch: BRANCH,
-      date: document.getElementById('rate_date').value,
-      sellThbToLak: unformatMoney(document.getElementById('rate_sellThbToLak').value),
-      costThbToLak: unformatMoney(document.getElementById('rate_costThbToLak').value),
-      sellLakToThb: unformatMoney(document.getElementById('rate_sellLakToThb').value),
-      costLakToThb: unformatMoney(document.getElementById('rate_costLakToThb').value)
-    };
-    btn.disabled = true;
-    label.textContent = 'ກຳລັງບັນທຶກ...';
-    try {
-      const res = await fetch(API_URL, { method:'POST', body: JSON.stringify({ action:'sabeoSetDailyRate', order }) });
-      const result = await res.json();
-      if(result.success){
-        showToast('✓ ບັນທຶກເລດປະຈຳວັນສຳເລັດແລ້ວ');
-        await loadRateHistory();
-      } else {
-        showToast('ມີຂໍ້ຜິດພາດ', true);
-      }
-    } catch(err){
-      showToast('ເຊື່ອມຕໍ່ບໍ່ໄດ້', true);
-    } finally {
-      btn.disabled = false;
-      label.textContent = '✓ ບັນທຶກເລດປະຈຳວັນ';
-    }
-  }
-
-  // ===== Opening Balance Modal =====
-  function openOpeningModal(){
-    document.getElementById('open_date').valueAsDate = new Date();
-    loadOpeningForDate();
-    document.getElementById('openingOverlay').classList.add('show');
-  }
-  function closeOpeningModal(){ document.getElementById('openingOverlay').classList.remove('show'); }
-
-  async function loadOpeningForDate(){
-    const date = document.getElementById('open_date').value;
-    document.getElementById('cashCheckResult').innerHTML = '';
-    try {
-      const res = await fetch(`${API_URL}?action=sabeoOpeningBalance&branch=${BRANCH}&date=${date}`);
-      const data = await res.json();
-      if(data){
-        document.getElementById('open_cashLak').value = Number(data.openCashLak||0).toLocaleString('en-US');
-        document.getElementById('open_cashThb').value = Number(data.openCashThb||0).toLocaleString('en-US');
-        document.getElementById('open_bankLak').value = Number(data.openBankLak||0).toLocaleString('en-US');
-        document.getElementById('open_bankThb').value = Number(data.openBankThb||0).toLocaleString('en-US');
-        document.getElementById('open_actualCashLak').value = data.actualCashLak!=='' && data.actualCashLak!=null ? Number(data.actualCashLak).toLocaleString('en-US') : '';
-        document.getElementById('open_actualCashThb').value = data.actualCashThb!=='' && data.actualCashThb!=null ? Number(data.actualCashThb).toLocaleString('en-US') : '';
-        document.getElementById('open_actualBankLak').value = data.actualBankLak!=='' && data.actualBankLak!=null ? Number(data.actualBankLak).toLocaleString('en-US') : '';
-        document.getElementById('open_actualBankThb').value = data.actualBankThb!=='' && data.actualBankThb!=null ? Number(data.actualBankThb).toLocaleString('en-US') : '';
-        document.getElementById('open_closed').checked = !!data.closed;
-      } else {
-        ['open_cashLak','open_cashThb','open_bankLak','open_bankThb','open_actualCashLak','open_actualCashThb','open_actualBankLak','open_actualBankThb'].forEach(id => document.getElementById(id).value = '');
-        document.getElementById('open_closed').checked = false;
-      }
-      updateLockStatusUI(!!(data && data.closed));
-      await loadCashCheck(date);
-    } catch(err){ /* ignore */ }
-  }
-
-  function updateLockStatusUI(isLocked){
-    const box = document.getElementById('lockStatusBox');
-    const lockedMsg = document.getElementById('lockStatusLocked');
-    const unlockRow = document.getElementById('unlockRow');
-    const closedCheckbox = document.getElementById('open_closed');
-    const closeDayRow = document.getElementById('closeDayRow');
-
-    if(isLocked){
-      box.style.display = 'block';
-      lockedMsg.style.display = 'flex';
-      unlockRow.style.display = 'flex';
-      closedCheckbox.disabled = true;
-      closeDayRow.style.opacity = '0.55';
-    } else {
-      box.style.display = 'none';
-      lockedMsg.style.display = 'none';
-      unlockRow.style.display = 'none';
-      closedCheckbox.disabled = false;
-      closeDayRow.style.opacity = '1';
-    }
-  }
-
-  async function submitUnlock(){
-    const date = document.getElementById('open_date').value;
-    const password = document.getElementById('unlockPassword').value;
-    const btn = document.querySelector('.unlock-btn');
-    const label = document.getElementById('unlockBtnLabel');
-
-    if(!password){
-      showToast('ກະລຸນາໃສ່ລະຫັດຜ່ານ', true);
-      return;
-    }
-
-    btn.disabled = true;
-    label.textContent = 'ກຳລັງກວດສອບ...';
-    try {
-      const res = await fetch(API_URL, { method:'POST', body: JSON.stringify({ action:'sabeoUnlockDate', order:{ branch: BRANCH, date: date, password: password } }) });
-      const result = await res.json();
-      if(result.success){
-        showToast('✓ ປົດລ໋ອກສຳເລັດແລ້ວ');
-        document.getElementById('unlockPassword').value = '';
-        await loadOpeningForDate();
-      } else {
-        showToast(result.error || 'ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ', true);
-      }
-    } catch(err){
-      showToast('ເຊື່ອມຕໍ່ບໍ່ໄດ້', true);
-    } finally {
-      btn.disabled = false;
-      label.textContent = 'ປົດລ໋ອກ';
-    }
-  }
-
-  async function loadCashCheck(date){
-    try {
-      const res = await fetch(`${API_URL}?action=sabeoCashCheck&branch=${BRANCH}&date=${date}`);
-      const data = await res.json();
-      const box = document.getElementById('cashCheckResult');
-      if(!data.hasOpening){
-        box.innerHTML = '';
-        return;
-      }
-      const rows = Object.keys(data.wallets).map(w => {
-        const info = data.wallets[w];
-        let diffHtml = '<span style="color:var(--ink-soft);">ຍັງບໍ່ໄດ້ນັບ</span>';
-        if(info.diff !== null){
-          const color = info.diff === 0 ? 'var(--good)' : (info.diff > 0 ? 'var(--good)' : 'var(--warn)');
-          const sign = info.diff > 0 ? '+' : '';
-          diffHtml = `<b style="color:${color};">${sign}${fmt(info.diff)}</b>`;
-        }
-        return `<div class="profit-preview-row"><span>${info.label} (ຄວນມີ ${fmt(info.expected)})</span>${diffHtml}</div>`;
-      }).join('');
-      box.innerHTML = `<div class="profit-preview show" style="margin-top:14px;">${rows}</div>`;
-    } catch(err){ /* ignore */ }
-  }
-
-  async function submitOpening(){
-    const btn = document.getElementById('openingSubmitBtn');
-    const label = document.getElementById('openingSubmitLabel');
-    const order = {
-      branch: BRANCH,
-      date: document.getElementById('open_date').value,
-      openCashLak: unformatMoney(document.getElementById('open_cashLak').value),
-      openCashThb: unformatMoney(document.getElementById('open_cashThb').value),
-      openBankLak: unformatMoney(document.getElementById('open_bankLak').value),
-      openBankThb: unformatMoney(document.getElementById('open_bankThb').value),
-      actualCashLak: document.getElementById('open_actualCashLak').value ? unformatMoney(document.getElementById('open_actualCashLak').value) : '',
-      actualCashThb: document.getElementById('open_actualCashThb').value ? unformatMoney(document.getElementById('open_actualCashThb').value) : '',
-      actualBankLak: document.getElementById('open_actualBankLak').value ? unformatMoney(document.getElementById('open_actualBankLak').value) : '',
-      actualBankThb: document.getElementById('open_actualBankThb').value ? unformatMoney(document.getElementById('open_actualBankThb').value) : '',
-      closed: document.getElementById('open_closed').checked
-    };
-    btn.disabled = true;
-    label.textContent = 'ກຳລັງບັນທຶກ...';
-    try {
-      const res = await fetch(API_URL, { method:'POST', body: JSON.stringify({ action:'sabeoSetOpeningBalance', order }) });
-      const result = await res.json();
-      if(result.success){
-        showToast(order.closed ? '✓ ບັນທຶກ ແລະ ປິດວັນສຳເລັດແລ້ວ' : '✓ ບັນທຶກສຳເລັດແລ້ວ');
-        await loadOpeningForDate();
-      } else {
-        showToast('ມີຂໍ້ຜິດພາດ', true);
-      }
-    } catch(err){
-      showToast('ເຊື່ອມຕໍ່ບໍ່ໄດ້', true);
-    } finally {
-      btn.disabled = false;
-      label.textContent = '✓ ບັນທຶກ';
-    }
-  }
-
-  // ===== History Modal =====
-  let historyType = 'transfer';
-  let historyFilterActive = {};
-
-  const SUBTYPE_OPTIONS = {
-    transfer: [['lak_lak','ລາວ→ລາວ'],['thb_lak','ໄທ→ລາວ'],['lak_thb','ລາວ→ໄທ']],
-    exchange: [['buy_thb','ຊື້ບາດ'],['sell_thb','ຂາຍບາດ']],
-    expense: []
-  };
-
-  function openHistoryModal(){
-    document.getElementById('historyOverlay').classList.add('show');
-    updateSubTypeOptions();
-    loadHistory();
-  }
-  function closeHistoryModal(){ document.getElementById('historyOverlay').classList.remove('show'); }
-
-  function switchHistoryType(el){
-    document.querySelectorAll('#historyTypeChips .type-chip').forEach(c => c.classList.remove('active'));
-    el.classList.add('active');
-    historyType = el.dataset.value;
-    historyFilterActive = {}; // ລ້າງຕົວກອງເມື່ອປ່ຽນປະເພດ (subType ບໍ່ກົງກັນຂ້າມປະເພດ)
-    clearFilterInputs();
-    updateSubTypeOptions();
-    loadHistory();
-  }
-
-  function updateSubTypeOptions(){
-    const sel = document.getElementById('hf_subType');
-    const opts = SUBTYPE_OPTIONS[historyType] || [];
-    sel.innerHTML = '<option value="">ທັງໝົດ</option>' + opts.map(([v,l]) => `<option value="${v}">${l}</option>`).join('');
-    sel.parentElement.style.display = opts.length ? 'block' : 'none';
-  }
-
-  function toggleHistoryFilter(){
-    const box = document.getElementById('historyFilterBox');
-    const icon = document.getElementById('filterToggleIcon');
-    const isOpen = box.style.display !== 'none';
-    box.style.display = isOpen ? 'none' : 'block';
-    icon.textContent = isOpen ? '▾' : '▴';
-  }
-
-  function clearFilterInputs(){
-    ['hf_dateFrom','hf_dateTo','hf_amountMin','hf_amountMax'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('hf_subType').value = '';
-  }
-
-  function applyHistoryFilter(){
-    historyFilterActive = {
-      dateFrom: document.getElementById('hf_dateFrom').value,
-      dateTo: document.getElementById('hf_dateTo').value,
-      amountMin: unformatMoney(document.getElementById('hf_amountMin').value) || '',
-      amountMax: unformatMoney(document.getElementById('hf_amountMax').value) || '',
-      subType: document.getElementById('hf_subType').value
-    };
-    loadHistory();
-  }
-
-  function clearHistoryFilter(){
-    clearFilterInputs();
-    historyFilterActive = {};
-    loadHistory();
-  }
-
-  async function loadHistory(){
-    const list = document.getElementById('historyList');
-    list.innerHTML = '<div class="skeleton"></div><div class="skeleton"></div>';
-    const savedTab = currentTab;
-    currentTab = historyType;
-    try {
-      const f = historyFilterActive;
-      let url = `${API_URL}?action=sabeoSearch&type=${historyType}&branch=${BRANCH}&page=1&pageSize=30`;
-      if(f.dateFrom) url += `&dateFrom=${f.dateFrom}`;
-      if(f.dateTo) url += `&dateTo=${f.dateTo}`;
-      if(f.amountMin !== '' && f.amountMin !== undefined) url += `&amountMin=${f.amountMin}`;
-      if(f.amountMax !== '' && f.amountMax !== undefined) url += `&amountMax=${f.amountMax}`;
-      if(f.subType) url += `&subType=${f.subType}`;
-
-      const res = await fetch(url);
-      const result = await res.json();
-      const items = result.items || [];
-      list.innerHTML = items.length ? items.map(renderRecentItem).join('') : '<div class="empty-state">ບໍ່ມີລາຍການ</div>';
-    } catch(err){
-      list.innerHTML = '<div class="empty-state">ໂຫຼດບໍ່ໄດ້</div>';
-    } finally {
-      currentTab = savedTab;
-    }
-  }
-
-  // Initial load
-  loadStock();
-  loadRecent();
+  const cu=l.inCurr==='thb'?'฿':'₭';
+  const co=l.outCurr==='thb'?'฿':'₭';
+  document.getElementById('fs_in').textContent=amt>0?fmt(inA)+' '+cu:'—';
+  document.getElementById('fs_out').textContent=amt>0?fmt(outA)+' '+co:'—';
+  document.getElementById('fs_wlt').innerHTML=`${l.wIn} &#8593;&nbsp;&nbsp;${l.wOut} &#8595;`;
+  const pr=document.getElementById('fs_profRow');
+  if(l.hasExch&&prof>0){pr.style.display='flex';document.getElementById('fs_prof').textContent=fmt(prof)+' ₭';}else pr.style.display='none';
+  s.classList.add('show');
+}
+
+['t_amount','t_rate'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('input',()=>updateFlowSum(resolveLogic(tPay,tRec)));});
+document.getElementById('t_date').addEventListener('change',()=>{const l=resolveLogic(tPay,tRec);if(l&&l.hasExch)loadRateHint();});
+
+document.getElementById('transferForm').addEventListener('submit',async function(e){
+  e.preventDefault();
+  const l=resolveLogic(tPay,tRec);
+  if(!l){toast('ເລືອກ "ຈ່າຍດ້ວຍ" ແລະ "ຜູ້ຮັບ" ກ່ອນ',true);return;}
+  const amt=unf(document.getElementById('t_amount').value);
+  const rate=l.hasExch?unf(document.getElementById('t_rate').value):0;
+  const feeLak=unf(document.getElementById('t_feeLak').value);
+  const feeThb=unf(document.getElementById('t_feeThb').value);
+  if(amt<=0){toast('ໃສ່ຈຳນວນເງິນ',true);return;}
+  if(l.hasExch&&rate<=0){toast('ໃສ່ເລດທີ່ໃຊ້',true);return;}
+  if(feeLak<=0&&feeThb<=0){toast('ໃສ່ຄ່າທຳນຽມ',true);return;}
+  const btn=document.getElementById('tSubmitBtn');const lbl=document.getElementById('tSubmitLbl');
+  btn.disabled=true;lbl.textContent='ກຳລັງບັນທຶກ...';
+  const order={branch:BRANCH,transferType:l.ttype,date:document.getElementById('t_date').value,inCurrency:l.inCurr,outCurrency:l.outCurr,knownAmount:amt,knownSide:'in',customerRate:rate,feeLak:feeLak,feeThb:feeThb,walletIn:l.walletIn,walletOut:l.walletOut,note:document.getElementById('t_note').value.trim()};
+  try{const res=await fetch(API,{method:'POST',body:JSON.stringify({action:'sabeoAddTransfer',order})});const r=await res.json();if(r.success){const pm=r.profit?` (ກຳໄລ ${fmt(r.profit)} ₭)`:'';toast('&#10003; ບັນທຶກສຳເລັດ'+pm);document.getElementById('transferForm').reset();document.getElementById('t_date').valueAsDate=new Date();tPay=null;tRec=null;document.querySelectorAll('#payChips .type-chip,#recChips .type-chip').forEach(c=>c.classList.remove('act-thb','act-lak'));document.getElementById('flowSum').classList.remove('show');document.getElementById('t_rateRow').style.display='none';await loadStock();loadRecent();}else toast('ຜິດພາດ: '+(r.error||''),true);}catch{toast('ເຊື່ອມຕໍ່ບໍ່ໄດ້',true);}
+  finally{btn.disabled=false;lbl.textContent='&#65291; ບັນທຶກໂອນເງິນ';}
+});
+
+// =====================
+// EXCHANGE
+// =====================
+function selExchType(el){document.querySelectorAll('#exchTypeChips .type-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');exchType=el.dataset.value;updateExchLabels();}
+function updateExchLabels(){
+  if(exchType==='buy_thb'){document.getElementById('eInLbl').textContent='ເງິນເຂົ້າ (ບາດ)';document.getElementById('eOutLbl').textContent='ເງິນອອກ (ກີບ)';document.getElementById('e_walletIn').value='cash_thb';document.getElementById('e_walletOut').value='cash_lak';document.getElementById('pvSpreadLbl').textContent='ກຳໄລ (ຮັບຮູ້ຕອນຂາຍ)';}
+  else{document.getElementById('eInLbl').textContent='ເງິນເຂົ້າ (ກີບ)';document.getElementById('eOutLbl').textContent='ເງິນອອກ (ບາດ)';document.getElementById('e_walletIn').value='cash_lak';document.getElementById('e_walletOut').value='cash_thb';document.getElementById('pvSpreadLbl').textContent='ກຳໄລສ່ວນຕ່າງ';}
+  document.getElementById('e_avgCost').textContent=stock.amountThb>0?fmt(stock.avgCost):'ຍັງບໍ່ມີ';
+  updatePP();
+}
+function updatePP(){const a=unf(document.getElementById('e_amount').value),r=unf(document.getElementById('e_rate').value),f=unf(document.getElementById('e_fee').value),pv=document.getElementById('profitPreview');if(a>0&&r>0){const sp=exchType==='sell_thb'?(r-stock.avgCost)*a:0;document.getElementById('pvSpread').textContent=fmt(sp)+' ₭';document.getElementById('pvFee').textContent=fmt(f)+' ₭';document.getElementById('pvTotal').textContent=fmt(sp+f)+' ₭';pv.classList.add('show');}else pv.classList.remove('show');}
+['e_amount','e_rate','e_fee'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('input',updatePP);});
+
+document.getElementById('exchangeForm').addEventListener('submit',async function(e){
+  e.preventDefault();const btn=document.getElementById('eSubmitBtn');const lbl=document.getElementById('eSubmitLbl');
+  const order={branch:BRANCH,exchangeType:exchType,date:document.getElementById('e_date').value,amount:unf(document.getElementById('e_amount').value),customerRate:unf(document.getElementById('e_rate').value),extraFee:unf(document.getElementById('e_fee').value),walletIn:document.getElementById('e_walletIn').value,walletOut:document.getElementById('e_walletOut').value,note:document.getElementById('e_note').value.trim()};
+  if(order.amount<=0||order.customerRate<=0){toast('ໃສ່ຈຳນວນ ແລະ ລາຄາ',true);return;}
+  if(exchType==='sell_thb'&&order.amount>stock.amountThb){toast('ສະຕັອກບໍ່ພໍ ('+fmt(stock.amountThb)+' ฿)',true);return;}
+  btn.disabled=true;lbl.textContent='ກຳລັງບັນທຶກ...';
+  try{const res=await fetch(API,{method:'POST',body:JSON.stringify({action:'sabeoAddExchange',order})});const r=await res.json();if(r.success){const pm=exchType==='sell_thb'?` (ກຳໄລ ${fmt(r.totalProfit)} ₭)`:'';toast('&#10003; ບັນທຶກ'+pm);document.getElementById('exchangeForm').reset();document.getElementById('e_date').valueAsDate=new Date();document.getElementById('profitPreview').classList.remove('show');await loadStock();loadRecent();}else toast('ຜິດພາດ: '+(r.error||''),true);}catch{toast('ເຊື່ອມຕໍ່ບໍ່ໄດ້',true);}
+  finally{btn.disabled=false;lbl.textContent='&#65291; ບັນທຶກແລກປ່ຽນ';}
+});
+
+// =====================
+// EXPENSE
+// =====================
+function selXCurr(el){document.querySelectorAll('#xCurrChips .type-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');xCurr=el.dataset.value;document.getElementById('xAmtUnit').setAttribute('data-unit',xCurr==='THB'?'THB':'KIP');}
+document.getElementById('expenseForm').addEventListener('submit',async function(e){
+  e.preventDefault();const btn=document.getElementById('xSubmitBtn');const lbl=document.getElementById('xSubmitLbl');
+  const order={branch:BRANCH,category:document.getElementById('x_cat').value,description:document.getElementById('x_desc').value.trim(),date:document.getElementById('x_date').value,amount:unf(document.getElementById('x_amount').value),currency:xCurr,wallet:document.getElementById('x_wallet').value,note:document.getElementById('x_note').value.trim()};
+  if(!order.description||order.amount<=0){toast('ໃສ່ລາຍລະອຽດ ແລະ ຈຳນວນ',true);return;}
+  btn.disabled=true;lbl.textContent='ກຳລັງບັນທຶກ...';
+  try{const res=await fetch(API,{method:'POST',body:JSON.stringify({action:'sabeoAddExpense',order})});const r=await res.json();if(r.success){toast('&#10003; ບັນທຶກລາຍຈ່າຍ');document.getElementById('expenseForm').reset();document.getElementById('x_date').valueAsDate=new Date();loadRecent();}else toast('ຜິດພາດ: '+(r.error||''),true);}catch{toast('ເຊື່ອມຕໍ່ບໍ່ໄດ້',true);}
+  finally{btn.disabled=false;lbl.textContent='&#65291; ບັນທຶກລາຍຈ່າຍ';}
+});
+
+// =====================
+// STOCK
+// =====================
+async function loadStock(){
+  try{const res=await fetch(`${API}?action=sabeoSummary&branch=${BRANCH}&filterType=all`);const d=await res.json();if(d.currentStock){stock=d.currentStock;const al=stock.alertLevel||'normal';const txt='ສະຕັອກ: '+fmt(stock.amountThb)+' ฿'+(al!=='normal'?' &#9888;':'');['stockBadge','stockBadgeTransfer'].forEach(id=>{const el=document.getElementById(id);if(el){el.innerHTML=txt;el.className='stock-badge'+(al!=='normal'?' '+al:'');}});updateExchLabels();}}catch{}
+}
+
+// =====================
+// RECENT
+// =====================
+const TT={lak_lak:'ລາວ&#8594;ລາວ',thb_lak:'ໄທ&#8594;ລາວ',lak_thb:'ລາວ&#8594;ໄທ'};
+const ET={buy_thb:'ຊື້ບາດ',sell_thb:'ຂາຍບາດ'};
+function esc(s){if(!s)return'';return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+async function loadRecent(){
+  const list=document.getElementById('recentList');list.innerHTML='<div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>';
+  try{const res=await fetch(`${API}?action=sabeoSearch&type=${curTab}&branch=${BRANCH}&page=1&pageSize=8`);const r=await res.json();const items=r.items||[];if(!items.length){list.innerHTML='<div class="empty-state">ຍັງບໍ່ມີລາຍການ</div>';return;}list.innerHTML=items.map(renderItem).join('');}catch{list.innerHTML='<div class="empty-state">ໂຫຼດບໍ່ໄດ້</div>';}
+}
+function renderItem(item){
+  if(curTab==='transfer'){const fee=Number(item['ຄ່າທຳນຽມ_ກີບ'])||0;const feeT=Number(item['ຄ່າທຳນຽມ_ບາດ'])||0;const out=Number(item['ຍອດອອກ'])||0;const co=item['ສະກຸນອອກ']==='thb'?'&#3647;':'&#8365;';return `<div class="recent-item"><div class="recent-tag" style="background:var(--brand-tint)">&#128184;</div><div class="recent-main"><div class="recent-title-text">${TT[item['ປະເພດ']]||esc(item['ປະເພດ'])}</div><div class="recent-meta">${esc(item['ວັນທີ'])} &middot; ${fmt(out)} ${co}</div></div><div class="recent-amount profit"><div class="num">${fmt(fee)}${feeT>0?' +'+fmt(feeT)+'&#3647;':''}</div><div class="lbl">ຄ່າທຳນຽມ</div></div></div>`;}
+  if(curTab==='exchange'){return `<div class="recent-item"><div class="recent-tag" style="background:var(--gold-tint)">&#128177;</div><div class="recent-main"><div class="recent-title-text">${ET[item['ປະເພດ']]||esc(item['ປະເພດ'])}</div><div class="recent-meta">${esc(item['ວັນທີ'])} &middot; ${fmt(item['ຈຳນວນບາດ'])} &#3647; @ ${fmt(item['ລາຄາໃຫ້ລູກຄ້າ'])}</div></div><div class="recent-amount profit"><div class="num">${fmt(item['ກຳໄລລວມ'])}</div><div class="lbl">ກຳໄລ &#8365;</div></div></div>`;}
+  return `<div class="recent-item"><div class="recent-tag" style="background:var(--paper)">&#129534;</div><div class="recent-main"><div class="recent-title-text">${esc(item['ໝວດໝູ່'])}</div><div class="recent-meta">${esc(item['ວັນທີ'])} &middot; ${esc(item['ລາຍລະອຽດ'])}</div></div><div class="recent-amount"><div class="num">${fmt(item['ຈຳນວນເງິນ'])}</div><div class="lbl">${item['ສະກຸນ']==='THB'?'&#3647;':'&#8365;'}</div></div></div>`;
+}
+
+// =====================
+// RATE MODAL
+// =====================
+function openRateModal(){document.getElementById('rate_date').valueAsDate=new Date();document.getElementById('rateOverlay').classList.add('show');loadRateHist();}
+function closeRateModal(){document.getElementById('rateOverlay').classList.remove('show');}
+async function loadRateHist(){const l=document.getElementById('rateHistList');l.innerHTML='<div class="empty-state">ກຳລັງໂຫຼດ...</div>';try{const res=await fetch(`${API}?action=sabeoRateHistory&branch=${BRANCH}`);const rows=await res.json();if(!rows||!rows.length){l.innerHTML='<div class="empty-state">ຍັງບໍ່ມີ</div>';return;}l.innerHTML=rows.slice(0,10).map(r=>`<div class="rate-history-item"><span class="rate-history-date">${r.date}</span><span class="rate-history-rates"><span>&#3647;&#8594;&#8365;: <b>${fmt(r.sellThbToLak)}</b></span><span>&#8365;&#8594;&#3647;: <b>${fmt(r.sellLakToThb)}</b></span></span></div>`).join('');}catch{l.innerHTML='<div class="empty-state">ໂຫຼດບໍ່ໄດ້</div>';}}
+async function submitRate(){const order={branch:BRANCH,date:document.getElementById('rate_date').value,sellThbToLak:unf(document.getElementById('rSell').value),costThbToLak:unf(document.getElementById('rCost').value),sellLakToThb:unf(document.getElementById('rSellLak').value),costLakToThb:unf(document.getElementById('rCostLak').value)};try{const res=await fetch(API,{method:'POST',body:JSON.stringify({action:'sabeoSetDailyRate',order})});const r=await res.json();if(r.success){toast('&#10003; ບັນທຶກເລດ');loadRateHist();}else toast('ຜິດພາດ',true);}catch{toast('ເຊື່ອມຕໍ່ບໍ່ໄດ້',true);}}
+
+// =====================
+// OPENING MODAL
+// =====================
+function openOpeningModal(){document.getElementById('open_date').valueAsDate=new Date();loadOpeningForDate();document.getElementById('openingOverlay').classList.add('show');}
+function closeOpeningModal(){document.getElementById('openingOverlay').classList.remove('show');}
+async function loadOpeningForDate(){
+  const date=document.getElementById('open_date').value;document.getElementById('cashCheckResult').innerHTML='';
+  try{const res=await fetch(`${API}?action=sabeoOpeningBalance&branch=${BRANCH}&date=${date}`);const d=await res.json();
+  if(d){['cashLak','cashThb','bankLak','bankThb'].forEach(k=>{document.getElementById('open_'+k).value=Number(d['open'+k.charAt(0).toUpperCase()+k.slice(1)]||0).toLocaleString('en-US');});['actualCashLak','actualCashThb','actualBankLak','actualBankThb'].forEach(k=>{const v=d[k];document.getElementById('open_'+k).value=(v!==''&&v!=null)?Number(v).toLocaleString('en-US'):'';});document.getElementById('open_closed').checked=!!d.closed;}
+  else{['cashLak','cashThb','bankLak','bankThb','actualCashLak','actualCashThb','actualBankLak','actualBankThb'].forEach(k=>document.getElementById('open_'+k).value='');document.getElementById('open_closed').checked=false;}
+  updateLockUI(!!(d&&d.closed));loadCashCheck(date);}catch{}
+}
+function updateLockUI(locked){const box=document.getElementById('lockStatusBox');const lk=document.getElementById('lockStatusLocked');const ul=document.getElementById('unlockRow');const cb=document.getElementById('open_closed');const cr=document.getElementById('closeDayRow');if(locked){box.style.display='block';lk.style.display='flex';ul.style.display='flex';cb.disabled=true;cr.style.opacity='.55';}else{box.style.display='none';lk.style.display='none';ul.style.display='none';cb.disabled=false;cr.style.opacity='1';}}
+async function submitUnlock(){const pw=document.getElementById('unlockPw').value;if(!pw){toast('ໃສ່ລະຫັດຜ່ານ',true);return;}const btn=document.querySelector('.unlock-btn');const lbl=document.getElementById('unlockLbl');btn.disabled=true;lbl.textContent='ກວດ...';try{const res=await fetch(API,{method:'POST',body:JSON.stringify({action:'sabeoUnlockDate',order:{branch:BRANCH,date:document.getElementById('open_date').value,password:pw}})});const r=await res.json();if(r.success){toast('&#10003; ປົດລ໋ອກ');document.getElementById('unlockPw').value='';loadOpeningForDate();}else toast(r.error||'ລະຫັດຜ່ານຜິດ',true);}catch{toast('ເຊື່ອມຕໍ່ບໍ່ໄດ້',true);}finally{btn.disabled=false;lbl.textContent='ປົດລ໋ອກ';}}
+async function loadCashCheck(date){try{const res=await fetch(`${API}?action=sabeoCashCheck&branch=${BRANCH}&date=${date}`);const d=await res.json();const box=document.getElementById('cashCheckResult');if(!d.hasOpening){box.innerHTML='';return;}const rows=Object.keys(d.wallets).map(w=>{const i=d.wallets[w];let dh='<span style="color:var(--ink-soft)">ຍັງບໍ່ນັບ</span>';if(i.diff!==null){const c=i.diff===0?'var(--good)':(i.diff>0?'var(--good)':'var(--warn)');const s=i.diff>0?'+':'';dh=`<b style="color:${c}">${s}${fmt(i.diff)}</b>`;}return `<div style="display:flex;justify-content:space-between;font-size:12.5px;padding:3px 0;"><span>${i.label} (ຄວນ ${fmt(i.expected)})</span>${dh}</div>`;}).join('');box.innerHTML=`<div style="background:var(--good-tint);border:1.5px solid #bfe3cc;border-radius:var(--radius-sm);padding:12px 14px;margin-top:12px;">${rows}</div>`;}catch{}}
+async function submitOpening(){const g=id=>document.getElementById(id).value;const order={branch:BRANCH,date:g('open_date'),openCashLak:unf(g('open_cashLak')),openCashThb:unf(g('open_cashThb')),openBankLak:unf(g('open_bankLak')),openBankThb:unf(g('open_bankThb')),actualCashLak:g('open_actualCashLak')?unf(g('open_actualCashLak')):'',actualCashThb:g('open_actualCashThb')?unf(g('open_actualCashThb')):'',actualBankLak:g('open_actualBankLak')?unf(g('open_actualBankLak')):'',actualBankThb:g('open_actualBankThb')?unf(g('open_actualBankThb')):'',closed:document.getElementById('open_closed').checked};try{const res=await fetch(API,{method:'POST',body:JSON.stringify({action:'sabeoSetOpeningBalance',order})});const r=await res.json();if(r.success){toast(order.closed?'&#10003; ປິດວັນ':'&#10003; ບັນທຶກ');loadOpeningForDate();}else toast('ຜິດພາດ',true);}catch{toast('ເຊື່ອມຕໍ່ບໍ່ໄດ້',true);}}
+
+// =====================
+// HISTORY MODAL
+// =====================
+let histType='transfer';let hf={};
+const STYPES={transfer:[['lak_lak','ລາວ&#8594;ລາວ'],['thb_lak','ໄທ&#8594;ລາວ'],['lak_thb','ລາວ&#8594;ໄທ']],exchange:[['buy_thb','ຊື້ບາດ'],['sell_thb','ຂາຍບາດ']],expense:[]};
+function openHistoryModal(){document.getElementById('historyOverlay').classList.add('show');updHFSub();loadHist();}
+function closeHistoryModal(){document.getElementById('historyOverlay').classList.remove('show');}
+function switchHistType(el){document.querySelectorAll('#histTypeChips .type-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');histType=el.dataset.value;hf={};clearHFInputs();updHFSub();loadHist();}
+function updHFSub(){const sel=document.getElementById('hf_sub');const opts=STYPES[histType]||[];sel.innerHTML='<option value="">ທັງໝົດ</option>'+opts.map(([v,l])=>`<option value="${v}">${l}</option>`).join('');sel.parentElement.style.display=opts.length?'block':'none';}
+function toggleHF(){const b=document.getElementById('hfBox');const ic=document.getElementById('hfIcon');const o=b.style.display!=='none';b.style.display=o?'none':'block';ic.textContent=o?'&#9660;':'&#9650;';}
+function clearHFInputs(){['hf_from','hf_to'].forEach(id=>document.getElementById(id).value='');document.getElementById('hf_sub').value='';}
+function applyHF(){hf={dateFrom:document.getElementById('hf_from').value,dateTo:document.getElementById('hf_to').value,subType:document.getElementById('hf_sub').value};loadHist();}
+function clearHF(){clearHFInputs();hf={};loadHist();}
+async function loadHist(){
+  const list=document.getElementById('histList');list.innerHTML='<div class="skeleton"></div><div class="skeleton"></div>';
+  const st=curTab;curTab=histType;
+  try{let url=`${API}?action=sabeoSearch&type=${histType}&branch=${BRANCH}&page=1&pageSize=30`;if(hf.dateFrom)url+=`&dateFrom=${hf.dateFrom}`;if(hf.dateTo)url+=`&dateTo=${hf.dateTo}`;if(hf.subType)url+=`&subType=${hf.subType}`;const res=await fetch(url);const r=await res.json();const items=r.items||[];list.innerHTML=items.length?items.map(renderItem).join(''):'<div class="empty-state">ບໍ່ມີລາຍການ</div>';}catch{list.innerHTML='<div class="empty-state">ໂຫຼດບໍ່ໄດ້</div>';}
+  finally{curTab=st;}
+}
+
+// Init
+document.getElementById('t_date').valueAsDate=new Date();
+document.getElementById('e_date').valueAsDate=new Date();
+document.getElementById('x_date').valueAsDate=new Date();
+updateExchLabels();
+loadStock();
+loadRecent();
 </script>
-
 </body>
 </html>
